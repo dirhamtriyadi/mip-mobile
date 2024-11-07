@@ -1,118 +1,145 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import { NavigationContainer, NavigationProp } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useContext, useEffect } from 'react';
+import { Text, TouchableOpacity, PermissionsAndroid, Alert, Platform, View } from 'react-native';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { AuthContext, AuthProvider } from './src/contexts/AuthContext';
+import LoginScreen from './src/screens/Auth/Login';
+import HomeScreen from './src/screens/Home';
+import AbsenScreen from './src/screens/Absen';
+import AbsenMasukScreen from './src/screens/AbsenMasuk';
+import AbsenPulangScreen from './src/screens/AbsenPulang';
+import SakitScreen from './src/screens/Sakit';
+import IzinScreen from './src/screens/Izin';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+export type RootStackParamList = {
+  Login: undefined;
+  Home: undefined;
+  Absen: undefined;
+  AbsenMasuk: undefined;
+  AbsenPulang: undefined;
+  Sakit: undefined;
+  Izin: undefined;
+  Cuti: undefined;
+};
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+async function requestLocationPermission() {
+  try {
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: "Location Permission",
+          message: "This app needs access to your location.",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the location");
+      } else {
+        console.log("Location permission denied");
+        Alert.alert(
+          "Permission Denied",
+          "Location permission is required to use this feature. Please enable it in the app settings.",
+          [
+            { text: "OK" }
+          ]
+        );
+      }
+    } else {
+      // For iOS, you can use a different library like react-native-permissions
+      console.log("Location permission is not required for iOS in this example.");
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+}
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+function App() {
+  useEffect(() => {
+    requestLocationPermission();
+  }, []);
+
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+    <AuthProvider>
+      <Layout />
+    </AuthProvider>
   );
 }
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+function Layout() {
+  const { logout, isAuthenticated, isLoading } = useContext(AuthContext);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Error removing token:', error);
+    }
   };
 
+  if (isLoading) {
+    return <View><Text>Loading...</Text></View>; // Show a loading indicator while checking authentication
+  }
+  
+
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        {isAuthenticated ? (
+          <Stack.Group>
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={() => ({
+                title: 'Home',
+                headerRight: () => (
+                  <TouchableOpacity
+                    style={{
+                      marginRight: 10,
+                      padding: 10,
+                      backgroundColor: '#da4a4a',
+                      borderRadius: 5,
+                    }}
+                    onPress={() => handleLogout()}
+                  >
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      Logout
+                    </Text>
+                  </TouchableOpacity>
+                ),
+                // remove header back button
+                headerBackVisible: false,
+              })}
+            />
+            <Stack.Screen name="Absen" component={AbsenScreen} options={{ title: 'Absen' }} />
+            <Stack.Screen name="AbsenMasuk" component={AbsenMasukScreen} options={{ title: 'Absen Masuk' }} />
+            <Stack.Screen name="AbsenPulang" component={AbsenPulangScreen} options={{ title: 'Absen Pulang' }} />
+            <Stack.Screen name="Sakit" component={SakitScreen} options={{ title: 'Sakit' }} />
+            <Stack.Screen name="Izin" component={IzinScreen} options={{ title: 'Izin' }} />
+          </Stack.Group>
+        ) : (
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              title: 'Login',
+              headerShown: false,
+            }}
+          />
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
