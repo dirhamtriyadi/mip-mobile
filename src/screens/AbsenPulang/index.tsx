@@ -10,6 +10,7 @@ import { useCurrentLocation } from "../../hooks/useCurrentLocation";
 import instance from "../../configs/axios";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
+import dayjs from "dayjs";
 
 function SakitScreen() {
     const { userDetailData } = useUserData();
@@ -24,8 +25,8 @@ function SakitScreen() {
         code: '',
         nik: '',
         name: '',
-        date: new Date(),
-        time_check_out: new Date(),
+        date: dayjs(),
+        time_check_out: dayjs(),
         description_check_out: '',
         image_check_out: '',
         location_check_out: '',
@@ -47,19 +48,29 @@ function SakitScreen() {
     useEffect(() => {
         setData((prevData) => ({
             ...prevData,
-            code: userDetailData.name + data.date.toLocaleDateString('id-ID'),
+            code: userDetailData.name + data.date.format('DD/MM/YYYY'),
             nik: userDetailData.nik,
             name: userDetailData.name,
         }));
     }, [userDetailData, data.date]);
 
     const handleDateChange = (selectedDate: Date) => {
-        setData((prevData) => ({ ...prevData, date: selectedDate }));
+        // setData((prevData) => ({ ...prevData, date: selectedDate }));
+        setData((prevData) => ({
+            ...prevData,
+            date: dayjs(selectedDate),
+            time_check_out: dayjs(selectedDate).hour(prevData.time_check_out.hour()).minute(prevData.time_check_out.minute()).second(prevData.time_check_out.second())
+        }));
         setOpenDatePicker(false);
     };
 
     const handleTimeChange = (selectedTime: Date) => {
-        setData((prevData) => ({ ...prevData, time_check_out: selectedTime }));
+        // setData((prevData) => ({ ...prevData, time_check_out: selectedTime }));
+        setData((prevData) => ({
+            ...prevData,
+            time_check_out: dayjs(selectedTime),
+            date: dayjs(selectedTime).hour(prevData.date.hour()).minute(prevData.date.minute()).second(prevData.date.second())
+        }));
         setOpenTimePicker(false);
     };
 
@@ -138,11 +149,8 @@ function SakitScreen() {
             // Create form data
             const formData = new FormData();
 
-            formData.append('date', date.toISOString().split('T')[0]);
-            // convert time_check_out to format H:i in Indonesian time
-            const hours = time_check_out.getHours().toString().padStart(2, '0');
-            const minutes = time_check_out.getMinutes().toString().padStart(2, '0');
-            formData.append('time_check_out', `${hours}:${minutes}`);
+            formData.append('date', date.format('YYYY-MM-DD'));
+            formData.append('time_check_out', time_check_out.format('HH:mm:ss'));
             formData.append('description_check_out', description_check_out);
             formData.append('location_check_out', location_check_out);
 
@@ -216,7 +224,7 @@ function SakitScreen() {
                             <TextInput
                                 style={{ color: '#242c40' }}
                                 placeholder="Tanggal"
-                                value={data.date.toLocaleDateString('id-ID')}
+                                value={data.date.format('DD/MM/YYYY')}
                                 editable={false}
                             />
                             <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={() => setOpenDatePicker(true)}>
@@ -230,7 +238,7 @@ function SakitScreen() {
                             <TextInput
                                 style={{ color: '#242c40' }}
                                 placeholder="Jam"
-                                value={data.time_check_out.toLocaleTimeString()}
+                                value={data.time_check_out.format('HH:mm:ss')}
                                 editable={false}
                             />
                             <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={() => setOpenTimePicker(true)}>
@@ -239,10 +247,10 @@ function SakitScreen() {
                         </View>
                     </View>
                     <View style={[styles.groupField]}>
-                        <Text style={[styles.fieldLabel]}>Deskripsi Absen Pulang</Text>
+                        <Text style={[styles.fieldLabel]}>Keterangan Pulang</Text>
                         <TextInput
                             style={[styles.fieldInput]}
-                            placeholder="Deskripsi Absen Pulang"
+                            placeholder="Keterangan Pulang"
                             value={data.description_check_out}
                             onChangeText={(text) => setData((prevData) => ({ ...prevData, description_check_out: text }))}
                         />
@@ -311,16 +319,16 @@ function SakitScreen() {
             <DatePicker
                 modal
                 mode="date"
-                minimumDate={new Date()}
+                minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
                 open={openDatePicker}
-                date={data.date}
+                date={new Date()}
                 onConfirm={handleDateChange}
                 onCancel={() => setOpenDatePicker(false)}
             />
             <DatePicker
                 modal
                 mode="time"
-                minimumDate={new Date()}
+                minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
                 open={openTimePicker}
                 date={new Date()}
                 onConfirm={handleTimeChange}

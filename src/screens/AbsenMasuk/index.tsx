@@ -10,6 +10,7 @@ import instance from "../../configs/axios";
 import { useUserData } from "../../hooks/useUserData";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
+import dayjs from "dayjs";
 
 function AbsenMasukScreen() {
   const [image, setImage] = useState<any>(null);
@@ -22,8 +23,8 @@ function AbsenMasukScreen() {
     code: '',
     nik: '',
     name: '',
-    date: new Date(),
-    time_check_in: new Date(),
+    date: dayjs(),
+    time_check_in: dayjs(),
     type: 'present',
     description_check_in: '',
     image_check_in: '',
@@ -49,19 +50,28 @@ function AbsenMasukScreen() {
   useEffect(() => {
     setData((prevData) => ({
       ...prevData,
-      code: userDetailData.name + data.date.toLocaleDateString('id-ID'),
+      code: userDetailData.name + data.date.format('DD/MM/YYYY'),
       nik: userDetailData.nik,
       name: userDetailData.name,
     }));
   }, [userDetailData, data.date]);
 
   const handleDateChange = (selectedDate: Date) => {
-    setData((prevData) => ({ ...prevData, date: selectedDate }));
+    // setData((prevData) => ({ ...prevData, date: selectedDate }));
+    setData((prevData) => ({
+      ...prevData,
+      date: dayjs(selectedDate),
+      time_check_in: dayjs(selectedDate),
+    }));
     setOpenDatePicker(false);
   };
 
   const handleTimeChange = (selectedTime: Date) => {
-    setData((prevData) => ({ ...prevData, time_check_in: selectedTime }));
+    // setData((prevData) => ({ ...prevData, time_check_in: selectedTime }));
+    setData((prevData) => ({
+      ...prevData,
+      time_check_in: dayjs(selectedTime),
+    }));
     setOpenTimePicker(false);
   };
 
@@ -140,11 +150,11 @@ function AbsenMasukScreen() {
 
       const formData = new FormData();
 
-      formData.append('date', date.toISOString().split('T')[0]);
-      // convert time_check_out to format H:i in Indonesian time
-      const hours = time_check_in.getHours().toString().padStart(2, '0');
-      const minutes = time_check_in.getMinutes().toString().padStart(2, '0');
-      formData.append('time_check_in', `${hours}:${minutes}`);
+      console.log('data: ', data);
+      
+
+      formData.append('date', date.format('YYYY-MM-DD'));
+      formData.append('time_check_in', time_check_in.format('HH:mm:ss'));
       formData.append('type', type);
       formData.append('description_check_in', description_check_in);
       formData.append('location_check_in', location_check_in);
@@ -217,7 +227,7 @@ function AbsenMasukScreen() {
               <TextInput
                 style={{ color: '#242c40' }}
                 placeholder="Tanggal"
-                value={data.date.toLocaleDateString('id-ID')}
+                value={data.date.format('DD/MM/YYYY')}
                 editable={false}
               />
               <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={() => setOpenDatePicker(true)}>
@@ -231,7 +241,7 @@ function AbsenMasukScreen() {
               <TextInput
                 style={{ color: '#242c40' }}
                 placeholder="Jam"
-                value={data.time_check_in.toLocaleTimeString()}
+                value={data.time_check_in.format('HH:mm:ss')}
                 editable={false}
               />
               <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={() => setOpenTimePicker(true)}>
@@ -240,10 +250,10 @@ function AbsenMasukScreen() {
             </View>
           </View>
           <View style={[styles.groupField]}>
-            <Text style={[styles.fieldLabel]}>Deskripsi Absen Masuk</Text>
+            <Text style={[styles.fieldLabel]}>Keterangan Masuk</Text>
             <TextInput
               style={[styles.fieldInput]}
-              placeholder="Deskripsi Absen Masuk"
+              placeholder="Keterangan Masuk"
               value={data.description_check_in}
               onChangeText={(text) => setData((prevData) => ({ ...prevData, description_check_in: text }))}
             />
@@ -312,16 +322,16 @@ function AbsenMasukScreen() {
       <DatePicker
         modal
         mode="date"
-        minimumDate={new Date()}
+        minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
         open={openDatePicker}
-        date={data.date}
+        date={new Date()}
         onConfirm={handleDateChange}
         onCancel={() => setOpenDatePicker(false)}
       />
       <DatePicker
         modal
         mode="time"
-        minimumDate={new Date()}
+        minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
         open={openTimePicker}
         date={new Date()}
         onConfirm={handleTimeChange}
