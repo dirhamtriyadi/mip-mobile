@@ -129,7 +129,7 @@ function IzinScreen() {
       return Alert.alert('Nama harus diisi');
     }
     if (data.description_check_in === '') {
-      return Alert.alert('Deskripsi absen sakit harus diisi');
+      return Alert.alert('Keterangan absen izin harus diisi');
     }
     if (data.image_check_in === '') {
       return Alert.alert('Foto izin harus diisi');
@@ -240,10 +240,10 @@ function IzinScreen() {
             </View>
           </View>
           <View style={[styles.groupField]}>
-            <Text style={[styles.fieldLabel]}>Deskripsi Absen Sakit</Text>
+            <Text style={[styles.fieldLabel]}>Keterangan Absen Izin</Text>
             <TextInput
               style={[styles.fieldInput]}
-              placeholder="Deskripsi Absen Sakit"
+              placeholder="Keterangan Absen Izin"
               value={data.description_check_in}
               onChangeText={(text) => setData((prevData) => ({ ...prevData, description_check_in: text }))}
             />
@@ -269,11 +269,11 @@ function IzinScreen() {
             )}
           </View>
           <View style={[styles.groupField]}>
-            <Text style={[styles.fieldLabel]}>Lokasi Absen Sakit</Text>
+            <Text style={[styles.fieldLabel]}>Lokasi Absen Izin</Text>
             <View style={{ width: '100%', height: 45, borderWidth: 1, borderColor: '#ccc', borderRadius: 5, marginBottom: 15, paddingHorizontal: 10, justifyContent: 'center' }}>
               <TextInput
                 style={{ color: '#242c40' }}
-                placeholder="Lokasi Absen Sakit"
+                placeholder="Lokasi Absen Izin"
                 value={data.location_check_in}
                 // onChangeText={handleLocationChange}
               />

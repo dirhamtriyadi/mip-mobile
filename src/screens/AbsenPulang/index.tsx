@@ -13,6 +13,7 @@ import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
 
 function SakitScreen() {
+    const [workSchedule, setWorkSchedule] = useState<any>(null);
     const { userDetailData } = useUserData();
     const { location, getCurrentLocation } = useCurrentLocation();
     const [image, setImage] = useState<any>(null);
@@ -33,6 +34,20 @@ function SakitScreen() {
         latitude: 0,
         longitude: 0,
     });
+
+    useEffect(() => {
+        getWorkSchedule();
+    }, []);
+
+    const getWorkSchedule = async () => {
+        try {
+            const response = await instance.get('v1/attendances/work-schedules');
+            setWorkSchedule(response.data.data);
+        } catch (error: any) {
+            Alert.alert('Gagal mengambil data jadwal kerja', 'Gagal terjadi kesalahan karena:\n' + error.response.data.message);
+            console.log('Error getting work schedule: ', error.response.data.message);
+        }
+    };
 
     useEffect(() => {
         if (location.latitude !== 0 && location.longitude !== 0) {
@@ -125,7 +140,7 @@ function SakitScreen() {
         if (data.name === '') {
             return Alert.alert('Nama harus diisi');
         }
-        if (data.description_check_out === '') {
+        if (data.time_check_out.format('HH:mm:ss') < workSchedule?.check_out_time && data.description_check_out === '') {
             return Alert.alert('Keterangan pulang harus diisi');
         }
         if (data.image_check_out === '') {
@@ -238,15 +253,17 @@ function SakitScreen() {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={[styles.groupField]}>
-                        <Text style={[styles.fieldLabel]}>Keterangan Pulang</Text>
-                        <TextInput
-                            style={[styles.fieldInput]}
-                            placeholder="Keterangan Pulang"
-                            value={data.description_check_out}
-                            onChangeText={(text) => setData((prevData) => ({ ...prevData, description_check_out: text }))}
-                        />
-                    </View>
+                    {data.time_check_out.format('HH:mm:ss') < workSchedule?.check_out_time && (
+                        <View style={[styles.groupField]}>
+                            <Text style={[styles.fieldLabel]}>Keterangan Pulang</Text>
+                            <TextInput
+                                style={[styles.fieldInput]}
+                                placeholder="Keterangan Pulang"
+                                value={data.description_check_out}
+                                onChangeText={(text) => setData((prevData) => ({ ...prevData, description_check_out: text }))}
+                            />
+                        </View>
+                    )}
                     <View style={[styles.groupField]}>
                         <Text style={[styles.fieldLabel]}>Foto Selfie Pulang</Text>
                         {image ? (
@@ -274,7 +291,7 @@ function SakitScreen() {
                                 style={{ color: '#242c40' }}
                                 placeholder="Lokasi"
                                 value={data.location_check_out}
-                                // onChangeText={handleLocationChange}
+                            // onChangeText={handleLocationChange}
                             />
                             <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={() => getCurrentLocation()}>
                                 <Icon name="location-arrow" size={20} color="#000" />

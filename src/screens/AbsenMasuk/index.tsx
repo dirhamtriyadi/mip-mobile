@@ -13,6 +13,7 @@ import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
 
 function AbsenMasukScreen() {
+  const [workSchedule, setWorkSchedule] = useState<any>(null);
   const [image, setImage] = useState<any>(null);
   const { userDetailData } = useUserData();
   const { location, getCurrentLocation } = useCurrentLocation();
@@ -35,6 +36,20 @@ function AbsenMasukScreen() {
 
   const [openDatePicker, setOpenDatePicker] = useState(false);
   const [openTimePicker, setOpenTimePicker] = useState(false);
+
+  useEffect(() => {
+    getWorkSchedule();
+  }, []);
+
+  const getWorkSchedule = async () => {
+    try {
+      const response = await instance.get('v1/attendances/work-schedules');
+      setWorkSchedule(response.data.data);
+    } catch (error: any) {
+      Alert.alert('Gagal mengambil data jadwal kerja', 'Gagal terjadi kesalahan karena:\n' + error.response.data.message);
+      console.log('Error getting work schedule: ', error.response.data.message);
+    }
+  };
 
   useEffect(() => {
     if (location.latitude !== 0 && location.longitude !== 0) {
@@ -128,8 +143,8 @@ function AbsenMasukScreen() {
     if (data.name === '') {
       return Alert.alert('Nama harus diisi');
     }
-    if (data.description_check_in === '') {
-      return Alert.alert('Deskripsi absen masuk harus diisi');
+    if (data.time_check_in.format('HH:mm:ss') > workSchedule?.work_start_time && data.description_check_in === '') {
+      return Alert.alert('Keterangan absen masuk harus diisi');
     }
     if (data.image_check_in === '') {
       return Alert.alert('Foto selfie harus diisi');
@@ -242,7 +257,8 @@ function AbsenMasukScreen() {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={[styles.groupField]}>
+          {data.time_check_in.format('HH:mm:ss') > workSchedule?.work_start_time && (
+            <View style={[styles.groupField]}>
             <Text style={[styles.fieldLabel]}>Keterangan Masuk</Text>
             <TextInput
               style={[styles.fieldInput]}
@@ -251,6 +267,7 @@ function AbsenMasukScreen() {
               onChangeText={(text) => setData((prevData) => ({ ...prevData, description_check_in: text }))}
             />
           </View>
+          )}
           <View style={[styles.groupField]}>
             <Text style={[styles.fieldLabel]}>Foto Selfie Masuk</Text>
             {image ? (

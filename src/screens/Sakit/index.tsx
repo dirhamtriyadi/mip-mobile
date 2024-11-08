@@ -129,7 +129,7 @@ function SakitScreen() {
       return Alert.alert('Nama harus diisi');
     }
     if (data.description_check_in === '') {
-      return Alert.alert('Deskripsi absen sakit harus diisi');
+      return Alert.alert('Keterangan absen sakit harus diisi');
     }
     if (data.image_check_in === '') {
       return Alert.alert('Bukti sakit / surat Dokter harus diisi');
@@ -240,10 +240,10 @@ function SakitScreen() {
             </View>
           </View>
           <View style={[styles.groupField]}>
-            <Text style={[styles.fieldLabel]}>Deskripsi Absen Sakit</Text>
+            <Text style={[styles.fieldLabel]}>Keterangan Absen Sakit</Text>
             <TextInput
               style={[styles.fieldInput]}
-              placeholder="Deskripsi Absen Sakit"
+              placeholder="Keterangan Absen Sakit"
               value={data.description_check_in}
               onChangeText={(text) => setData((prevData) => ({ ...prevData, description_check_in: text }))}
             />
