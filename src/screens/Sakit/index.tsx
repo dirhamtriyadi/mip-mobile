@@ -11,7 +11,6 @@ import { useUserData } from "../../hooks/useUserData";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
-import DateTimePicker from 'react-native-ui-datepicker';
 
 function SakitScreen() {
   const [image, setImage] = useState<any>(null);
@@ -225,11 +224,6 @@ function SakitScreen() {
                 <Icon name="calendar" size={20} color="#000" />
               </TouchableOpacity>
             </View>
-            <DateTimePicker
-              mode="single"
-              date={data.date.toDate()}
-              onChange={(params) => setData((prevData) => ({ ...prevData, date: dayjs(params.date) }))}
-            />
           </View>
           <View style={[styles.groupField]}>
             <Text style={[styles.fieldLabel]}>Jam</Text>
@@ -315,7 +309,7 @@ function SakitScreen() {
           </View>
         </View>
       </ScrollView>
-      {/* <DatePicker
+      <DatePicker
         modal
         mode="date"
         minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
@@ -323,7 +317,7 @@ function SakitScreen() {
         date={data.date.toDate()}
         onConfirm={handleDateChange}
         onCancel={() => setOpenDatePicker(false)}
-      /> */}
+      />
       <DatePicker
         modal
         mode="time"
