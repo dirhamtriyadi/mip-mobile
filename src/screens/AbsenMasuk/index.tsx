@@ -58,20 +58,13 @@ function AbsenMasukScreen() {
 
   const handleDateChange = (selectedDate: Date) => {
     // setData((prevData) => ({ ...prevData, date: selectedDate }));
-    setData((prevData) => ({
-      ...prevData,
-      date: dayjs(selectedDate),
-      time_check_in: dayjs(selectedDate),
-    }));
+    setData((prevData) => ({ ...prevData, date: dayjs(selectedDate) }));
     setOpenDatePicker(false);
   };
 
   const handleTimeChange = (selectedTime: Date) => {
     // setData((prevData) => ({ ...prevData, time_check_in: selectedTime }));
-    setData((prevData) => ({
-      ...prevData,
-      time_check_in: dayjs(selectedTime),
-    }));
+    setData((prevData) => ({ ...prevData, time_check_in: dayjs(selectedTime), }));
     setOpenTimePicker(false);
   };
 
@@ -324,16 +317,16 @@ function AbsenMasukScreen() {
         mode="date"
         minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
         open={openDatePicker}
-        date={new Date()}
+        date={data.date.toDate()}
         onConfirm={handleDateChange}
         onCancel={() => setOpenDatePicker(false)}
       />
       <DatePicker
         modal
         mode="time"
-        minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
+        minimumDate={dayjs().toDate()}
         open={openTimePicker}
-        date={new Date()}
+        date={data.time_check_in.toDate()}
         onConfirm={handleTimeChange}
         onCancel={() => setOpenTimePicker(false)}
       />

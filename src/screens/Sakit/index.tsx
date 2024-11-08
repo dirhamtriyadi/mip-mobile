@@ -10,6 +10,8 @@ import instance from "../../configs/axios";
 import { useUserData } from "../../hooks/useUserData";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
+import dayjs from "dayjs";
+import DateTimePicker from 'react-native-ui-datepicker';
 
 function SakitScreen() {
   const [image, setImage] = useState<any>(null);
@@ -22,8 +24,8 @@ function SakitScreen() {
     code: '',
     nik: '',
     name: '',
-    date: new Date(),
-    time_check_in: new Date(),
+    date: dayjs(),
+    time_check_in: dayjs(),
     type: 'sick',
     description_check_in: '',
     image_check_in: '',
@@ -49,19 +51,21 @@ function SakitScreen() {
   useEffect(() => {
     setData((prevData) => ({
       ...prevData,
-      code: userDetailData.name + data.date.toLocaleDateString('id-ID'),
+      code: userDetailData.name + data.date.format('DD/MM/YYYY'),
       nik: userDetailData.nik,
       name: userDetailData.name,
     }));
   }, [userDetailData, data.date]);
 
   const handleDateChange = (selectedDate: Date) => {
-    setData((prevData) => ({ ...prevData, date: selectedDate }));
+    // setData((prevData) => ({ ...prevData, date: selectedDate }));
+    setData((prevData) => ({ ...prevData, date: dayjs(selectedDate) }));
     setOpenDatePicker(false);
   };
 
   const handleTimeChange = (selectedTime: Date) => {
-    setData((prevData) => ({ ...prevData, time_check_in: selectedTime }));
+    // setData((prevData) => ({ ...prevData, time_check_in: selectedTime }));
+    setData((prevData) => ({ ...prevData, time_check_in: dayjs(selectedTime) }));
     setOpenTimePicker(false);
   };
 
@@ -139,12 +143,9 @@ function SakitScreen() {
       const { date, time_check_in, type, description_check_in, location_check_in } = data;
 
       const formData = new FormData();
-      
-      formData.append('date', date.toISOString().split('T')[0]);
-      // convert time_check_out to format H:i in Indonesian time
-      const hours = time_check_in.getHours().toString().padStart(2, '0');
-      const minutes = time_check_in.getMinutes().toString().padStart(2, '0');
-      formData.append('time_check_in', `${hours}:${minutes}`);
+
+      formData.append('date', date.format('YYYY-MM-DD'));
+      formData.append('time_check_in', time_check_in.format('HH:mm:ss'));
       formData.append('type', type);
       formData.append('description_check_in', description_check_in);
       formData.append('location_check_in', location_check_in);
@@ -217,13 +218,18 @@ function SakitScreen() {
               <TextInput
                 style={{ color: '#242c40' }}
                 placeholder="Tanggal"
-                value={data.date.toLocaleDateString('id-ID')}
+                value={data.date.format('DD/MM/YYYY')}
                 editable={false}
               />
               <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={() => setOpenDatePicker(true)}>
                 <Icon name="calendar" size={20} color="#000" />
               </TouchableOpacity>
             </View>
+            <DateTimePicker
+              mode="single"
+              date={data.date.toDate()}
+              onChange={(params) => setData((prevData) => ({ ...prevData, date: dayjs(params.date) }))}
+            />
           </View>
           <View style={[styles.groupField]}>
             <Text style={[styles.fieldLabel]}>Jam</Text>
@@ -231,7 +237,7 @@ function SakitScreen() {
               <TextInput
                 style={{ color: '#242c40' }}
                 placeholder="Jam"
-                value={data.time_check_in.toLocaleTimeString()}
+                value={data.time_check_in.format('HH:mm:ss')}
                 editable={false}
               />
               <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={() => setOpenTimePicker(true)}>
@@ -275,7 +281,7 @@ function SakitScreen() {
                 style={{ color: '#242c40' }}
                 placeholder="Lokasi Absen Sakit"
                 value={data.location_check_in}
-                // onChangeText={handleLocationChange}
+              // onChangeText={handleLocationChange}
               />
               <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={getCurrentLocation}>
                 <Icon name="location-arrow" size={20} color="#000" />
@@ -309,21 +315,21 @@ function SakitScreen() {
           </View>
         </View>
       </ScrollView>
-      <DatePicker
+      {/* <DatePicker
         modal
         mode="date"
-        minimumDate={new Date()}
+        minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
         open={openDatePicker}
-        date={data.date}
+        date={data.date.toDate()}
         onConfirm={handleDateChange}
         onCancel={() => setOpenDatePicker(false)}
-      />
+      /> */}
       <DatePicker
         modal
         mode="time"
-        minimumDate={new Date()}
+        minimumDate={dayjs().toDate()}
         open={openTimePicker}
-        date={new Date()}
+        date={data.time_check_in.toDate()}
         onConfirm={handleTimeChange}
         onCancel={() => setOpenTimePicker(false)}
       />

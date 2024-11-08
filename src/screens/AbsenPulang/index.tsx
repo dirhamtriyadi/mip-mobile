@@ -56,21 +56,13 @@ function SakitScreen() {
 
     const handleDateChange = (selectedDate: Date) => {
         // setData((prevData) => ({ ...prevData, date: selectedDate }));
-        setData((prevData) => ({
-            ...prevData,
-            date: dayjs(selectedDate),
-            time_check_out: dayjs(selectedDate).hour(prevData.time_check_out.hour()).minute(prevData.time_check_out.minute()).second(prevData.time_check_out.second())
-        }));
+        setData((prevData) => ({ ...prevData, date: dayjs(selectedDate), }));
         setOpenDatePicker(false);
     };
 
     const handleTimeChange = (selectedTime: Date) => {
         // setData((prevData) => ({ ...prevData, time_check_out: selectedTime }));
-        setData((prevData) => ({
-            ...prevData,
-            time_check_out: dayjs(selectedTime),
-            date: dayjs(selectedTime).hour(prevData.date.hour()).minute(prevData.date.minute()).second(prevData.date.second())
-        }));
+        setData((prevData) => ({ ...prevData, time_check_out: dayjs(selectedTime), }));
         setOpenTimePicker(false);
     };
 
@@ -321,16 +313,16 @@ function SakitScreen() {
                 mode="date"
                 minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
                 open={openDatePicker}
-                date={new Date()}
+                date={data.date.toDate()}
                 onConfirm={handleDateChange}
                 onCancel={() => setOpenDatePicker(false)}
             />
             <DatePicker
                 modal
                 mode="time"
-                minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
+                minimumDate={dayjs().toDate()}
                 open={openTimePicker}
-                date={new Date()}
+                date={data.time_check_out.toDate()}
                 onConfirm={handleTimeChange}
                 onCancel={() => setOpenTimePicker(false)}
             />
