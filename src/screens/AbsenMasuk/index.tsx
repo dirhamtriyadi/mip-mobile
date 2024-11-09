@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, PermissionsAndroid, Platform, Alert, Image } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, PermissionsAndroid, Platform, Alert, Image, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
 import MapView, { Marker } from 'react-native-maps';
@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 function AbsenMasukScreen() {
   const [workSchedule, setWorkSchedule] = useState<any>(null);
   const [image, setImage] = useState<any>(null);
+  const [openModal, setOpenModal] = useState(false);
   const { userDetailData } = useUserData();
   const { location, getCurrentLocation } = useCurrentLocation();
 
@@ -27,7 +28,7 @@ function AbsenMasukScreen() {
     date: dayjs(),
     time_check_in: dayjs(),
     type: 'present',
-    description_check_in: '',
+    reason_late: '',
     image_check_in: '',
     location_check_in: '',
     latitude: 0,
@@ -143,8 +144,9 @@ function AbsenMasukScreen() {
     if (data.name === '') {
       return Alert.alert('Nama harus diisi');
     }
-    if (data.time_check_in.format('HH:mm:ss') > workSchedule?.work_start_time && data.description_check_in === '') {
-      return Alert.alert('Keterangan absen masuk harus diisi');
+    if (data.time_check_in.format('HH:mm:ss') > workSchedule?.work_start_time && data.reason_late === '') {
+      return setOpenModal(true);
+      // return Alert.alert('Keterangan absen masuk harus diisi');
     }
     if (data.image_check_in === '') {
       return Alert.alert('Foto selfie harus diisi');
@@ -154,17 +156,17 @@ function AbsenMasukScreen() {
     }
 
     try {
-      const { date, time_check_in, type, description_check_in, location_check_in } = data;
+      const { date, time_check_in, type, reason_late, location_check_in } = data;
 
       const formData = new FormData();
 
       console.log('data: ', data);
-      
+
 
       formData.append('date', date.format('YYYY-MM-DD'));
       formData.append('time_check_in', time_check_in.format('HH:mm:ss'));
       formData.append('type', type);
-      formData.append('description_check_in', description_check_in);
+      formData.append('reason_late', reason_late);
       formData.append('location_check_in', location_check_in);
 
       // Add image file to formData
@@ -257,17 +259,34 @@ function AbsenMasukScreen() {
               </TouchableOpacity>
             </View>
           </View>
-          {data.time_check_in.format('HH:mm:ss') > workSchedule?.work_start_time && (
-            <View style={[styles.groupField]}>
-            <Text style={[styles.fieldLabel]}>Keterangan Masuk</Text>
-            <TextInput
-              style={[styles.fieldInput]}
-              placeholder="Keterangan Masuk"
-              value={data.description_check_in}
-              onChangeText={(text) => setData((prevData) => ({ ...prevData, description_check_in: text }))}
-            />
-          </View>
-          )}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={openModal}
+            onRequestClose={() => {
+              setOpenModal(!openModal);
+            }}
+          >
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+              <View style={{ width: '80%', height: 200, backgroundColor: 'white', borderRadius: 10, padding: 20 }}>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Alasan Terlambat</Text>
+                <TextInput
+                  style={[styles.fieldInput]}
+                  placeholder="Alasan Terlambat"
+                  value={data.reason_late}
+                  onChangeText={(text) => setData((prevData) => ({ ...prevData, reason_late: text }))}
+                />
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                  <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center', marginRight: 10 }} onPress={() => setOpenModal(!openModal)}>
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>Batal</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center' }} onPress={() => setOpenModal(!openModal)}>
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>Simpan</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
           <View style={[styles.groupField]}>
             <Text style={[styles.fieldLabel]}>Foto Selfie Masuk</Text>
             {image ? (
@@ -295,7 +314,7 @@ function AbsenMasukScreen() {
                 style={{ color: '#242c40' }}
                 placeholder="Lokasi Absen Masuk"
                 value={data.location_check_in}
-                // onChangeText={handleLocationChange}
+              // onChangeText={handleLocationChange}
               />
               <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={getCurrentLocation}>
                 <Icon name="location-arrow" size={20} color="#000" />

@@ -28,7 +28,7 @@ function SakitScreen() {
         name: '',
         date: dayjs(),
         time_check_out: dayjs(),
-        description_check_out: '',
+        reason_early_out: '',
         image_check_out: '',
         location_check_out: '',
         latitude: 0,
@@ -140,7 +140,7 @@ function SakitScreen() {
         if (data.name === '') {
             return Alert.alert('Nama harus diisi');
         }
-        if (data.time_check_out.format('HH:mm:ss') < workSchedule?.check_out_time && data.description_check_out === '') {
+        if (data.time_check_out.format('HH:mm:ss') < workSchedule?.check_out_time && data.reason_early_out === '') {
             return Alert.alert('Keterangan pulang harus diisi');
         }
         if (data.image_check_out === '') {
@@ -151,14 +151,14 @@ function SakitScreen() {
         }
 
         try {
-            const { date, time_check_out, description_check_out, location_check_out } = data;
+            const { date, time_check_out, reason_early_out, location_check_out } = data;
 
             // Create form data
             const formData = new FormData();
 
             formData.append('date', date.format('YYYY-MM-DD'));
             formData.append('time_check_out', time_check_out.format('HH:mm:ss'));
-            formData.append('description_check_out', description_check_out);
+            formData.append('reason_early_out', reason_early_out);
             formData.append('location_check_out', location_check_out);
 
             // Add image file to formData
@@ -259,8 +259,8 @@ function SakitScreen() {
                             <TextInput
                                 style={[styles.fieldInput]}
                                 placeholder="Keterangan Pulang"
-                                value={data.description_check_out}
-                                onChangeText={(text) => setData((prevData) => ({ ...prevData, description_check_out: text }))}
+                                value={data.reason_early_out}
+                                onChangeText={(text) => setData((prevData) => ({ ...prevData, reason_early_out: text }))}
                             />
                         </View>
                     )}

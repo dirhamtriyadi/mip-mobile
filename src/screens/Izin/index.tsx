@@ -26,7 +26,6 @@ function IzinScreen() {
     date: dayjs(),
     time_check_in: dayjs(),
     type: 'permit',
-    description_check_in: '',
     image_check_in: '',
     location_check_in: '',
     latitude: 0,
@@ -128,25 +127,21 @@ function IzinScreen() {
     if (data.name === '') {
       return Alert.alert('Nama harus diisi');
     }
-    if (data.description_check_in === '') {
-      return Alert.alert('Keterangan absen izin harus diisi');
-    }
-    if (data.image_check_in === '') {
-      return Alert.alert('Foto izin harus diisi');
-    }
+    // if (data.image_check_in === '') {
+    //   return Alert.alert('Foto izin harus diisi');
+    // }
     if (data.location_check_in === '') {
       return Alert.alert('Lokasi harus diisi');
     }
 
     try {
-      const { date, time_check_in, type, description_check_in, location_check_in } = data;
+      const { date, time_check_in, type, location_check_in } = data;
 
       const formData = new FormData();
       
       formData.append('date', date.format('YYYY-MM-DD'));
       formData.append('time_check_in', time_check_in.format('HH:mm:ss'));
       formData.append('type', type);
-      formData.append('description_check_in', description_check_in);
       formData.append('location_check_in', location_check_in);
 
       // Add image file to formData
@@ -238,15 +233,6 @@ function IzinScreen() {
                 <Icon name="clock" size={20} color="#000" />
               </TouchableOpacity>
             </View>
-          </View>
-          <View style={[styles.groupField]}>
-            <Text style={[styles.fieldLabel]}>Keterangan Absen Izin</Text>
-            <TextInput
-              style={[styles.fieldInput]}
-              placeholder="Keterangan Absen Izin"
-              value={data.description_check_in}
-              onChangeText={(text) => setData((prevData) => ({ ...prevData, description_check_in: text }))}
-            />
           </View>
           <View style={[styles.groupField]}>
             <Text style={[styles.fieldLabel]}>Foto Izin</Text>
@@ -360,23 +346,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 15,
     paddingHorizontal: 10,
-  },
-  lightContainer: {
-    backgroundColor: 'white',
-  },
-  darkContainer: {
-    backgroundColor: '#242c40',
-  },
-  lightThemeText: {
-    color: '#242c40',
-  },
-  darkThemeText: {
-    color: '#d0d0c0',
-  },
-  lightThemeInput: {
-    color: '#242c40',
-  },
-  darkThemeInput: {
-    color: '#d0d0c0',
   },
 });
