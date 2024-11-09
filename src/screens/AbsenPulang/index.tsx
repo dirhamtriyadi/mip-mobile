@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, PermissionsAndroid, Platform, Alert, Image } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, PermissionsAndroid, Platform, Alert, Image, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
 import MapView, { Marker } from 'react-native-maps';
@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 
 function SakitScreen() {
     const [workSchedule, setWorkSchedule] = useState<any>(null);
+    const [openModal, setOpenModal] = useState(false);
     const { userDetailData } = useUserData();
     const { location, getCurrentLocation } = useCurrentLocation();
     const [image, setImage] = useState<any>(null);
@@ -140,8 +141,9 @@ function SakitScreen() {
         if (data.name === '') {
             return Alert.alert('Nama harus diisi');
         }
-        if (data.time_check_out.format('HH:mm:ss') < workSchedule?.check_out_time && data.reason_early_out === '') {
-            return Alert.alert('Keterangan pulang harus diisi');
+        if (data.time_check_out.format('HH:mm:ss') < workSchedule?.work_end_time && data.reason_early_out === '') {
+            // return Alert.alert('Keterangan pulang harus diisi');
+            return setOpenModal(true);
         }
         if (data.image_check_out === '') {
             return Alert.alert('Foto selfie harus diisi');
@@ -253,17 +255,34 @@ function SakitScreen() {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    {data.time_check_out.format('HH:mm:ss') < workSchedule?.check_out_time && (
-                        <View style={[styles.groupField]}>
-                            <Text style={[styles.fieldLabel]}>Keterangan Pulang</Text>
-                            <TextInput
-                                style={[styles.fieldInput]}
-                                placeholder="Keterangan Pulang"
-                                value={data.reason_early_out}
-                                onChangeText={(text) => setData((prevData) => ({ ...prevData, reason_early_out: text }))}
-                            />
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={openModal}
+                        onRequestClose={() => {
+                            setOpenModal(!openModal);
+                        }}
+                    >
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                            <View style={{ width: '80%', height: 200, backgroundColor: 'white', borderRadius: 10, padding: 20 }}>
+                                <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Alasan Pulang Lebih Awal</Text>
+                                <TextInput
+                                    style={[styles.fieldInput]}
+                                    placeholder="Alasan Pulang Lebih Awal"
+                                    value={data.reason_early_out}
+                                    onChangeText={(text) => setData((prevData) => ({ ...prevData, reason_early_out: text }))}
+                                />
+                                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                                    <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center', marginRight: 10 }} onPress={() => setOpenModal(!openModal)}>
+                                        <Text style={{ color: 'white', fontWeight: 'bold' }}>Batal</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center' }} onPress={() => setOpenModal(!openModal)}>
+                                        <Text style={{ color: 'white', fontWeight: 'bold' }}>Simpan</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
                         </View>
-                    )}
+                    </Modal>
                     <View style={[styles.groupField]}>
                         <Text style={[styles.fieldLabel]}>Foto Selfie Pulang</Text>
                         {image ? (
