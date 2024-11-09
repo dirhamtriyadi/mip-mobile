@@ -1,21 +1,11 @@
 import React from 'react';
 import { Text, View, ActivityIndicator, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import useAuth from '../../hooks/useAuth';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../../App';
 
 function HomeScreen() {
-  const { isLoading, isAuthenticated } = useAuth();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
-  if (isLoading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
-
-  if (!isAuthenticated) {
-    return null;
-  }
 
   const handleInDevelopment = () => {
     Alert.alert('Dalam tahap pengembangan', 'Fitur ini sedang dalam tahap pengembangan.')
