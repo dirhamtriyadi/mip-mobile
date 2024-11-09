@@ -23,6 +23,10 @@ function AbsenScreen() {
     navigation.navigate('Izin');
   }
 
+  const handleCuti = () => {
+    navigation.navigate('Cuti');
+  }
+
   return (
     <SafeAreaView style={[styles.container]}>
       <View style={styles.listButton}>
@@ -38,7 +42,7 @@ function AbsenScreen() {
         <TouchableOpacity style={styles.btn} onPress={handleIzin}>
           <Text>Izin</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={handleCuti}>
           <Text>Cuti</Text>
         </TouchableOpacity>
       </View>

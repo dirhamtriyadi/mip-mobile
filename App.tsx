@@ -11,6 +11,7 @@ import AbsenMasukScreen from './src/screens/AbsenMasuk';
 import AbsenPulangScreen from './src/screens/AbsenPulang';
 import SakitScreen from './src/screens/Sakit';
 import IzinScreen from './src/screens/Izin';
+import CutiScreen from './src/screens/Cuti';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -126,6 +127,7 @@ function Layout() {
             <Stack.Screen name="AbsenPulang" component={AbsenPulangScreen} options={{ title: 'Absen Pulang' }} />
             <Stack.Screen name="Sakit" component={SakitScreen} options={{ title: 'Sakit' }} />
             <Stack.Screen name="Izin" component={IzinScreen} options={{ title: 'Izin' }} />
+            <Stack.Screen name="Cuti" component={CutiScreen} options={{ title: 'Cuti' }} />
           </Stack.Group>
         ) : (
           <Stack.Screen
