@@ -1,7 +1,7 @@
 import { NavigationContainer, NavigationProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useContext, useEffect } from 'react';
-import { Text, TouchableOpacity, PermissionsAndroid, Alert, Platform, View } from 'react-native';
+import { Text, TouchableOpacity, PermissionsAndroid, Alert, Platform, View, ActivityIndicator } from 'react-native';
 
 import { AuthContext, AuthProvider } from './src/contexts/AuthContext';
 import LoginScreen from './src/screens/Auth/Login';
@@ -84,10 +84,13 @@ function Layout() {
   };
 
   if (isLoading) {
-    return <View><Text>Loading...</Text></View>; // Show a loading indicator while checking authentication
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
   
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
