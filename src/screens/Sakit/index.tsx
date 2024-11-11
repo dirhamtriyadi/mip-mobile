@@ -23,7 +23,8 @@ function SakitScreen() {
     code: '',
     nik: '',
     name: '',
-    date: dayjs(),
+    start_date: dayjs(),
+    end_date: dayjs(),
     time_check_in: dayjs(),
     type: 'sick',
     image_check_in: '',
@@ -32,7 +33,8 @@ function SakitScreen() {
     longitude: 0,
   });
 
-  const [openDatePicker, setOpenDatePicker] = useState(false);
+  const [openDatePickerStartDate, setOpenDatePickerStartDate] = useState(false);
+  const [openDatePickerEndDate, setOpenDatePickerEndDate] = useState(false);
   const [openTimePicker, setOpenTimePicker] = useState(false);
 
   useEffect(() => {
@@ -49,16 +51,22 @@ function SakitScreen() {
   useEffect(() => {
     setData((prevData) => ({
       ...prevData,
-      code: userDetailData.name + data.date.format('DD/MM/YYYY'),
+      code: userDetailData.name + data.start_date.format('DD/MM/YYYY'),
       nik: userDetailData.nik,
       name: userDetailData.name,
     }));
-  }, [userDetailData, data.date]);
+  }, [userDetailData, data.start_date]);
 
-  const handleDateChange = (selectedDate: Date) => {
+  const handleDateChangeStartDate = (selectedDate: Date) => {
     // setData((prevData) => ({ ...prevData, date: selectedDate }));
-    setData((prevData) => ({ ...prevData, date: dayjs(selectedDate) }));
-    setOpenDatePicker(false);
+    setData((prevData) => ({ ...prevData, start_date: dayjs(selectedDate) }));
+    setOpenDatePickerStartDate(false);
+  };
+
+  const handleDateChangeEndDate = (selectedDate: Date) => {
+    // setData((prevData) => ({ ...prevData, date: selectedDate }));
+    setData((prevData) => ({ ...prevData, end_date: dayjs(selectedDate) }));
+    setOpenDatePickerEndDate(false);
   };
 
   const handleTimeChange = (selectedTime: Date) => {
@@ -135,11 +143,12 @@ function SakitScreen() {
     }
 
     try {
-      const { date, time_check_in, type, location_check_in } = data;
+      const { start_date, end_date, time_check_in, type, location_check_in } = data;
 
       const formData = new FormData();
 
-      formData.append('date', date.format('YYYY-MM-DD'));
+      formData.append('start_date', start_date.format('YYYY-MM-DD'));
+      formData.append('end_date', end_date.format('YYYY-MM-DD'));
       formData.append('time_check_in', time_check_in.format('HH:mm:ss'));
       formData.append('type', type);
       formData.append('location_check_in', location_check_in);
@@ -207,15 +216,29 @@ function SakitScreen() {
             />
           </View>
           <View style={[styles.groupField]}>
-            <Text style={[styles.fieldLabel]}>Tanggal</Text>
+            <Text style={[styles.fieldLabel]}>Tanggal Awal Sakit</Text>
             <View style={{ width: '100%', height: 45, borderWidth: 1, borderColor: '#ccc', borderRadius: 5, marginBottom: 15, paddingHorizontal: 10, justifyContent: 'center' }}>
               <TextInput
                 style={{ color: '#242c40' }}
-                placeholder="Tanggal"
-                value={data.date.format('DD/MM/YYYY')}
+                placeholder="Tanggal Awal Sakit"
+                value={data.start_date.format('DD/MM/YYYY')}
                 editable={false}
               />
-              <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={() => setOpenDatePicker(true)}>
+              <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={() => setOpenDatePickerStartDate(true)}>
+                <Icon name="calendar" size={20} color="#000" />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={[styles.groupField]}>
+            <Text style={[styles.fieldLabel]}>Tanggal Akhir Sakit</Text>
+            <View style={{ width: '100%', height: 45, borderWidth: 1, borderColor: '#ccc', borderRadius: 5, marginBottom: 15, paddingHorizontal: 10, justifyContent: 'center' }}>
+              <TextInput
+                style={{ color: '#242c40' }}
+                placeholder="Tanggal Akhir Sakit"
+                value={data.end_date.format('DD/MM/YYYY')}
+                editable={false}
+              />
+              <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={() => setOpenDatePickerEndDate(true)}>
                 <Icon name="calendar" size={20} color="#000" />
               </TouchableOpacity>
             </View>
@@ -299,10 +322,19 @@ function SakitScreen() {
         modal
         mode="date"
         minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
-        open={openDatePicker}
-        date={data.date.toDate()}
-        onConfirm={handleDateChange}
-        onCancel={() => setOpenDatePicker(false)}
+        open={openDatePickerStartDate}
+        date={data.start_date.toDate()}
+        onConfirm={handleDateChangeStartDate}
+        onCancel={() => setOpenDatePickerStartDate(false)}
+      />
+      <DatePicker
+        modal
+        mode="date"
+        minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
+        open={openDatePickerEndDate}
+        date={data.end_date.toDate()}
+        onConfirm={handleDateChangeEndDate}
+        onCancel={() => setOpenDatePickerEndDate(false)}
       />
       <DatePicker
         modal
