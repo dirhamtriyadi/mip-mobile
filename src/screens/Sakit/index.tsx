@@ -11,11 +11,16 @@ import { useUserData } from "../../hooks/useUserData";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
+import { useNotification } from "../../hooks/useNotification";
 
 function SakitScreen() {
   const [image, setImage] = useState<any>(null);
+  const [openDatePickerStartDate, setOpenDatePickerStartDate] = useState(false);
+  const [openDatePickerEndDate, setOpenDatePickerEndDate] = useState(false);
+  const [openTimePicker, setOpenTimePicker] = useState(false);
   const { userDetailData } = useUserData();
   const { location, getCurrentLocation } = useCurrentLocation();
+  const { showNotification } = useNotification();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -32,10 +37,6 @@ function SakitScreen() {
     latitude: 0,
     longitude: 0,
   });
-
-  const [openDatePickerStartDate, setOpenDatePickerStartDate] = useState(false);
-  const [openDatePickerEndDate, setOpenDatePickerEndDate] = useState(false);
-  const [openTimePicker, setOpenTimePicker] = useState(false);
 
   useEffect(() => {
     if (location.latitude !== 0 && location.longitude !== 0) {
@@ -171,6 +172,7 @@ function SakitScreen() {
           onPress: () => navigation.navigate('Home'),
         }
       ]);
+      showNotification('Absen sakit berhasil', 'Absen sakit berhasil disubmit');
     } catch (error: any) {
       if (error.response?.data?.message?.code) {
         error.response?.data?.message?.code.map((item: any) => {

@@ -11,6 +11,7 @@ import { useUserData } from "../../hooks/useUserData";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
+import { useNotification } from "../../hooks/useNotification";
 
 function AbsenMasukScreen() {
   const [workSchedule, setWorkSchedule] = useState<any>(null);
@@ -18,6 +19,7 @@ function AbsenMasukScreen() {
   const [openModal, setOpenModal] = useState(false);
   const { userDetailData } = useUserData();
   const { location, getCurrentLocation } = useCurrentLocation();
+  const { showNotification } = useNotification();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -187,6 +189,7 @@ function AbsenMasukScreen() {
           onPress: () => navigation.navigate('Home'),
         }
       ]);
+      showNotification('Absen Masuk', 'Absen masuk berhasil disubmit');
     } catch (error: any) {
       if (error.response?.data?.message?.code) {
         error.response?.data?.message?.code.map((item: any) => {

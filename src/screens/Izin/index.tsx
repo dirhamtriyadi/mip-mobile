@@ -11,11 +11,15 @@ import { useUserData } from "../../hooks/useUserData";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
+import { useNotification } from "../../hooks/useNotification";
 
 function IzinScreen() {
   const [image, setImage] = useState<any>(null);
+  const [openDatePicker, setOpenDatePicker] = useState(false);
+  const [openTimePicker, setOpenTimePicker] = useState(false);
   const { userDetailData } = useUserData();
   const { location, getCurrentLocation } = useCurrentLocation();
+  const { showNotification } = useNotification();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -31,9 +35,6 @@ function IzinScreen() {
     latitude: 0,
     longitude: 0,
   });
-
-  const [openDatePicker, setOpenDatePicker] = useState(false);
-  const [openTimePicker, setOpenTimePicker] = useState(false);
 
   useEffect(() => {
     if (location.latitude !== 0 && location.longitude !== 0) {
@@ -162,6 +163,7 @@ function IzinScreen() {
           onPress: () => navigation.navigate('Home'),
         }
       ]);
+      showNotification('Absen izin berhasil', 'Absen izin berhasil disubmit');
     } catch (error: any) {
       if (error.response?.data?.message?.code) {
         error.response?.data?.message?.code.map((item: any) => {
