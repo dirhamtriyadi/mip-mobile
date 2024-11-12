@@ -11,6 +11,8 @@ import {
 interface ReasonModalProps {
   visible: boolean;
   onClose: () => void;
+  title: string;
+  placeholder: string;
   value: string;
   onChangeText: (text: string) => void;
 }
@@ -18,6 +20,8 @@ interface ReasonModalProps {
 const ReasonModal: React.FC<ReasonModalProps> = ({
   visible,
   onClose,
+  title,
+  placeholder,
   value,
   onChangeText,
 }) => (
@@ -42,11 +46,11 @@ const ReasonModal: React.FC<ReasonModalProps> = ({
           padding: 20,
         }}>
         <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: 10}}>
-          Alasan Terlambat
+          {title}
         </Text>
         <TextInput
           style={[styles.fieldInput]}
-          placeholder="Alasan Terlambat"
+          placeholder={placeholder}
           value={value}
           onChangeText={onChangeText}
         />
