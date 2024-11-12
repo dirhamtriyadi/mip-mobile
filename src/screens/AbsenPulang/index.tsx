@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, Image, Modal } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
-import MapView, { Marker } from 'react-native-maps';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useUserData } from "../../hooks/useUserData";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
 import instance from "../../configs/axios";
@@ -29,7 +27,6 @@ function SakitScreen() {
         time_check_out: dayjs(),
         reason_early_out: '',
         image_check_out: '',
-        location_check_in: '',
         location_check_out: '',
         latitude: 0,
         longitude: 0,
@@ -65,8 +62,9 @@ function SakitScreen() {
             name: userDetailData.name,
             date: date,
             time_check_out: time,
+            image_check_out: image,
         }));
-    }, [userDetailData, data.date, date, time]);
+    }, [userDetailData, data.date, date, time, image]);
 
     const handleLocationChange = (text: string) => {
         const [latitude, longitude] = text.split(',').map(coord => parseFloat(coord.trim()));

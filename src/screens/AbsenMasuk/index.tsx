@@ -29,7 +29,6 @@ function AbsenMasukScreen() {
     reason_late: '',
     image_check_in: '',
     location_check_in: '',
-    location_check_out: '',
     latitude: 0,
     longitude: 0,
   });
@@ -64,8 +63,9 @@ function AbsenMasukScreen() {
       name: userDetailData.name,
       date: date,
       time_check_in: time,
+      image_check_in: image,
     }));
-  }, [userDetailData, data.date, date, time]);
+  }, [userDetailData, data.date, date, time, image]);
 
   const handleSubmit = async () => {
     if (data.code === '') {
