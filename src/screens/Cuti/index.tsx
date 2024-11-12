@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import instance from "../../configs/axios";
 import { useUserData } from "../../hooks/useUserData";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
 import { useNotification } from "../../hooks/useNotification";
+import useDatePickerStartDate from "../../hooks/useDatePicker";
+import useDatePickerEndDate from "../../hooks/useDatePicker";
+import InputField from "../../components/InputField";
 
 function CutiScreen() {
-  const [openDatePickerStartDate, setOpenDatePickerStartDate] = useState(false);
-  const [openDatePickerEndDate, setOpenDatePickerEndDate] = useState(false);
-  const { userDetailData } = useUserData();
-  const { showNotification } = useNotification();
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
   const [data, setData] = useState({
     nik: '',
     name: '',
@@ -24,24 +20,22 @@ function CutiScreen() {
     end_date: dayjs(),
   });
 
+  const { date: startDate, openDatePicker: openDatePickerStartDate, setOpenDatePicker: setOpenDatePickerStartDate, handleDateChange: handleDateChangeStartDate } = useDatePickerStartDate(data.start_date);
+  const { date: endDate, openDatePicker: openDatePickerEndDate, setOpenDatePicker: setOpenDatePickerEndDate, handleDateChange: handleDateChangeEndDate } = useDatePickerEndDate(data.end_date);
+  const { userDetailData } = useUserData();
+  const { showNotification } = useNotification();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   useEffect(() => {
     setData((prevData) => ({
       ...prevData,
       nik: userDetailData.nik,
       name: userDetailData.name,
+      start_date: startDate,
+      end_date: endDate,
     }));
-  }, [userDetailData]);
+  }, [userDetailData, startDate, endDate]);
 
-  const handleDateChangeStartDate = (selectedDate: Date) => {
-    setData((prevData) => ({ ...prevData, start_date: dayjs(selectedDate) }));
-    setOpenDatePickerStartDate(false);
-  };
-
-  const handleDateChangeEndDate = (selectedDate: Date) => {
-    setData((prevData) => ({ ...prevData, end_date: dayjs(selectedDate) }));
-    setOpenDatePickerEndDate(false);
-  };
-  
   const handleSubmit = async () => {
 
     // add validation here
@@ -87,52 +81,36 @@ function CutiScreen() {
     <SafeAreaView style={[styles.container]}>
       <ScrollView>
         <View style={[styles.formContainer]}>
-          <View style={[styles.groupField]}>
-            <Text style={[styles.fieldLabel]}>NIK</Text>
-            <TextInput
-              style={[styles.fieldInput]}
-              placeholder="NIK"
-              value={data.nik}
-              onChangeText={(text) => setData((prevData) => ({ ...prevData, nik: text }))}
-            />
-          </View>
-          <View style={[styles.groupField]}>
-            <Text style={[styles.fieldLabel]}>Nama</Text>
-            <TextInput
-              style={[styles.fieldInput]}
-              placeholder="Nama"
-              value={data.name}
-              onChangeText={(text) => setData((prevData) => ({ ...prevData, name: text }))}
-            />
-          </View>
-          <View style={[styles.groupField]}>
-            <Text style={[styles.fieldLabel]}>Tanggal Mulai Cuti</Text>
-            <View style={{ width: '100%', height: 45, borderWidth: 1, borderColor: '#ccc', borderRadius: 5, marginBottom: 15, paddingHorizontal: 10, justifyContent: 'center' }}>
-              <TextInput
-                style={{ color: '#242c40' }}
-                placeholder="Tanggal Mulai Cuti"
-                value={data.start_date.format('DD/MM/YYYY')}
-                editable={false}
-              />
-              <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={() => setOpenDatePickerStartDate(true)}>
-                <Icon name="calendar" size={20} color="#000" />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={[styles.groupField]}>
-            <Text style={[styles.fieldLabel]}>Tanggal Akhir Cuti</Text>
-            <View style={{ width: '100%', height: 45, borderWidth: 1, borderColor: '#ccc', borderRadius: 5, marginBottom: 15, paddingHorizontal: 10, justifyContent: 'center' }}>
-              <TextInput
-                style={{ color: '#242c40' }}
-                placeholder="Tanggal Akhir Cuti"
-                value={data.end_date.format('DD/MM/YYYY')}
-                editable={false}
-              />
-              <TouchableOpacity style={{ position: 'absolute', right: 10 }} onPress={() => setOpenDatePickerEndDate(true)}>
-                <Icon name="calendar" size={20} color="#000" />
-              </TouchableOpacity>
-            </View>
-          </View>
+          <InputField
+            label="NIK"
+            placeholder="NIK"
+            value={data.nik}
+            onChangeText={(text) => setData((prevData) => ({ ...prevData, nik: text }))}
+          />
+          <InputField
+            label="Nama"
+            placeholder="Nama"
+            value={data.name}
+            onChangeText={(text) => setData((prevData) => ({ ...prevData, name: text }))}
+          />
+          <InputField
+            label="Tanggal Mulai Cuti"
+            placeholder="Tanggal Mulai Cuti"
+            value={data.start_date.format('DD/MM/YYYY')}
+            onChangeText={() => {}}
+            editable={false}
+            onIconPress={() => setOpenDatePickerStartDate(true)}
+            iconName="calendar"
+          />
+          <InputField
+            label="Tanggal Akhir Cuti"
+            placeholder="Tanggal Akhir Cuti"
+            value={data.end_date.format('DD/MM/YYYY')}
+            onChangeText={() => {}}
+            editable={false}
+            onIconPress={() => setOpenDatePickerEndDate(true)}
+            iconName="calendar"
+          />
           <View style={[styles.groupField, { marginBottom: 10 }]}>
             <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center' }} onPress={handleSubmit}>
               <Text style={{ color: 'white', fontWeight: 'bold' }}>Ajukan Cuti</Text>
@@ -177,19 +155,5 @@ const styles = StyleSheet.create({
   },
   groupField: {
     width: '100%',
-  },
-  fieldLabel: {
-    fontSize: 16,
-    marginBottom: 10,
-    fontWeight: 'bold',
-  },
-  fieldInput: {
-    width: '100%',
-    height: 45,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    marginBottom: 15,
-    paddingHorizontal: 10,
   },
 });
