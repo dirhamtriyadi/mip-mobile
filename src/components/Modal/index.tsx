@@ -11,7 +11,7 @@ import {
 interface ReasonModalProps {
   visible: boolean;
   onClose: () => void;
-  title: string;
+  label: string;
   placeholder: string;
   value: string;
   onChangeText: (text: string) => void;
@@ -20,7 +20,7 @@ interface ReasonModalProps {
 const ReasonModal: React.FC<ReasonModalProps> = ({
   visible,
   onClose,
-  title,
+  label,
   placeholder,
   value,
   onChangeText,
@@ -46,7 +46,7 @@ const ReasonModal: React.FC<ReasonModalProps> = ({
           padding: 20,
         }}>
         <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: 10}}>
-          {title}
+          {label}
         </Text>
         <TextInput
           style={[styles.fieldInput]}

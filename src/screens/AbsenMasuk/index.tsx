@@ -170,7 +170,7 @@ function AbsenMasukScreen() {
           <ReasonModal
             visible={openModal}
             onClose={() => setOpenModal(!openModal)}
-            title="Alasan Terlambat"
+            label="Alasan Terlambat"
             placeholder="Keterangan"
             value={data.reason_late}
             onChangeText={(text) => setData((prevData) => ({ ...prevData, reason_late: text }))}
