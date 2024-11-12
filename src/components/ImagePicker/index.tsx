@@ -4,18 +4,20 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {StyleSheet} from 'react-native';
 
 interface ImagePickerProps {
+  label: string;
   image: {uri: string} | null;
   onOpenCamera: () => void;
   onResetCamera: () => void;
 }
 
 const ImagePicker: React.FC<ImagePickerProps> = ({
+  label,
   image,
   onOpenCamera,
   onResetCamera,
 }) => (
   <View style={[styles.groupField]}>
-    <Text style={[styles.fieldLabel]}>Foto Selfie Masuk</Text>
+    <Text style={[styles.fieldLabel]}>{label}</Text>
     {image ? (
       <TouchableOpacity
         onPress={onResetCamera}

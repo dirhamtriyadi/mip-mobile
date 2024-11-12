@@ -29,6 +29,7 @@ function AbsenMasukScreen() {
     reason_late: '',
     image_check_in: '',
     location_check_in: '',
+    location_check_out: '',
     latitude: 0,
     longitude: 0,
   });
@@ -176,14 +177,16 @@ function AbsenMasukScreen() {
             onChangeText={(text) => setData((prevData) => ({ ...prevData, reason_late: text }))}
           />
           <ImagePicker
+            label="Foto Selfie Masuk"
             image={image}
             onOpenCamera={handleClickOpenCamera}
             onResetCamera={handleClickResetCamera}
           />
           <LocationPicker
+            label="Lokasi Absen Masuk"
+            placeholder="Lokasi Absen Masuk"
             location={location}
             getCurrentLocation={getCurrentLocation}
-            data={data}
           />
           <View style={[styles.groupField, { marginBottom: 10 }]}>
             <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center' }} onPress={handleSubmit}>

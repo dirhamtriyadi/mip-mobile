@@ -10,24 +10,24 @@ import MapView, {Marker} from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 interface LocationPickerProps {
+  label: string;
+  placeholder: string;
   getCurrentLocation: () => void;
-  data: {
-    location_check_in: string;
-    latitude: number;
-    longitude: number;
-  };
   location: {
     latitude: number;
     longitude: number;
+    locationString: string
   };
 }
 
 const LocationPicker: React.FC<LocationPickerProps> = ({
+  label,
+  placeholder,
   getCurrentLocation,
-  data,
+  location
 }) => (
   <View style={[styles.groupField]}>
-    <Text style={[styles.fieldLabel]}>Lokasi Absen Masuk</Text>
+    <Text style={[styles.fieldLabel]}>{label}</Text>
     <View
       style={{
         width: '100%',
@@ -41,8 +41,8 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
       }}>
       <TextInput
         style={{color: '#242c40'}}
-        placeholder="Lokasi Absen Masuk"
-        value={data.location_check_in}
+        placeholder={placeholder}
+        value={location.locationString}
         // onChangeText={handleLocationChange}
       />
       <TouchableOpacity
@@ -51,22 +51,22 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
         <Icon name="location-arrow" size={20} color="#000" />
       </TouchableOpacity>
     </View>
-    {data.latitude !== 0 && data.longitude !== 0 && (
+    {location.locationString && (
       <MapView
         style={{width: '100%', height: 200, marginBottom: 10, marginTop: -10}}
         initialRegion={{
-          latitude: data.latitude,
-          longitude: data.longitude,
+          latitude: location.latitude,
+          longitude: location.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}>
         <Marker
           coordinate={{
-            latitude: data.latitude,
-            longitude: data.longitude,
+            latitude: location.latitude,
+            longitude: location.longitude,
           }}
           title="Lokasi Anda"
-          description={data.location_check_in}
+          description={location.locationString}
         />
       </MapView>
     )}
