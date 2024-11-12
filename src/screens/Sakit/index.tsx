@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, Image } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
-import MapView, { Marker } from 'react-native-maps';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useCurrentLocation } from '../../hooks/useCurrentLocation';
 import instance from "../../configs/axios";
 import { useUserData } from "../../hooks/useUserData";
