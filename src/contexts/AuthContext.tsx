@@ -56,8 +56,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       await AsyncStorage.setItem('user', JSON.stringify(response.data.data));
       setIsAuthenticated(true);
       setUserData(response.data.data);
-      console.log('response.data.data', response.data);
-      
     } catch (error) {
       console.error('Login error:', error);
       throw error;
