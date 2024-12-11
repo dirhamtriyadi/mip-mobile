@@ -10,7 +10,7 @@ import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
 import { useNotification } from "../../hooks/useNotification";
 import InputField from "../../components/InputField";
-import ReasonModal from "../../components/Modal";
+import ReasonModal from "../../components/ReasonModal";
 import ImagePicker from "../../components/ImagePicker";
 import LocationPicker from "../../components/LocationPicker";
 import useWorkSchedule from "../../hooks/useWorkSchedule";

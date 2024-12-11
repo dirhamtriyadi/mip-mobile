@@ -14,7 +14,7 @@ import useCamera from "../../hooks/useCamera";
 import useDatePicker from "../../hooks/useDatePicker";
 import useTimePicker from "../../hooks/useTimePicker";
 import InputField from "../../components/InputField";
-import ReasonModal from "../../components/Modal";
+import ReasonModal from "../../components/ReasonModal";
 import LocationPicker from "../../components/LocationPicker";
 import ImagePicker from "../../components/ImagePicker";
 

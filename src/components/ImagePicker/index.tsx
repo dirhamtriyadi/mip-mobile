@@ -45,16 +45,10 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
     )}
     {image && (
       <View
-        style={{
-          width: '100%',
-          height: 200,
-          marginBottom: 10,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+        style={[styles.imgContainer]}>
         <Image
           source={{uri: image.uri}}
-          style={{width: '100%', height: '100%', resizeMode: 'contain'}}
+          style={[styles.imgStyle]}
         />
       </View>
     )}
@@ -86,6 +80,18 @@ const styles = StyleSheet.create({
   },
   btnIcon: {
     position: 'absolute', right: 10
+  },
+  imgContainer: {
+    width: '100%',
+    height: 200,
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imgStyle: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain'
   }
 });
 
