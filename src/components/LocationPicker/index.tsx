@@ -31,20 +31,20 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
     <View
       style={[styles.fieldInput]}>
       <TextInput
-        style={{color: '#242c40'}}
+        style={styles.textInput}
         placeholder={placeholder}
         value={location.locationString}
         // onChangeText={handleLocationChange}
       />
       <TouchableOpacity
-        style={{position: 'absolute', right: 10}}
+        style={styles.btnIcon}
         onPress={getCurrentLocation}>
         <Icon name="location-arrow" size={20} color="#000" />
       </TouchableOpacity>
     </View>
     {location.locationString && (
       <MapView
-        style={{width: '100%', height: 200, marginBottom: 10, marginTop: -10}}
+        style={[styles.map]}
         initialRegion={{
           latitude: location.latitude,
           longitude: location.longitude,
@@ -82,6 +82,19 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingHorizontal: 10,
     justifyContent: 'center',
+  },
+  textInput: {
+    color: '#242c40'
+  },
+  btnIcon: {
+    position: 'absolute',
+    right: 10
+  },
+  map: {
+    width: '100%',
+    height: 200,
+    marginBottom: 10,
+    marginTop: -10
   }
 });
 
