@@ -29,16 +29,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   <View style={[styles.groupField]}>
     <Text style={[styles.fieldLabel]}>{label}</Text>
     <View
-      style={{
-        width: '100%',
-        height: 45,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        marginBottom: 15,
-        paddingHorizontal: 10,
-        justifyContent: 'center',
-      }}>
+      style={[styles.fieldInput]}>
       <TextInput
         style={{color: '#242c40'}}
         placeholder={placeholder}
@@ -82,6 +73,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: 'bold',
   },
+  fieldInput: {
+    width: '100%',
+    height: 45,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 15,
+    paddingHorizontal: 10,
+    justifyContent: 'center',
+  }
 });
 
 export default LocationPicker;
