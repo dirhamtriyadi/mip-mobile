@@ -21,45 +21,25 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
     {image ? (
       <TouchableOpacity
         onPress={onResetCamera}
-        style={{
-          width: '100%',
-          height: 45,
-          borderWidth: 1,
-          borderColor: '#ccc',
-          borderRadius: 5,
-          marginBottom: 15,
-          paddingHorizontal: 10,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text style={{color: '#242c40'}}>Reset Foto</Text>
+        style={[styles.btn]}>
+        <Text style={[styles.btnText]}>Reset Foto</Text>
         <Icon
           name="trash-alt"
           size={20}
           color="#000"
-          style={{position: 'absolute', right: 10}}
+          style={[styles.btnIcon]}
         />
       </TouchableOpacity>
     ) : (
       <TouchableOpacity
         onPress={onOpenCamera}
-        style={{
-          width: '100%',
-          height: 45,
-          borderWidth: 1,
-          borderColor: '#ccc',
-          borderRadius: 5,
-          marginBottom: 15,
-          paddingHorizontal: 10,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text style={{color: '#242c40'}}>Ambil Foto</Text>
+        style={[styles.btn]}>
+        <Text style={[styles.btnText]}>Ambil Foto</Text>
         <Icon
           name="camera"
           size={20}
           color="#000"
-          style={{position: 'absolute', right: 10}}
+          style={[styles.btnIcon]}
         />
       </TouchableOpacity>
     )}
@@ -90,6 +70,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: 'bold',
   },
+  btnText: {
+    color: '#242c40',
+  },
+  btn: {
+    width: '100%',
+    height: 45,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 15,
+    paddingHorizontal: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnIcon: {
+    position: 'absolute', right: 10
+  }
 });
 
 export default ImagePicker;
