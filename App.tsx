@@ -12,6 +12,8 @@ import AbsenPulangScreen from './src/screens/AbsenPulang';
 import SakitScreen from './src/screens/Sakit';
 import IzinScreen from './src/screens/Izin';
 import CutiScreen from './src/screens/Cuti';
+import PenagihanScreen from './src/screens/Penagihan';
+import DetailPenagihanScreen from './src/screens/DetailPenagihan';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -22,6 +24,8 @@ export type RootStackParamList = {
   Sakit: undefined;
   Izin: undefined;
   Cuti: undefined;
+  Penagihan: undefined;
+  DetailPenagihan: { id: string };
 };
 
 async function requestLocationPermission() {
@@ -131,6 +135,8 @@ function Layout() {
             <Stack.Screen name="Sakit" component={SakitScreen} options={{ title: 'Sakit' }} />
             <Stack.Screen name="Izin" component={IzinScreen} options={{ title: 'Izin' }} />
             <Stack.Screen name="Cuti" component={CutiScreen} options={{ title: 'Cuti' }} />
+            <Stack.Screen name="Penagihan" component={PenagihanScreen} options={{ title: 'Penagihan' }} />
+            <Stack.Screen name="DetailPenagihan" component={DetailPenagihanScreen} options={{ title: 'Detail Penagihan' }} />
           </Stack.Group>
         ) : (
           <Stack.Screen

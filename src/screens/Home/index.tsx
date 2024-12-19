@@ -21,7 +21,7 @@ function HomeScreen() {
           </TouchableOpacity>
         </View>
         <View style={styles.content}>
-          <TouchableOpacity style={styles.button} onPress={handleInDevelopment}>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Penagihan')}>
             <Icon name="money-bill-wave" size={30} color="#000" />
             <Text>Penagihan</Text>
           </TouchableOpacity>
