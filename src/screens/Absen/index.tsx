@@ -6,43 +6,27 @@ import { RootStackParamList } from "../../../App";
 
 function AbsenScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
-  const handleAbsenMasuk = () => {
-    navigation.navigate('AbsenMasuk');
-  }
-
-  const handleAbsenPulang = () => {
-    navigation.navigate('AbsenPulang');
-  }
-
-  const handleSakit = () => {
-    navigation.navigate('Sakit');
-  }
-
-  const handleIzin = () => {
-    navigation.navigate('Izin');
-  }
-
-  const handleCuti = () => {
-    navigation.navigate('Cuti');
+  
+  const handleClick = (navigate: any) => {
+    navigation.navigate(navigate);
   }
 
   return (
     <SafeAreaView style={[styles.container]}>
       <View style={styles.listButton}>
-        <TouchableOpacity style={styles.btn} onPress={handleAbsenMasuk}>
+        <TouchableOpacity style={styles.btn} onPress={() => handleClick('AbsenMasuk')}>
           <Text>Absen Masuk</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={handleAbsenPulang}>
+        <TouchableOpacity style={styles.btn} onPress={() => handleClick('AbsenPulang')}>
           <Text>Absen Pulang</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={handleSakit}>
+        <TouchableOpacity style={styles.btn} onPress={() => handleClick('Sakit')}>
           <Text>Sakit</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={handleIzin}>
+        <TouchableOpacity style={styles.btn} onPress={() => handleClick('Izin')}>
           <Text>Izin</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={handleCuti}>
+        <TouchableOpacity style={styles.btn} onPress={() => handleClick('Cuti')}>
           <Text>Cuti</Text>
         </TouchableOpacity>
       </View>
