@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert, ActivityIndicator } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View, Alert, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
 import instance from "../../configs/axios";
@@ -13,6 +13,7 @@ import useDatePickerStartDate from "../../hooks/useDatePicker";
 import useDatePickerEndDate from "../../hooks/useDatePicker";
 import InputField from "../../components/InputField";
 import globalStyles from "../../styles/styles";
+import styles from "./styles";
 
 interface CutiData {
   start_date: any;
@@ -202,20 +203,3 @@ function CutiScreen() {
 }
 
 export default CutiScreen;
-
-const styles = StyleSheet.create({
-  groupDetailCuti:{
-    marginTop: 20,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { 
-      width: 0,
-      height: 2 
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    padding: 10 
-  }
-});

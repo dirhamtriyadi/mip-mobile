@@ -1,9 +1,10 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RootStackParamList } from "../../../App";
 import globalStyles from "../../styles/styles";
+import styles from "./styles";
 
 function AbsenScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -36,29 +37,3 @@ function AbsenScreen() {
 }
 
 export default AbsenScreen;
-
-const styles = StyleSheet.create({
-  listButton: {
-    padding: 5,
-    width: '100%',
-    alignItems: 'center',
-  },
-  btn: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: 50,
-    margin: 3,
-    // padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  }
-});

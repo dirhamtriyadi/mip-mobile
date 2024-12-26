@@ -5,20 +5,21 @@ import {
   TextInput,
   Button,
   Alert,
-  StyleSheet,
   useColorScheme,
   ActivityIndicator,
 } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../../App';
 import { AuthContext } from '../../contexts/AuthContext';
+import createStyles from './styles';
 
 function LoginScreen() {
   const { isAuthenticated, isLoading, login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const theme = useColorScheme();
+  const theme = useColorScheme() || 'light';
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const styles = createStyles(theme);
 
   const handleLogin = async () => {
     try {
@@ -33,30 +34,6 @@ function LoginScreen() {
       navigation.navigate('Home');
     }
   }, [isAuthenticated, navigation]);
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      padding: 20,
-      backgroundColor: theme === 'dark' ? '#000' : '#fff',
-    },
-    title: {
-      fontSize: 24,
-      marginBottom: 20,
-      textAlign: 'center',
-      color: theme === 'dark' ? '#fff' : '#000',
-    },
-    input: {
-      height: 40,
-      borderColor: 'gray',
-      borderWidth: 1,
-      marginBottom: 20,
-      paddingLeft: 10,
-      color: theme === 'dark' ? '#fff' : '#000',
-      backgroundColor: theme === 'dark' ? '#333' : '#fff',
-    },
-  });
 
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
