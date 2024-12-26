@@ -12,22 +12,14 @@ interface PenagihanData {
   date: any;
   destination: string;
   customer: {
+    id: string;
     name_customer: string;
+    no: string;
   };
 }
 
 function PenagihanScreen() {
-  const [data, setData] = useState<PenagihanData[]>([
-    {
-      id: '',
-      no_billing: '',
-      date: '',
-      destination: '',
-      customer: {
-        name_customer: '',
-      },
-    },
-  ]);
+  const [data, setData] = useState<PenagihanData[]>([]);
 
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false)
@@ -91,10 +83,11 @@ function PenagihanScreen() {
             <ActivityIndicator size="large" color="#007bff" />
           ) : data?.map((item, index) => (
             <TouchableOpacity key={index} style={[ styles.btn, { padding: 10, backgroundColor: '#f8f8f8', borderRadius: 10 }]} onPress={() => navigation.navigate('DetailPenagihan', { id: item.id })}>
-            <View style={styles.head}>
-              <Text style={styles.textKontrak}>No. Tagihan: {item.no_billing}</Text>
-              <Text style={styles.textDate}>{item.date}</Text>
-            </View>
+              <View style={styles.head}>
+                <Text style={styles.textKontrak}>No. Kontrak: {item.customer.no}</Text>
+                <Text style={styles.textDate}>{item.date}</Text>
+              </View>
+              <Text>No. Tagihan: {item.no_billing}</Text>
               {item.destination == 'visit' ? <Text style={styles.destinationVisit}>Kunjungan</Text> : item.destination == 'promise' ? <Text style={styles.destinationPromise}>Janji Bayar</Text> : <Text style={styles.destinationPay}>Bayar</Text>}
               <Text>{item.customer.name_customer}</Text>
             </TouchableOpacity>
