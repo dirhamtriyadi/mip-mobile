@@ -28,46 +28,9 @@ export type RootStackParamList = {
   DetailPenagihan: { id: string };
 };
 
-async function requestLocationPermission() {
-  try {
-    if (Platform.OS === 'android') {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: "Location Permission",
-          message: "This app needs access to your location.",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK"
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the location");
-      } else {
-        console.log("Location permission denied");
-        Alert.alert(
-          "Permission Denied",
-          "Location permission is required to use this feature. Please enable it in the app settings.",
-          [
-            { text: "OK" }
-          ]
-        );
-      }
-    } else {
-      // For iOS, you can use a different library like react-native-permissions
-      console.log("Location permission is not required for iOS in this example.");
-    }
-  } catch (err) {
-    console.warn(err);
-  }
-}
-
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App() {
-  useEffect(() => {
-    requestLocationPermission();
-  }, []);
 
   return (
     <AuthProvider>
