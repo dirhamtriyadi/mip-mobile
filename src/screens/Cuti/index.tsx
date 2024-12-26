@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
 import instance from "../../configs/axios";
@@ -7,10 +7,31 @@ import { useUserData } from "../../hooks/useUserData";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
+import 'dayjs/locale/id';
 import { useNotification } from "../../hooks/useNotification";
 import useDatePickerStartDate from "../../hooks/useDatePicker";
 import useDatePickerEndDate from "../../hooks/useDatePicker";
 import InputField from "../../components/InputField";
+
+interface CutiData {
+  start_date: any;
+  end_date: any;
+  status: string;
+  response: string;
+  created_at: string;
+  updated_at: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    detail_users: {
+      id: string;
+      nik: string;
+    };
+    created_at: string;
+    updated_at: string;
+  };
+}
 
 function CutiScreen() {
   const [data, setData] = useState({
@@ -25,6 +46,25 @@ function CutiScreen() {
   const { userDetailData } = useUserData();
   const { showNotification } = useNotification();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [cutiData, setCutiData] = useState<CutiData>();
+
+  const fetchCutiData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await instance.get('v1/leaves');
+      setCutiData(response.data.data);
+      setIsLoading(false);
+    } catch (error: any) {
+      Alert.alert('Gagal mengambil data cuti', error.response.data.message);
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchCutiData();
+  }, []);
 
   useEffect(() => {
     setData((prevData) => ({
@@ -116,6 +156,26 @@ function CutiScreen() {
               <Text style={{ color: 'white', fontWeight: 'bold' }}>Ajukan Cuti</Text>
             </TouchableOpacity>
           </View>
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#007bff" />
+          ) : cutiData ? (
+            <View style={styles.groupDetailCuti}>
+              <Text style={{ color: 'black', fontWeight: 'bold' }}>Detail Terakhir Cuti</Text>
+              <View style={[styles.groupField, { marginBottom: 10 }]}>
+                <Text style={{ color: 'black' }}>Nama: {cutiData.user.name}</Text>
+                <Text style={{ color: 'black' }}>NIK: {cutiData.user.detail_users.nik}</Text>
+                <Text style={{ color: 'black' }}>Tanggal Mulai Cuti: {dayjs(cutiData.start_date).locale('id').format('DD MMMM YYYY')}</Text> 
+                <Text style={{ color: 'black' }}>Tanggal Selesai Cuti: {dayjs(cutiData.end_date).locale('id').format('DD MMMM YYYY')}</Text>
+                <Text style={{ color: 'black' }}>Status Cuti: {cutiData.status}</Text>
+                <Text style={{ color: 'black' }}>Response Cuti: {cutiData.response}</Text>
+              </View>
+            </View>
+          ) : (
+            <View style={styles.groupDetailCuti}>
+              <Text style={{ color: 'black', fontWeight: 'bold' }}>Detail Terakhir Cuti</Text>
+              <Text style={{ color: 'black' }}>Tidak ada data</Text>
+            </View>
+          )}
         </View>
       </ScrollView>
       <DatePicker
@@ -156,4 +216,18 @@ const styles = StyleSheet.create({
   groupField: {
     width: '100%',
   },
+  groupDetailCuti:{
+    marginTop: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { 
+      width: 0,
+      height: 2 
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    padding: 10 
+  }
 });
