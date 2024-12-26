@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
 import { useCurrentLocation } from '../../hooks/useCurrentLocation';
@@ -17,6 +17,7 @@ import useWorkSchedule from "../../hooks/useWorkSchedule";
 import useCamera from "../../hooks/useCamera";
 import useDatePicker from "../../hooks/useDatePicker";
 import useTimePicker from "../../hooks/useTimePicker";
+import globalStyles from "../../styles/styles";
 
 function AbsenMasukScreen() {
   const [data, setData] = useState({
@@ -129,9 +130,9 @@ function AbsenMasukScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container]}>
+    <SafeAreaView style={globalStyles.container}>
       <ScrollView>
-        <View style={[styles.formContainer]}>
+        <View style={globalStyles.formContainer}>
           <InputField
             label="Kode Absen"
             placeholder="Kode"
@@ -188,7 +189,7 @@ function AbsenMasukScreen() {
             location={location}
             getCurrentLocation={getCurrentLocation}
           />
-          <View style={[styles.groupField, { marginBottom: 10 }]}>
+          <View style={[globalStyles.groupField, { marginBottom: 10 }]}>
             <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center' }} onPress={handleSubmit}>
               <Text style={{ color: 'white', fontWeight: 'bold' }}>Absen Masuk</Text>
             </TouchableOpacity>
@@ -218,37 +219,3 @@ function AbsenMasukScreen() {
 }
 
 export default AbsenMasukScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-  },
-  formContainer: {
-    width: '90%',
-    marginHorizontal: '5%',
-  },
-  groupField: {
-    width: '100%',
-  },
-  lightContainer: {
-    backgroundColor: 'white',
-  },
-  darkContainer: {
-    backgroundColor: '#242c40',
-  },
-  lightThemeText: {
-    color: '#242c40',
-  },
-  darkThemeText: {
-    color: '#d0d0c0',
-  },
-  lightThemeInput: {
-    color: '#242c40',
-  },
-  darkThemeInput: {
-    color: '#d0d0c0',
-  },
-});

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
 import { useCurrentLocation } from '../../hooks/useCurrentLocation';
@@ -15,6 +15,7 @@ import useTimePicker from "../../hooks/useTimePicker";
 import InputField from "../../components/InputField";
 import ImagePicker from "../../components/ImagePicker";
 import LocationPicker from "../../components/LocationPicker";
+import globalStyles from "../../styles/styles";
 
 function IzinScreen() {
   const [data, setData] = useState({
@@ -142,9 +143,9 @@ function IzinScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container]}>
+    <SafeAreaView style={globalStyles.container}>
       <ScrollView>
-        <View style={[styles.formContainer]}>
+        <View style={globalStyles.formContainer}>
           <InputField
             label="Kode Absen"
             placeholder="Kode"
@@ -193,7 +194,7 @@ function IzinScreen() {
             location={location}
             getCurrentLocation={getCurrentLocation}
           />
-          <View style={[styles.groupField, { marginBottom: 10 }]}>
+          <View style={[globalStyles.groupField, { marginBottom: 10 }]}>
             <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center' }} onPress={handleSubmit}>
               <Text style={{ color: 'white', fontWeight: 'bold' }}>Absen Izin</Text>
             </TouchableOpacity>
@@ -223,19 +224,3 @@ function IzinScreen() {
 }
 
 export default IzinScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-  },
-  formContainer: {
-    width: '90%',
-    marginHorizontal: '5%',
-  },
-  groupField: {
-    width: '100%',
-  },
-});

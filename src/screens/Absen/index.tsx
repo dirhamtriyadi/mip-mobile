@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RootStackParamList } from "../../../App";
+import globalStyles from "../../styles/styles";
 
 function AbsenScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -12,7 +13,7 @@ function AbsenScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container]}>
+    <SafeAreaView style={globalStyles.container}>
       <View style={styles.listButton}>
         <TouchableOpacity style={styles.btn} onPress={() => handleClick('AbsenMasuk')}>
           <Text>Absen Masuk</Text>
@@ -37,13 +38,6 @@ function AbsenScreen() {
 export default AbsenScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    backgroundColor: '#f8f8f8',
-  },
   listButton: {
     padding: 5,
     width: '100%',

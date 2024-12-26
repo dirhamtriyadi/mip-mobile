@@ -24,6 +24,7 @@ import SignatureScreen, {
 } from "react-native-signature-canvas";
 import useCamera from '../../hooks/useCamera';
 import { useNotification } from '../../hooks/useNotification';
+import globalStyles from '../../styles/styles';
 
 interface DetailPenagihanScreenProps {
   route: any;
@@ -230,9 +231,9 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
   }
 
   return (
-    <SafeAreaView style={[styles.container]}>
+    <SafeAreaView style={globalStyles.container}>
       <ScrollView scrollEnabled={scrollEnabled}>
-        <View style={[styles.formContainer]}>
+        <View style={styles.formContainer}>
           <InputField
             label="No Tagihan"
             placeholder="Masukan No Tagihan"
@@ -256,7 +257,7 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
             onIconPress={() => setOpenDatePicker(true)}
             iconName="calendar"
           />
-          <View style={styles.groupField}>
+          <View style={globalStyles.groupField}>
             <Text style={styles.fieldLabel}>Tujuan Penagihan</Text>
             <View
               style={{
@@ -361,7 +362,7 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
                 />
               </>
             )}
-            <View style={styles.groupField}>
+            <View style={globalStyles.groupField}>
               <Text style={styles.fieldLabel}>TTD Petugas</Text>
               {data.signature_officer ? (
                 <Image
@@ -400,7 +401,7 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
                 </View>
               )}
             </View>
-            <View style={styles.groupField}>
+            <View style={globalStyles.groupField}>
               <Text style={styles.fieldLabel}>TTD Customer</Text>
               {data.signature_customer ? (
                 <Image
@@ -438,7 +439,7 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
                   />
                 </View>
               )}
-              <View style={[styles.groupField, { marginBottom: 10 }]}>
+              <View style={[globalStyles.groupField, { marginBottom: 10 }]}>
                 <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center' }} onPress={handleSubmit}>
                   <Text style={{ color: 'white', fontWeight: 'bold' }}>Simpan</Text>
                 </TouchableOpacity>
@@ -494,12 +495,6 @@ const webStyles = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-  },
   containerSiganture: {
     flex: 1,
     alignItems: "center",
@@ -517,9 +512,6 @@ const styles = StyleSheet.create({
   formContainer: {
     width: '90%',
     marginHorizontal: '5%',
-  },
-  groupField: {
-    width: '100%',
   },
   fieldLabel: {
     fontSize: 16,
