@@ -45,48 +45,10 @@ function App() {
 }
 
 function HomeStackScreen() {
-  const { logout } = useContext(AuthContext);
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error('Error removing token:', error);
-    }
-  };
-
   return (
     <Stack.Navigator>
       <Stack.Group>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={() => ({
-            title: 'Home',
-            headerRight: () => (
-              <TouchableOpacity
-                style={{
-                  marginRight: 10,
-                  padding: 10,
-                  backgroundColor: '#da4a4a',
-                  borderRadius: 5,
-                }}
-                onPress={() => handleLogout()}
-              >
-                <Text
-                  style={{
-                    color: 'white',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Logout
-                </Text>
-              </TouchableOpacity>
-            ),
-            // remove header back button
-            headerBackVisible: false,
-          })}
-        />
+        <Stack.Screen name="Home" component={HomeScreen} options={() => ({ title: 'Home' })} />
         <Stack.Screen name="Absen" component={AbsenScreen} options={{ title: 'Absen' }} />
         <Stack.Screen name="AbsenMasuk" component={AbsenMasukScreen} options={{ title: 'Absen Masuk' }} />
         <Stack.Screen name="AbsenPulang" component={AbsenPulangScreen} options={{ title: 'Absen Pulang' }} />
@@ -101,9 +63,43 @@ function HomeStackScreen() {
 }
 
 function ProfileStackScreen() {
+  const { logout } = useContext(AuthContext);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Error removing token:', error);
+    }
+  };
+  
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} options={{
+        title: 'Profile',
+        headerRight: () => (
+          <TouchableOpacity
+            style={{
+              marginRight: 10,
+              padding: 10,
+              backgroundColor: '#da4a4a',
+              borderRadius: 5,
+            }}
+            onPress={() => handleLogout()}
+          >
+            <Text
+              style={{
+                color: 'white',
+                fontWeight: 'bold',
+              }}
+            >
+              Logout
+            </Text>
+          </TouchableOpacity>
+        ),
+        // remove header back button
+        headerBackVisible: false,
+        }} />
     </Stack.Navigator>
   );
 }
