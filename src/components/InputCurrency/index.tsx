@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CurrencyInput from 'react-native-currency-input';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-interface InputFieldProps {
+interface InputCurrencyProps {
     label: string;
     placeholder?: string;
     value: number;
@@ -13,7 +13,7 @@ interface InputFieldProps {
     onIconPress?: () => void;
 }
 
-const InputField: React.FC<InputFieldProps> = ({
+const InputCurrency: React.FC<InputCurrencyProps> = ({
     label,
     placeholder,
     value,
@@ -38,7 +38,7 @@ const InputField: React.FC<InputFieldProps> = ({
                 minValue={0}
                 // showPositiveSign
                 onChangeText={(formattedValue) => {
-                    console.log(formattedValue); // R$ +2.310,46
+                    // console.log(formattedValue); // R$ +2.310,46
                 }}
             />
             {iconName && (
@@ -74,4 +74,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default InputField
+export default InputCurrency
