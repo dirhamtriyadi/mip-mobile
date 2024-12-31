@@ -11,19 +11,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import instance from '../../configs/axios';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../../App';
-import InputField from '../../components/InputField';
-import ImagePicker from '../../components/ImagePicker';
-import InputCurrency from '../../components/InputCurrency';
-import useDatePicker from '../../hooks/useDatePicker';
+import InputField from '@components/InputField';
+import ImagePicker from '@components/ImagePicker';
+import InputCurrency from '@components/InputCurrency';
+import useDatePicker from '@hooks/useDatePicker';
 import DatePicker from 'react-native-date-picker';
 import { Picker } from '@react-native-picker/picker';
 import dayjs from 'dayjs';
 import SignatureScreen, {
   SignatureViewRef,
 } from "react-native-signature-canvas";
-import useCamera from '../../hooks/useCamera';
-import { useNotification } from '../../hooks/useNotification';
-import globalStyles from '../../styles/styles';
+import useCamera from '@hooks/useCamera';
+import { useNotification } from '@hooks/useNotification';
+import globalStyles from '@styles/styles';
 import styles from './styles';
 import webStyles from './webStyles';
 

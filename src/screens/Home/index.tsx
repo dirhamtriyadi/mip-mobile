@@ -1,9 +1,9 @@
-import React from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../../App';
-import styles from './styles';
+import React from "react";
+import { Text, View, TouchableOpacity, Alert } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../../../App";
+import styles from "./styles";
 
 function HomeScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

@@ -2,22 +2,22 @@ import React, { useState, useEffect } from "react";
 import { ScrollView, Text, TouchableOpacity, View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
-import { useCurrentLocation } from '../../hooks/useCurrentLocation';
+import { useCurrentLocation } from '@hooks/useCurrentLocation';
 import instance from "../../configs/axios";
-import { useUserData } from "../../hooks/useUserData";
+import { useUserData } from "@hooks/useUserData";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
-import { useNotification } from "../../hooks/useNotification";
-import InputField from "../../components/InputField";
-import ReasonModal from "../../components/ReasonModal";
-import ImagePicker from "../../components/ImagePicker";
-import LocationPicker from "../../components/LocationPicker";
-import useWorkSchedule from "../../hooks/useWorkSchedule";
-import useCamera from "../../hooks/useCamera";
-import useDatePicker from "../../hooks/useDatePicker";
-import useTimePicker from "../../hooks/useTimePicker";
-import globalStyles from "../../styles/styles";
+import { useNotification } from "@hooks/useNotification";
+import InputField from "@components/InputField";
+import ReasonModal from "@components/ReasonModal";
+import ImagePicker from "@components/ImagePicker";
+import LocationPicker from "@components/LocationPicker";
+import useWorkSchedule from "@hooks/useWorkSchedule";
+import useCamera from "@hooks/useCamera";
+import useDatePicker from "@hooks/useDatePicker";
+import useTimePicker from "@hooks/useTimePicker";
+import globalStyles from "@styles/styles";
 
 function AbsenMasukScreen() {
   const [data, setData] = useState({

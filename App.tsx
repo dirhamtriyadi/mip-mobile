@@ -6,17 +6,17 @@ import { Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { AuthContext, AuthProvider } from './src/contexts/AuthContext';
-import LoginScreen from './src/screens/Auth/Login';
-import HomeScreen from './src/screens/Home';
-import AbsenScreen from './src/screens/Absen';
-import AbsenMasukScreen from './src/screens/AbsenMasuk';
-import AbsenPulangScreen from './src/screens/AbsenPulang';
-import SakitScreen from './src/screens/Sakit';
-import IzinScreen from './src/screens/Izin';
-import CutiScreen from './src/screens/Cuti';
-import PenagihanScreen from './src/screens/Penagihan';
-import DetailPenagihanScreen from './src/screens/DetailPenagihan';
-import ProfileScreen from './src/screens/Profile';
+import LoginScreen from '@screens/Auth/Login.tsx';
+import HomeScreen from '@screens/Home';
+import AbsenScreen from '@screens/Absen';
+import AbsenMasukScreen from '@screens/AbsenMasuk';
+import AbsenPulangScreen from '@screens/AbsenPulang';
+import SakitScreen from '@screens/Sakit';
+import IzinScreen from '@screens/Izin';
+import CutiScreen from '@screens/Cuti';
+import PenagihanScreen from '@screens/Penagihan';
+import DetailPenagihanScreen from '@screens/DetailPenagihan';
+import ProfileScreen from '@screens/Profile';
 
 export type RootStackParamList = {
   Login: undefined;

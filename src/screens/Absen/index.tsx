@@ -3,7 +3,7 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RootStackParamList } from "../../../App";
-import globalStyles from "../../styles/styles";
+import globalStyles from "@styles/styles";
 import styles from "./styles";
 
 function AbsenScreen() {

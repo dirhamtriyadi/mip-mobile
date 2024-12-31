@@ -1,8 +1,8 @@
 import { ActivityIndicator, Alert, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
 import styles from "./styles";
-import globalStyles from "../../styles/styles";
-import InputField from "../../components/InputField";
+import globalStyles from "@styles/styles";
+import InputField from "@components/InputField";
 import React, { useState, useEffect } from "react";
 import instance from "../../configs/axios";
 

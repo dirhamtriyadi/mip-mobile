@@ -3,16 +3,16 @@ import { ScrollView, Text, TouchableOpacity, View, Alert, ActivityIndicator } fr
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
 import instance from "../../configs/axios";
-import { useUserData } from "../../hooks/useUserData";
+import { useUserData } from "@hooks/useUserData";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
 import 'dayjs/locale/id';
-import { useNotification } from "../../hooks/useNotification";
-import useDatePickerStartDate from "../../hooks/useDatePicker";
-import useDatePickerEndDate from "../../hooks/useDatePicker";
-import InputField from "../../components/InputField";
-import globalStyles from "../../styles/styles";
+import { useNotification } from "@hooks/useNotification";
+import useDatePickerStartDate from "@hooks/useDatePicker";
+import useDatePickerEndDate from "@hooks/useDatePicker";
+import InputField from "@components/InputField";
+import globalStyles from "@styles/styles";
 import styles from "./styles";
 
 interface CutiData {

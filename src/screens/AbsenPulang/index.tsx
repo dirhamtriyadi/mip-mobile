@@ -2,22 +2,22 @@ import React, { useState, useEffect } from "react";
 import { ScrollView, Text, TouchableOpacity, View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
-import { useUserData } from "../../hooks/useUserData";
-import { useCurrentLocation } from "../../hooks/useCurrentLocation";
+import { useUserData } from "@hooks/useUserData";
+import { useCurrentLocation } from "@hooks/useCurrentLocation";
 import instance from "../../configs/axios";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
-import { useNotification } from "../../hooks/useNotification";
-import useWorkSchedule from "../../hooks/useWorkSchedule";
-import useCamera from "../../hooks/useCamera";
-import useDatePicker from "../../hooks/useDatePicker";
-import useTimePicker from "../../hooks/useTimePicker";
-import InputField from "../../components/InputField";
-import ReasonModal from "../../components/ReasonModal";
-import LocationPicker from "../../components/LocationPicker";
-import ImagePicker from "../../components/ImagePicker";
-import globalStyles from "../../styles/styles";
+import { useNotification } from "@hooks/useNotification";
+import useWorkSchedule from "@hooks/useWorkSchedule";
+import useCamera from "@hooks/useCamera";
+import useDatePicker from "@hooks/useDatePicker";
+import useTimePicker from "@hooks/useTimePicker";
+import InputField from "@components/InputField";
+import ReasonModal from "@components/ReasonModal";
+import LocationPicker from "@components/LocationPicker";
+import ImagePicker from "@components/ImagePicker";
+import globalStyles from "@styles/styles";
 
 function SakitScreen() {
     const [data, setData] = useState({

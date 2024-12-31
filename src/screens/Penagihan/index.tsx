@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert, TextInput, ActivityIndicator } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View, Alert, TextInput, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import instance from "../../configs/axios";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from "react-native-vector-icons/FontAwesome5";
 import styles from "./styles";
 
 interface PenagihanData {
