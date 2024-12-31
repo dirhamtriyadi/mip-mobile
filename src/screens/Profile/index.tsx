@@ -95,7 +95,7 @@ function ProfileScreen() {
   return (
     <SafeAreaView style={globalStyles.container}>
       <ScrollView>
-        <View style={[globalStyles.formContainer, styles.formGroup, { marginVertical: 5}]}>
+        <View style={[globalStyles.formContainer, styles.formGroup, { marginTop: 10, marginBottom: 5 }]}>
           <Text style={styles.title}>Edit Profile</Text>
         </View>
         <View style={[globalStyles.formContainer, styles.formGroup]}>
@@ -111,7 +111,7 @@ function ProfileScreen() {
         </View>
         <View style={[globalStyles.formContainer, styles.formGroup]}>
           <InputField label="Password" value={formDataPassword.password} onChangeText={(value) => handleChangePassword("password", value)} placeholder="Masukan Password Baru" />
-          <InputField label="Confirm Password" value={formDataPassword.confirm_password} onChangeText={(value) => handleChangePassword('confirm_password', value)} placeholder="Masukan Konfirmasi Password" />
+          <InputField label="Konfirmasi Password" value={formDataPassword.confirm_password} onChangeText={(value) => handleChangePassword('confirm_password', value)} placeholder="Masukan Konfirmasi Password" />
           <TouchableOpacity style={styles.btn} onPress={() => handleSave("update-password", formDataPassword)}>
             <Text style={styles.btnText}>Simpan</Text>
           </TouchableOpacity>

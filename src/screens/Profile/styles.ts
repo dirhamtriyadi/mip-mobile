@@ -8,9 +8,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
       },
       formGroup: {
-        backgroundColor: 'white',
         borderRadius: 10,
-        padding: 10 
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 3,
+        backgroundColor: '#fff',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
       },
       groupField: {
         width: '100%',
@@ -23,7 +34,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#242c40',
         padding: 10,
         borderRadius: 5,
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '100%',
       },
       btnText: {
         color: 'white',
