@@ -6,8 +6,8 @@ import InputField from "@components/InputField";
 import React, { useState, useEffect } from "react";
 import instance from "../../configs/axios";
 
-function ProfileScreen() {
-  interface formDataProfile {
+function ProfilScreen() {
+  interface formDataProfil {
     _method: string;
     name: string;
     email: string;
@@ -22,7 +22,7 @@ function ProfileScreen() {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [formDataProfile, setFormDataProfile] = useState<formDataProfile>({
+  const [formDataProfil, setFormDataProfil] = useState<formDataProfil>({
     _method: "put",
     name: "",
     email: "",
@@ -35,11 +35,11 @@ function ProfileScreen() {
     confirm_password: "",
   });
 
-  const getProfile = async () => {
+  const getProfil = async () => {
     try {
       setLoading(true);
       const response = await instance.get('v1/profile');
-      setFormDataProfile((prevState) => ({
+      setFormDataProfil((prevState) => ({
         ...prevState,
         name: response.data.data.name,
         email: response.data.data.email,
@@ -53,11 +53,11 @@ function ProfileScreen() {
   };
 
   useEffect(() => {
-    getProfile();
+    getProfil();
   }, []);
 
-  const handleChangeProfile = (key: string, value: string) => {
-    setFormDataProfile((prevState) => ({
+  const handleChangeProfil = (key: string, value: string) => {
+    setFormDataProfil((prevState) => ({
       ...prevState,
       [key]: value,
     }));
@@ -96,13 +96,13 @@ function ProfileScreen() {
     <SafeAreaView style={globalStyles.container}>
       <ScrollView>
         <View style={[globalStyles.formContainer, styles.formGroup, { marginTop: 10, marginBottom: 5 }]}>
-          <Text style={styles.title}>Edit Profile</Text>
+          <Text style={styles.title}>Edit Profil</Text>
         </View>
         <View style={[globalStyles.formContainer, styles.formGroup]}>
-          <InputField label="Nama" value={formDataProfile.name} onChangeText={(value) => handleChangeProfile("name", value)} placeholder="Masukan Nama Anda" />
-          <InputField label="Email" value={formDataProfile.email} onChangeText={(value) => handleChangeProfile("email", value)} placeholder="Masukan Email Anda" />
-          <InputField label="NIK" value={formDataProfile.nik} onChangeText={(value) => handleChangeProfile("nik", value)} placeholder="Masukan NIK Anda" />
-          <TouchableOpacity style={styles.btn} onPress={() => handleSave("", formDataProfile)}>
+          <InputField label="Nama" value={formDataProfil.name} onChangeText={(value) => handleChangeProfil("name", value)} placeholder="Masukan Nama Anda" />
+          <InputField label="Email" value={formDataProfil.email} onChangeText={(value) => handleChangeProfil("email", value)} placeholder="Masukan Email Anda" />
+          <InputField label="NIK" value={formDataProfil.nik} onChangeText={(value) => handleChangeProfil("nik", value)} placeholder="Masukan NIK Anda" />
+          <TouchableOpacity style={styles.btn} onPress={() => handleSave("", formDataProfil)}>
             <Text style={styles.btnText}>Simpan</Text>
           </TouchableOpacity>
         </View>
@@ -121,4 +121,4 @@ function ProfileScreen() {
   );
 }
 
-export default ProfileScreen;
+export default ProfilScreen;

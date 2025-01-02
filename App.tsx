@@ -16,7 +16,7 @@ import IzinScreen from '@screens/Izin';
 import CutiScreen from '@screens/Cuti';
 import PenagihanScreen from '@screens/Penagihan';
 import DetailPenagihanScreen from '@screens/DetailPenagihan';
-import ProfileScreen from '@screens/Profile';
+import ProfilScreen from '@src/screens/Profil';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -29,7 +29,7 @@ export type RootStackParamList = {
   Cuti: undefined;
   Penagihan: undefined;
   DetailPenagihan: { id: string };
-  Profile: undefined;
+  Profil: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -62,7 +62,7 @@ function HomeStackScreen() {
   )
 }
 
-function ProfileStackScreen() {
+function ProfilStackScreen() {
   const { logout } = useContext(AuthContext);
 
   const handleLogout = async () => {
@@ -75,8 +75,8 @@ function ProfileStackScreen() {
   
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Profile" component={ProfileScreen} options={{
-        title: 'Profile',
+      <Stack.Screen name="Profil" component={ProfilScreen} options={{
+        title: 'Profil',
         headerRight: () => (
           <TouchableOpacity
             style={{
@@ -126,9 +126,9 @@ function Layout() {
                 <Ionicons name='home-outline' size={24} color={color} />
                 ),
               }} />
-            <Tab.Screen name="ProfileStackScreen" component={ProfileStackScreen} options={{
+            <Tab.Screen name="ProfilStackScreen" component={ProfilStackScreen} options={{
               headerShown: false,
-              tabBarLabel: 'Profile',
+              tabBarLabel: 'Profil',
               tabBarIcon: ({ color }) => (
                 <Ionicons name='person-outline' size={24} color={color} />
                 ),
