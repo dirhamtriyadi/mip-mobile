@@ -5,8 +5,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
 } from 'react-native';
+import styles from './styles';
 
 interface ReasonModalProps {
   visible: boolean;
@@ -86,17 +86,5 @@ const ReasonModal: React.FC<ReasonModalProps> = ({
     </View>
   </Modal>
 );
-
-const styles = StyleSheet.create({
-  fieldInput: {
-    width: '100%',
-    height: 45,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    marginBottom: 15,
-    paddingHorizontal: 10,
-  },
-});
 
 export default ReasonModal;

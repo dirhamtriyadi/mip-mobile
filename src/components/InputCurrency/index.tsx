@@ -1,7 +1,8 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import CurrencyInput from 'react-native-currency-input';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import styles from './styles';
 
 interface InputCurrencyProps {
     label: string;
@@ -52,26 +53,5 @@ const InputCurrency: React.FC<InputCurrencyProps> = ({
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-    groupField: {
-      width: '100%',
-    },
-    fieldLabel: {
-      fontSize: 16,
-      marginBottom: 10,
-      fontWeight: 'bold',
-    },
-    fieldInput: {
-      width: '100%',
-      height: 45,
-      borderWidth: 1,
-      borderColor: '#ccc',
-      borderRadius: 5,
-      marginBottom: 15,
-      paddingHorizontal: 10,
-      justifyContent: 'center',
-    }
-  });
 
 export default InputCurrency
