@@ -14,6 +14,7 @@ import useDatePickerEndDate from "@hooks/useDatePicker";
 import InputField from "@components/InputField";
 import globalStyles from "@styles/styles";
 import styles from "./styles";
+import Button from "@src/components/Button";
 
 interface CutiData {
   start_date: any;
@@ -154,9 +155,7 @@ function CutiScreen() {
             iconName="calendar"
           />
           <View style={[globalStyles.groupField, { marginBottom: 10 }]}>
-            <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center' }} onPress={handleSubmit}>
-              <Text style={{ color: 'white', fontWeight: 'bold' }}>Ajukan Cuti</Text>
-            </TouchableOpacity>
+            <Button label="Ajukan Cuti" onPress={handleSubmit} />
           </View>
           {isLoading ? (
             <ActivityIndicator size="large" color="#007bff" />
