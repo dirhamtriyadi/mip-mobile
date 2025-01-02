@@ -1,10 +1,11 @@
-import { ActivityIndicator, Alert, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Alert, SafeAreaView, ScrollView } from "react-native";
 import { Text, View } from "react-native";
 import styles from "./styles";
 import globalStyles from "@styles/styles";
 import InputField from "@components/InputField";
 import React, { useState, useEffect } from "react";
 import instance from "../../configs/axios";
+import Button from "@src/components/Button";
 
 function ProfilScreen() {
   interface formDataProfil {
@@ -102,9 +103,7 @@ function ProfilScreen() {
           <InputField label="Nama" value={formDataProfil.name} onChangeText={(value) => handleChangeProfil("name", value)} placeholder="Masukan Nama Anda" />
           <InputField label="Email" value={formDataProfil.email} onChangeText={(value) => handleChangeProfil("email", value)} placeholder="Masukan Email Anda" />
           <InputField label="NIK" value={formDataProfil.nik} onChangeText={(value) => handleChangeProfil("nik", value)} placeholder="Masukan NIK Anda" />
-          <TouchableOpacity style={styles.btn} onPress={() => handleSave("", formDataProfil)}>
-            <Text style={styles.btnText}>Simpan</Text>
-          </TouchableOpacity>
+          <Button label="Simpan" onPress={() => handleSave("", formDataProfil)} />
         </View>
         <View style={[globalStyles.formContainer, styles.formGroup, { marginTop: 10, marginBottom: 5 }]}>
           <Text style={styles.title}>Edit Password</Text>
@@ -112,9 +111,7 @@ function ProfilScreen() {
         <View style={[globalStyles.formContainer, styles.formGroup]}>
           <InputField label="Password" value={formDataPassword.password} onChangeText={(value) => handleChangePassword("password", value)} placeholder="Masukan Password Baru" />
           <InputField label="Konfirmasi Password" value={formDataPassword.confirm_password} onChangeText={(value) => handleChangePassword('confirm_password', value)} placeholder="Masukan Konfirmasi Password" />
-          <TouchableOpacity style={styles.btn} onPress={() => handleSave("update-password", formDataPassword)}>
-            <Text style={styles.btnText}>Simpan</Text>
-          </TouchableOpacity>
+          <Button label="Simpan" onPress={() => handleSave("update-password", formDataPassword)} />
         </View>
       </ScrollView>
     </SafeAreaView>

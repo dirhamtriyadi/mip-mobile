@@ -18,6 +18,7 @@ import useCamera from "@hooks/useCamera";
 import useDatePicker from "@hooks/useDatePicker";
 import useTimePicker from "@hooks/useTimePicker";
 import globalStyles from "@styles/styles";
+import Button from "@src/components/Button";
 
 function AbsenMasukScreen() {
   const [data, setData] = useState({
@@ -190,9 +191,7 @@ function AbsenMasukScreen() {
             getCurrentLocation={getCurrentLocation}
           />
           <View style={[globalStyles.groupField, { marginBottom: 10 }]}>
-            <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center' }} onPress={handleSubmit}>
-              <Text style={{ color: 'white', fontWeight: 'bold' }}>Absen Masuk</Text>
-            </TouchableOpacity>
+            <Button label="Simpan" onPress={handleSubmit} />
           </View>
         </View>
       </ScrollView>

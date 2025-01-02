@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, Text, TouchableOpacity, View, Alert } from "react-native";
+import { ScrollView, View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
 import { useUserData } from "@hooks/useUserData";
@@ -18,6 +18,7 @@ import ReasonModal from "@components/ReasonModal";
 import LocationPicker from "@components/LocationPicker";
 import ImagePicker from "@components/ImagePicker";
 import globalStyles from "@styles/styles";
+import Button from "@src/components/Button";
 
 function SakitScreen() {
     const [data, setData] = useState({
@@ -208,9 +209,7 @@ function SakitScreen() {
                         getCurrentLocation={getCurrentLocation}
                     />
                     <View style={[globalStyles.groupField, { marginBottom: 10 }]}>
-                        <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center' }} onPress={handleSubmit}>
-                            <Text style={{ color: 'white', fontWeight: 'bold' }}>Absen Pulang</Text>
-                        </TouchableOpacity>
+                        <Button label="Simpan" onPress={handleSubmit} />
                     </View>
                 </View>
             </ScrollView>
