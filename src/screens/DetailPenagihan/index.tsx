@@ -26,6 +26,7 @@ import { useNotification } from '@hooks/useNotification';
 import globalStyles from '@styles/styles';
 import styles from './styles';
 import webStyles from './webStyles';
+import Button from '@src/components/Button';
 
 interface DetailPenagihanScreenProps {
   route: any;
@@ -40,15 +41,11 @@ interface DetailPenagihanData {
     name_customer: string,
   },
   user_id: number;
-  destination: string;
-  image_visit: File | null;
-  description_visit: string | null;
+  status: string;
+  description: string;
+  evidence: string | null;
   promise_date: any | null;
-  image_promise: File | null;
-  description_promise: string | null;
   amount: number | null;
-  image_amount: File | null;
-  description_amount: string | null;
   signature_officer: string | null;
   signature_customer: string | null;
 }
@@ -62,9 +59,7 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
   const [isLockedOfficer, setIsLockedOfficer] = useState(true);
   const [isLockedCustomer, setIsLockedCustomer] = useState(true);
   const { showNotification } = useNotification();
-  const { image: imageVisit, handleClickOpenCamera: handleClickOpenCameraVisit, handleClickResetCamera: handleClickResetCameraVisit } = useCamera();
-  const { image: imagePromise, handleClickOpenCamera: handleClickOpenCameraPromise, handleClickResetCamera: handleClickResetCameraPromise } = useCamera();
-  const { image: imageAmount, handleClickOpenCamera: handleClickOpenCameraAmount, handleClickResetCamera: handleClickResetCameraAmount } = useCamera();
+  const { image, handleClickOpenCamera, handleClickResetCamera } = useCamera();
   const { openDatePicker: openDatePickerPromiseDate, setOpenDatePicker: setOpenDatePickerPromiseDate, handleDateChange: handleDateChangePromiseDate, date: datePromiseDate } = useDatePicker();
   const { openDatePicker, setOpenDatePicker, handleDateChange, date } = useDatePicker();
 
@@ -77,15 +72,11 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
       name_customer: '',
     },
     user_id: 0,
-    destination: '',
-    image_visit: null,
-    description_visit: null,
+    status: 'visit',
+    description: '',
+    evidence: null,
     promise_date: null,
-    image_promise: null,
-    description_promise: null,
     amount: null,
-    image_amount: null,
-    description_amount: null,
     signature_officer: null,
     signature_customer: null,
   });
@@ -95,19 +86,11 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
   useEffect(() => {
     setData((prevData) => ({
       ...prevData,
-      image_visit: imageVisit,
-      image_promise: imagePromise,
-      image_amount: imageAmount,
+      date: date.toDate(),
+      evidence: image,
       promise_date: datePromiseDate,
     }));
-  }, [imageVisit, imagePromise, imageAmount, datePromiseDate]);
-
-  useEffect(() => {
-    setData((prevData) => ({
-      ...prevData,
-      date: date.toDate(),
-    }));
-  }, [date]);
+  }, [ date, image, datePromiseDate ]);
 
   useEffect(() => {
     fetchBillingDetails();
@@ -116,7 +99,17 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
   const fetchBillingDetails = async () => {
     try {
       const response = await instance.get('v1/billings/' + id);
-      setData(response.data.data);
+      setData((prevData) => ({
+        ...prevData,
+        id: response.data.data.id,
+        no_billing: response.data.data.no_billing,
+        name: response.data.data.name,
+        date: response.data.data.date,
+        customer_id: response.data.data.customer_id,
+        customer: {
+          name_customer: response.data.data.customer.name_customer,
+        },
+      }));
     } catch (error: any) {
       Alert.alert(
         'Gagal mengambil data penagihan',
@@ -147,55 +140,30 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
 
   const handleSubmit = async () => {
     try {
-      const { id, no_billing, date, destination, image_visit, description_visit, promise_date, image_promise, description_promise, amount, image_amount, description_amount, signature_officer, signature_customer } = data
+      const { id, no_billing, date, status, description, evidence, promise_date, amount, signature_officer, signature_customer } = data;
 
       // Create form data
       const formData = new FormData();
 
-      formData.append('_method', 'put');
+      // formData.append('_method', 'put');
+      formData.append('id', id);
       formData.append('no_billing', no_billing);
-      formData.append('date', dayjs(date).format('YYYY-MM-DD'));
-      formData.append('destination', destination);
-      if (destination === 'visit') {
-        // Add imahe file to formData
-        if (image_visit) {
-          formData.append('image_visit', {
-            uri: imageVisit.uri,
-            type: imageVisit.type,
-            name: imageVisit.fileName,
-          });
-        }
-        if (description_visit != null) {
-          formData.append('description_visit', description_visit);
-        }
-      } else if (destination === 'promise') {
-        formData.append('promise_date', dayjs(promise_date).format('YYYY-MM-DD'));
-        // Add imahe file to formData
-        if (image_promise) {
-          formData.append('image_promise', {
-            uri: imagePromise.uri,
-            type: imagePromise.type,
-            name: imagePromise.fileName,
-          });
-        }
-        if (description_promise != null) {
-          formData.append('description_promise', description_promise);
-        }
-      } else if (destination === 'pay') {
-        formData.append('amount', amount ? amount : null);
-        // Add imahe file to formData
-        if (image_amount) {
-          formData.append('image_amount', {
-            uri: imageAmount.uri,
-            type: imageAmount.type,
-            name: imageAmount.fileName,
-          });
-        }
-        if (description_amount != null) {
-          formData.append('description_amount', description_amount);
-        }
+      formData.append('status_date', dayjs(date).format('YYYY-MM-DD'));
+      formData.append('status', status);
+      formData.append('description', description || '');
+      if (evidence) {
+        formData.append('evidence', {
+          uri: image.uri,
+          type: image.type,
+          name: image.fileName,
+        });
       }
-      // Add imahe file to formData
+      if (status === 'promise_to_pay') {
+        formData.append('promise_date', dayjs(promise_date).format('YYYY-MM-DD'));
+      } else if (status === 'pay') {
+        formData.append('amount', amount ?? null);
+      }
+      // Add image file to formData
       if (signature_officer) {
         formData.append('signature_officer', {
           uri: signature_officer,
@@ -203,7 +171,7 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
           name: 'signature_officer',
         });
       }
-      // Add imahe file to formData
+      // Add image file to formData
       if (signature_customer) {
         formData.append('signature_customer', {
           uri: signature_customer,
@@ -216,18 +184,18 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
       instance.defaults.headers['Content-Type'] = 'multipart/form-data';
 
       // Send request
-      await instance.post('v1/billings/' + id, formData);
-      Alert.alert('Penagihan berhasil', 'Penagihan berhasil diupdate', [
+      await instance.post('v1/billing-statuses/', formData);
+      Alert.alert('Penagihan berhasil', 'Status penagihan berhasil ditambahkan', [
         {
           text: 'OK',
           onPress: () => navigation.navigate('Home'),
         }
       ]);
-      showNotification('Penagihan', 'Penagihan berhasil disubmit');
+      showNotification('Penagihan', 'Status penagihan berhasil ditambahkan');
     } catch (error: any) {
       // console.log(error);
       Alert.alert('Penagihan Gagal', 'Gagal terjadi kesalahan karena:\n' + error.response.data.message);
-      // console.log('Error submitting penagihan: ', error.response.data);
+      // console.log('Error submitting penagihan: ', error.response);
     }
   }
 
@@ -255,7 +223,7 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
             value={dayjs(data.date).format('DD/MM/YYYY')}
             onChangeText={() => { }}
             editable={false}
-            onIconPress={() => setOpenDatePicker(true)}
+            onIconPress={() => {}}
             iconName="calendar"
           />
           <View style={globalStyles.groupField}>
@@ -273,36 +241,16 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
               }}>
               <Picker
                 style={{ color: '#242c40' }}
-                selectedValue={data.destination}
+                selectedValue={data.status}
                 onValueChange={(itemValue, itemIndex) =>
-                  itemValue === 'visit' ? setData((prevData: any) => ({ ...prevData, destination: itemValue })) : itemValue === 'promise' ? setData((prevData: any) => ({ ...prevData, destination: itemValue, promise_date: dayjs() })) : setData((prevData: any) => ({ ...prevData, destination: itemValue }))
+                  itemValue === 'visit' ? setData((prevData: any) => ({ ...prevData, status: itemValue })) : itemValue === 'promise_to_pay' ? setData((prevData: any) => ({ ...prevData, status: itemValue, promise_date: dayjs() })) : setData((prevData: any) => ({ ...prevData, status: itemValue }))
                 }>
                 <Picker.Item label="Kunjungan" value="visit" />
-                <Picker.Item label="Janji Bayar" value="promise" />
+                <Picker.Item label="Janji Bayar" value="promise_to_pay" />
                 <Picker.Item label="Bayar" value="pay" />
               </Picker>
             </View>
-            {data.destination == 'visit' ? (
-              <>
-                <ImagePicker
-                  label="Bukti Kunjungan"
-                  image={imageVisit}
-                  onOpenCamera={handleClickOpenCameraVisit}
-                  onResetCamera={handleClickResetCameraVisit}
-                />
-                <InputField
-                  label="Deskripsi Kunjungan"
-                  placeholder="Masukan Deskripsi Kunjungan"
-                  value={data.description_visit || ''}
-                  onChangeText={(value) => {
-                    setData((prevData: any) => ({
-                      ...prevData,
-                      description_visit: value,
-                    }));
-                  }}
-                />
-              </>
-            ) : data.destination == 'promise' ? (
+            {data.status == 'promise_to_pay' ? (
               <>
                 <InputField
                   label="Tanggal Janji Bayar"
@@ -313,25 +261,8 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
                   onIconPress={() => setOpenDatePickerPromiseDate(true)}
                   iconName="calendar"
                 />
-                <ImagePicker
-                  label="Bukti Janji Bayar"
-                  image={imagePromise}
-                  onOpenCamera={handleClickOpenCameraPromise}
-                  onResetCamera={handleClickResetCameraPromise}
-                />
-                <InputField
-                  label="Deskripsi Janji Bayar"
-                  placeholder="Masukan Deskripsi Janji Bayar"
-                  value={data.description_promise || ''}
-                  onChangeText={(value) => {
-                    setData((prevData: any) => ({
-                      ...prevData,
-                      description_promise: value,
-                    }));
-                  }}
-                />
               </>
-            ) : (
+            ) : data.status == 'pay' ? (
               <>
                 <InputCurrency
                   label="Nominal"
@@ -344,25 +275,25 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
                     }));
                   }}
                 />
-                <ImagePicker
-                  label="Bukti Pembayaran"
-                  image={imageAmount}
-                  onOpenCamera={handleClickOpenCameraAmount}
-                  onResetCamera={handleClickResetCameraAmount}
-                />
-                <InputField
-                  label="Deskripsi Bayar"
-                  placeholder="Masukan Deskripsi Bayar"
-                  value={data.description_amount || ''}
-                  onChangeText={(value) => {
-                    setData((prevData: any) => ({
-                      ...prevData,
-                      description_amount: value,
-                    }));
-                  }}
-                />
               </>
-            )}
+            ) : null}
+            <ImagePicker
+              label="Bukti"
+              image={image}
+              onOpenCamera={handleClickOpenCamera}
+              onResetCamera={handleClickResetCamera}
+            />
+            <InputField
+              label="Deskripsi"
+              placeholder="Masukan Deskripsi"
+              value={data.description || ''}
+              onChangeText={(value) => {
+                setData((prevData: any) => ({
+                  ...prevData,
+                  description: value,
+                }));
+              }}
+            />
             <View style={globalStyles.groupField}>
               <Text style={styles.fieldLabel}>TTD Petugas</Text>
               {data.signature_officer ? (
@@ -441,9 +372,7 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
                 </View>
               )}
               <View style={[globalStyles.groupField, { marginBottom: 10 }]}>
-                <TouchableOpacity style={{ backgroundColor: '#242c40', padding: 10, borderRadius: 5, alignItems: 'center' }} onPress={handleSubmit}>
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>Simpan</Text>
-                </TouchableOpacity>
+                <Button label='Simpan' onPress={handleSubmit} />
               </View>
             </View>
           </View>

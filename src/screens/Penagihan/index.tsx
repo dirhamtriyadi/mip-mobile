@@ -11,11 +11,14 @@ interface PenagihanData {
   id: string;
   no_billing: string;
   date: any;
-  destination: string;
   customer: {
     id: string;
     name_customer: string;
     no: string;
+  };
+  billingStatuses: any;
+  latestBillingStatus: {
+    status: string;
   };
 }
 
@@ -76,7 +79,7 @@ function PenagihanScreen() {
           />
           <TouchableOpacity style={{ justifyContent: 'center' }} onPress={() => fetchSearch()}><Icon name='search' size={20} color="#000" /></TouchableOpacity>
         </View>
-        <Text style={{ marginBottom: 10 }}>Kunjungan = visit, Janji bayar = promise, Bayar = pay</Text>
+        <Text style={{ marginBottom: 10 }}>Kunjungan = visit, Janji bayar = promise_to_pay, Bayar = pay</Text>
       </View>
       <ScrollView>
         <View style={[styles.listContainer]}>
@@ -89,8 +92,9 @@ function PenagihanScreen() {
                 <Text style={styles.textDate}>{item.date}</Text>
               </View>
               <Text>No. Tagihan: {item.no_billing}</Text>
-              {item.destination == 'visit' ? <Text style={styles.destinationVisit}>Kunjungan</Text> : item.destination == 'promise' ? <Text style={styles.destinationPromise}>Janji Bayar</Text> : <Text style={styles.destinationPay}>Bayar</Text>}
+              {/* {item.billingStatuses?.status == 'pending' ? <Text style={styles.statusPending}>Pending</Text> : item.billingStatuses.status == 'proccess' ? <Text style={styles.statusProcess}>Proccess</Text> : item.billingStatuses.status == 'success' ? <Text style={styles.statusSuccess}>Success</Text> : item.billingStatuses.status == 'cancel' ? <Text style={styles.statusCancel}>Cancel</Text> : item.billingStatuses?.status == null ? <Text style={styles.statusPending}>Belum Ada</Text> : <Text style={styles.statusError}>Error</Text>} */}
               <Text>{item.customer.name_customer}</Text>
+              {item.latestBillingStatus?.status == 'visit' ? <Text style={styles.statusVisit}>Kunjungan</Text> : item.latestBillingStatus?.status == 'promise_to_pay' ? <Text style={styles.statusPromiseToPay}>Janji Bayar</Text> : item.latestBillingStatus?.status == 'pay' ? <Text style={styles.statusPay}>Bayar</Text> : item.latestBillingStatus?.status == null ? <Text style={styles.statusError}>Belum Ada</Text>  : <Text style={styles.statusError}>Error</Text>}
             </TouchableOpacity>
           )) }
         </View>
