@@ -9,7 +9,7 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
 import { useNotification } from "@hooks/useNotification";
-import useCamera from "@hooks/useCamera";
+import useImagePicker from "@hooks/useImagePicker";
 import useDatePickerStartDate from "@hooks/useDatePicker";
 import useDatePickerEndDate from "@hooks/useDatePicker";
 import useTimePicker from "@hooks/useTimePicker";
@@ -34,7 +34,9 @@ function SakitScreen() {
     longitude: 0,
   });
 
-  const { image, handleClickOpenCamera, handleClickResetCamera } = useCamera();
+  const [tempImage, setTempImage] = useState<any>(null);
+
+  const { image, handleClickOpenCamera, handleImageSelect, handleClickReset } = useImagePicker();
   const { date: startDate, openDatePicker: openDatePickerStartDate, setOpenDatePicker: setOpenDatePickerStartDate, handleDateChange: handleDateChangeStartDate } = useDatePickerStartDate(data.start_date);
   const { date: endDate, openDatePicker: openDatePickerEndDate, setOpenDatePicker: setOpenDatePickerEndDate, handleDateChange: handleDateChangeEndDate } = useDatePickerEndDate(data.end_date);
   const { time, openTimePicker, setOpenTimePicker, handleTimeChange } = useTimePicker(data.time_check_in);
@@ -200,7 +202,8 @@ function SakitScreen() {
             label="Bukti Sakit / Surat Dokter"
             image={image}
             onOpenCamera={handleClickOpenCamera}
-            onResetCamera={handleClickResetCamera}
+            onImageSelected={handleImageSelect}
+            onResetImage={handleClickReset}
           />
           <LocationPicker
             label="Lokasi Absen Sakit"

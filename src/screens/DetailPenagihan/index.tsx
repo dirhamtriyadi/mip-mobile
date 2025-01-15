@@ -21,7 +21,7 @@ import dayjs from 'dayjs';
 import SignatureScreen, {
   SignatureViewRef,
 } from "react-native-signature-canvas";
-import useCamera from '@hooks/useCamera';
+import useImagePicker from "@hooks/useImagePicker";
 import { useNotification } from '@hooks/useNotification';
 import globalStyles from '@styles/styles';
 import styles from './styles';
@@ -59,7 +59,7 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
   const [isLockedOfficer, setIsLockedOfficer] = useState(true);
   const [isLockedCustomer, setIsLockedCustomer] = useState(true);
   const { showNotification } = useNotification();
-  const { image, handleClickOpenCamera, handleClickResetCamera } = useCamera();
+  const { image, handleClickOpenCamera, handleImageSelect, handleClickReset } = useImagePicker();
   const { openDatePicker: openDatePickerPromiseDate, setOpenDatePicker: setOpenDatePickerPromiseDate, handleDateChange: handleDateChangePromiseDate, date: datePromiseDate } = useDatePicker();
   const { openDatePicker, setOpenDatePicker, handleDateChange, date } = useDatePicker();
 
@@ -281,7 +281,8 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
               label="Bukti"
               image={image}
               onOpenCamera={handleClickOpenCamera}
-              onResetCamera={handleClickResetCamera}
+              onImageSelected={handleImageSelect}
+              onResetImage={handleClickReset}
             />
             <InputField
               label="Deskripsi"

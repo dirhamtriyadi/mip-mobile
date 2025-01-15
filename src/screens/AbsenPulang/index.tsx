@@ -10,7 +10,7 @@ import { RootStackParamList } from "../../../App";
 import dayjs from "dayjs";
 import { useNotification } from "@hooks/useNotification";
 import useWorkSchedule from "@hooks/useWorkSchedule";
-import useCamera from "@hooks/useCamera";
+import useImagePicker from "@hooks/useImagePicker";
 import useDatePicker from "@hooks/useDatePicker";
 import useTimePicker from "@hooks/useTimePicker";
 import InputField from "@components/InputField";
@@ -35,7 +35,7 @@ function SakitScreen() {
     });
 
     const workSchedule = useWorkSchedule();
-    const { image, handleClickOpenCamera, handleClickResetCamera } = useCamera();
+    const { image, handleClickOpenCamera, handleImageSelect, handleClickReset } = useImagePicker();
     const { date, openDatePicker, setOpenDatePicker, handleDateChange } = useDatePicker(data.date);
     const { time, openTimePicker, setOpenTimePicker, handleTimeChange } = useTimePicker(data.time_check_out);
     const [openModal, setOpenModal] = useState(false);
@@ -200,7 +200,7 @@ function SakitScreen() {
                         label="Foto Selfie Pulang"
                         image={image}
                         onOpenCamera={handleClickOpenCamera}
-                        onResetCamera={handleClickResetCamera}
+                        onResetImage={handleClickReset}
                     />
                     <LocationPicker
                         label="Lokasi Absen Pulang"

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, Text, TouchableOpacity, View, Alert } from "react-native";
+import { ScrollView, View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DatePicker from 'react-native-date-picker';
 import { useCurrentLocation } from '@hooks/useCurrentLocation';
@@ -14,7 +14,7 @@ import ReasonModal from "@components/ReasonModal";
 import ImagePicker from "@components/ImagePicker";
 import LocationPicker from "@components/LocationPicker";
 import useWorkSchedule from "@hooks/useWorkSchedule";
-import useCamera from "@hooks/useCamera";
+import useImagePicker from "@hooks/useImagePicker";
 import useDatePicker from "@hooks/useDatePicker";
 import useTimePicker from "@hooks/useTimePicker";
 import globalStyles from "@styles/styles";
@@ -36,7 +36,7 @@ function AbsenMasukScreen() {
   });
 
   const workSchedule = useWorkSchedule();
-  const { image, handleClickOpenCamera, handleClickResetCamera } = useCamera();
+  const { image, handleClickOpenCamera, handleImageSelect, handleClickReset } = useImagePicker();
   const { date, openDatePicker, setOpenDatePicker, handleDateChange } = useDatePicker(data.date);
   const { time, openTimePicker, setOpenTimePicker, handleTimeChange } = useTimePicker(data.time_check_in);
   const [openModal, setOpenModal] = useState(false);
@@ -182,7 +182,7 @@ function AbsenMasukScreen() {
             label="Foto Selfie Masuk"
             image={image}
             onOpenCamera={handleClickOpenCamera}
-            onResetCamera={handleClickResetCamera}
+            onResetImage={handleClickReset}
           />
           <LocationPicker
             label="Lokasi Absen Masuk"
