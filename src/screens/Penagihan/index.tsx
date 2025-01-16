@@ -72,10 +72,10 @@ function PenagihanScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container]}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.headContainer}>
         <Text style={[{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }]}>List Tagihan</Text>
-        <View style={[styles.groupSearch]}>
+        <View style={styles.groupSearch}>
           <TextInput
             placeholder="Masukan kata pencarian"
             style={{ width: '90%' }}
@@ -83,10 +83,10 @@ function PenagihanScreen() {
           />
           <TouchableOpacity style={{ justifyContent: 'center' }} onPress={() => fetchSearch()}><Icon name='search' size={20} color="#000" /></TouchableOpacity>
         </View>
-        <Text style={{ marginBottom: 10 }}>Kunjungan = visit, Janji bayar = promise_to_pay, Bayar = pay</Text>
+        {/* <Text style={{ marginBottom: 10 }}>Kunjungan = visit, Janji bayar = promise_to_pay, Bayar = pay</Text> */}
       </View>
       <ScrollView>
-        <View style={[styles.listContainer]}>
+        <View style={styles.listContainer}>
           {loading ? (
             <ActivityIndicator size="large" color="#007bff" />
           ) : data?.map((item, index) => (

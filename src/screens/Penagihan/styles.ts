@@ -5,15 +5,16 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         height: '100%',
-        justifyContent: 'center',
       },
       headContainer: {
         width: '90%',
         marginHorizontal: '5%',
+        marginTop: 5
       },
       listContainer: {
         width: '90%',
         marginHorizontal: '5%',
+        marginTop: 5
       },
       groupField: {
         width: '100%',
