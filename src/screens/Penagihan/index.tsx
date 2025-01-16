@@ -18,7 +18,11 @@ interface PenagihanData {
   };
   billingStatuses: any;
   latestBillingStatus: {
-    status: string;
+    status: {
+      label: string;
+      value: string;
+    };
+    status_date: string;
   };
 }
 
@@ -94,7 +98,13 @@ function PenagihanScreen() {
               <Text>No. Tagihan: {item.no_billing}</Text>
               {/* {item.billingStatuses?.status == 'pending' ? <Text style={styles.statusPending}>Pending</Text> : item.billingStatuses.status == 'proccess' ? <Text style={styles.statusProcess}>Proccess</Text> : item.billingStatuses.status == 'success' ? <Text style={styles.statusSuccess}>Success</Text> : item.billingStatuses.status == 'cancel' ? <Text style={styles.statusCancel}>Cancel</Text> : item.billingStatuses?.status == null ? <Text style={styles.statusPending}>Belum Ada</Text> : <Text style={styles.statusError}>Error</Text>} */}
               <Text>{item.customer.name_customer}</Text>
-              {item.latestBillingStatus?.status == 'visit' ? <Text style={styles.statusVisit}>Kunjungan</Text> : item.latestBillingStatus?.status == 'promise_to_pay' ? <Text style={styles.statusPromiseToPay}>Janji Bayar</Text> : item.latestBillingStatus?.status == 'pay' ? <Text style={styles.statusPay}>Bayar</Text> : item.latestBillingStatus?.status == null ? <Text style={styles.statusError}>Belum Ada</Text>  : <Text style={styles.statusError}>Error</Text>}
+              <View style={{flex: 1, flexDirection: 'row', gap: 5}}>
+                {/* {item.latestBillingStatus?.status == 'visit' ? <Text style={styles.statusVisit}>Kunjungan</Text> : item.latestBillingStatus?.status == 'promise_to_pay' ? <Text style={styles.statusPromiseToPay}>Janji Bayar</Text> : item.latestBillingStatus?.status == 'pay' ? <Text style={styles.statusPay}>Bayar</Text> : item.latestBillingStatus?.status == null ? <Text style={styles.statusError}>Belum Ada</Text>  : <Text style={styles.statusError}>Error</Text>} */}
+                {item.latestBillingStatus?.status.value == 'visit' ? <Text style={styles.statusVisit}>{item.latestBillingStatus?.status.label}</Text> : item.latestBillingStatus?.status.value == 'promise_to_pay' ? <Text style={styles.statusPromiseToPay}>{item.latestBillingStatus?.status.label}</Text> : item.latestBillingStatus?.status.value == 'pay' ? <Text style={styles.statusPay}>{item.latestBillingStatus?.status.label}</Text> : item.latestBillingStatus?.status.value == null ? <Text style={styles.statusError}>Belum Ada</Text>  : <Text style={styles.statusError}>Error</Text>}
+                {item.latestBillingStatus?.status_date && (
+                  <Text>{item.latestBillingStatus?.status_date}</Text>
+                )}
+              </View>
             </TouchableOpacity>
           )) }
         </View>
