@@ -40,6 +40,18 @@ const styles = StyleSheet.create({
     btnText: {
       color: 'white',
       fontWeight: 'bold',
+    },
+    error: {
+      flexDirection: 'row',
+      backgroundColor: '#dc3545',
+      padding: 10,
+      borderRadius: 5,
+      alignItems: 'center',
+      width: '100%',
+      marginBottom: 10,
+    },
+    errorText: {
+      color: 'white',
     }
 });
 
