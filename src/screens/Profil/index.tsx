@@ -131,7 +131,7 @@ function ProfilScreen() {
               <Text style={styles.errorText}>{errors.email[0]}</Text>
             </View>
           ) }
-          <InputField label="NIK" value={formDataProfil.nik} onChangeText={(value) => handleChangeProfil("nik", value)} placeholder="Masukan NIK Anda" />
+          <InputField editable={false} label="NIK" value={formDataProfil.nik} onChangeText={(value) => handleChangeProfil("nik", value)} placeholder="Masukan NIK Anda" />
           { errors && errors.nik && (
             <View style={styles.error}>
               <Text style={styles.errorText}>{errors.nik[0]}</Text>
