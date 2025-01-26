@@ -103,8 +103,6 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
         ...prevData,
         id: response.data.data.id,
         no_billing: response.data.data.no_billing,
-        name: response.data.data.name,
-        date: response.data.data.date,
         customer_id: response.data.data.customer_id,
         customer: {
           name_customer: response.data.data.customer.name_customer,
@@ -168,7 +166,7 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
         formData.append('signature_officer', {
           uri: signature_officer,
           type: 'image/png',
-          name: 'signature_officer',
+          name: 'signature_officer.png',
         });
       }
       // Add image file to formData
@@ -176,7 +174,7 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
         formData.append('signature_customer', {
           uri: signature_customer,
           type: 'image/png',
-          name: 'signature_customer',
+          name: 'signature_customer.png',
         });
       }
 

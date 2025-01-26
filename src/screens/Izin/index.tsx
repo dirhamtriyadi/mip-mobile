@@ -133,12 +133,12 @@ function IzinScreen() {
     } catch (error: any) {
       if (error.response?.data?.message?.code) {
         error.response?.data?.message?.code.map((item: any) => {
-          console.log(item);
+          // console.log(item);
           return Alert.alert('Absen Izin Gagal', item);
         });
       } else {
         Alert.alert('Absen Izin Gagal', 'Gagal terjadi kesalahan karena:\n' + error.response.data.message);
-        console.log('Error submitting absen izin: ', error.response.data.message);
+        // console.log('Error submitting absen izin: ', error.response.data.message);
       }
     }
   }

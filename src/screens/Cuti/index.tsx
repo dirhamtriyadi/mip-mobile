@@ -110,12 +110,12 @@ function CutiScreen() {
     } catch (error: any) {
       if (error.response?.data?.message?.code) {
         error.response?.data?.message?.code.map((item: any) => {
-          console.log(item);
+          // console.log(item);
           return Alert.alert('Cuti Gagal', item);
         });
       } else {
         Alert.alert('Cuti Gagal', 'Gagal terjadi kesalahan karena:\n' + error.response.data.message);
-        console.log('Error submitting cuti: ', error.response.data.message);
+        // console.log('Error submitting cuti: ', error.response.data.message);
       }
     }
   }

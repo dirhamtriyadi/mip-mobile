@@ -139,12 +139,12 @@ function SakitScreen() {
     } catch (error: any) {
       if (error.response?.data?.message?.code) {
         error.response?.data?.message?.code.map((item: any) => {
-          console.log(item);
+          // console.log(item);
           return Alert.alert('Absen Sakit Gagal', item);
         });
       } else {
         Alert.alert('Absen Sakit Gagal', 'Gagal terjadi kesalahan karena:\n' + error.response.data.message);
-        console.log('Error submitting absen sakit: ', error.response.data.message);
+        // console.log('Error submitting absen sakit: ', error.response.data.message);
       }
     }
   }

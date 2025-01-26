@@ -120,12 +120,12 @@ function AbsenMasukScreen() {
     } catch (error: any) {
       if (error.response?.data?.message?.code) {
         error.response?.data?.message?.code.map((item: any) => {
-          console.log(item);
+          // console.log(item);
           return Alert.alert('Absen Pulang Gagal', item);
         });
       } else {
         Alert.alert('Absen Masuk Gagal', 'Gagal terjadi kesalahan karena:\n' + error.response.data.message);
-        console.log('Error submitting absen masuk: ', error.response.data.message);
+        // console.log('Error submitting absen masuk: ', error.response.data.message);
       }
     }
   }

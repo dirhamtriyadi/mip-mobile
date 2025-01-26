@@ -18,7 +18,6 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
   onImageSelected,
   onResetImage
 }) => {
-  console.log(onOpenCamera, onImageSelected)
   return (
     <View style={[styles.groupField]}>
       <Text style={[styles.fieldLabel]}>{label}</Text>
