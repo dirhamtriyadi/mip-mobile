@@ -8,7 +8,7 @@ interface LocationProps {
   locationString: string;
 }
 
-export const useCurrentLocation = () => {
+export const useLocation = () => {
   const [location, setLocation] = useState<LocationProps>({
     latitude: 0,
     longitude: 0,

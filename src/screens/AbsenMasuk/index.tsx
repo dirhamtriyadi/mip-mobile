@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { ScrollView, View, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, {useState, useEffect} from 'react';
+import {ScrollView, View, Alert} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import DatePicker from 'react-native-date-picker';
-import { useCurrentLocation } from '@hooks/useCurrentLocation';
-import instance from "../../configs/axios";
-import { useUserData } from "@hooks/useUserData";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../../../App";
-import dayjs from "dayjs";
-import { useNotification } from "@hooks/useNotification";
-import InputField from "@components/InputField";
-import ReasonModal from "@components/ReasonModal";
-import ImagePicker from "@components/ImagePicker";
-import LocationPicker from "@components/LocationPicker";
-import useWorkSchedule from "@hooks/useWorkSchedule";
-import useImagePicker from "@hooks/useImagePicker";
-import useDatePicker from "@hooks/useDatePicker";
-import useTimePicker from "@hooks/useTimePicker";
-import globalStyles from "@styles/styles";
-import Button from "@src/components/Button";
+import {useLocation} from '@src/hooks/useLocation';
+import instance from '../../configs/axios';
+import {useUserData} from '@hooks/useUserData';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../../../App';
+import dayjs from 'dayjs';
+import {useNotification} from '@hooks/useNotification';
+import InputField from '@components/InputField';
+import ReasonModal from '@components/ReasonModal';
+import ImagePicker from '@components/ImagePicker';
+import LocationPicker from '@components/LocationPicker';
+import useWorkSchedule from '@hooks/useWorkSchedule';
+import useImagePicker from '@hooks/useImagePicker';
+import useDatePicker from '@hooks/useDatePicker';
+import useTimePicker from '@hooks/useTimePicker';
+import globalStyles from '@styles/styles';
+import Button from '@src/components/Button';
 
 function AbsenMasukScreen() {
   const [data, setData] = useState({
@@ -36,29 +36,32 @@ function AbsenMasukScreen() {
   });
 
   const workSchedule = useWorkSchedule();
-  const { image, handleClickOpenCamera, handleImageSelect, handleClickReset } = useImagePicker();
-  const { date, openDatePicker, setOpenDatePicker, handleDateChange } = useDatePicker(data.date);
-  const { time, openTimePicker, setOpenTimePicker, handleTimeChange } = useTimePicker(data.time_check_in);
+  const {image, handleClickOpenCamera, handleImageSelect, handleClickReset} =
+    useImagePicker();
+  const {date, openDatePicker, setOpenDatePicker, handleDateChange} =
+    useDatePicker(data.date);
+  const {time, openTimePicker, setOpenTimePicker, handleTimeChange} =
+    useTimePicker(data.time_check_in);
   const [openModal, setOpenModal] = useState(false);
-  const { userDetailData } = useUserData();
-  const { location, getCurrentLocation } = useCurrentLocation();
-  const { showNotification } = useNotification();
+  const {userDetailData} = useUserData();
+  const {location, getCurrentLocation} = useLocation();
+  const {showNotification} = useNotification();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     if (location.latitude !== 0 && location.longitude !== 0) {
-      setData((prevData) => ({
+      setData(prevData => ({
         ...prevData,
         latitude: location.latitude,
         longitude: location.longitude,
-        location_check_in: location.locationString
+        location_check_in: location.locationString,
       }));
     }
   }, [location]);
 
   useEffect(() => {
-    setData((prevData) => ({
+    setData(prevData => ({
       ...prevData,
       code: userDetailData.name + data.date.format('DD/MM/YYYY'),
       nik: userDetailData.nik,
@@ -79,7 +82,10 @@ function AbsenMasukScreen() {
     if (data.name === '') {
       return Alert.alert('Nama harus diisi');
     }
-    if (data.time_check_in.format('HH:mm:ss') > workSchedule?.work_start_time && data.reason_late === '') {
+    if (
+      data.time_check_in.format('HH:mm:ss') > workSchedule?.work_start_time &&
+      data.reason_late === ''
+    ) {
       return setOpenModal(true);
     }
     if (data.image_check_in === '') {
@@ -90,7 +96,7 @@ function AbsenMasukScreen() {
     }
 
     try {
-      const { date, time_check_in, type, reason_late, location_check_in } = data;
+      const {date, time_check_in, type, reason_late, location_check_in} = data;
       const formData = new FormData();
 
       formData.append('date', date.format('YYYY-MM-DD'));
@@ -114,7 +120,7 @@ function AbsenMasukScreen() {
         {
           text: 'OK',
           onPress: () => navigation.navigate('Home'),
-        }
+        },
       ]);
       showNotification('Absen Masuk', 'Absen masuk berhasil disubmit');
     } catch (error: any) {
@@ -124,11 +130,14 @@ function AbsenMasukScreen() {
           return Alert.alert('Absen Pulang Gagal', item);
         });
       } else {
-        Alert.alert('Absen Masuk Gagal', 'Gagal terjadi kesalahan karena:\n' + error.response.data.message);
+        Alert.alert(
+          'Absen Masuk Gagal',
+          'Gagal terjadi kesalahan karena:\n' + error.response.data.message,
+        );
         // console.log('Error submitting absen masuk: ', error.response.data.message);
       }
     }
-  }
+  };
 
   return (
     <SafeAreaView style={globalStyles.container}>
@@ -138,19 +147,25 @@ function AbsenMasukScreen() {
             label="Kode Absen"
             placeholder="Kode"
             value={data.code}
-            onChangeText={(text) => setData((prevData) => ({ ...prevData, code: text }))}
+            onChangeText={text =>
+              setData(prevData => ({...prevData, code: text}))
+            }
           />
           <InputField
             label="NIK"
             placeholder="NIK"
             value={data.nik}
-            onChangeText={(text) => setData((prevData) => ({ ...prevData, nik: text }))}
+            onChangeText={text =>
+              setData(prevData => ({...prevData, nik: text}))
+            }
           />
           <InputField
             label="Nama"
             placeholder="Nama"
             value={data.name}
-            onChangeText={(text) => setData((prevData) => ({ ...prevData, name: text }))}
+            onChangeText={text =>
+              setData(prevData => ({...prevData, name: text}))
+            }
           />
           <InputField
             label="Tanggal"
@@ -176,7 +191,9 @@ function AbsenMasukScreen() {
             label="Alasan Terlambat"
             placeholder="Keterangan"
             value={data.reason_late}
-            onChangeText={(text) => setData((prevData) => ({ ...prevData, reason_late: text }))}
+            onChangeText={text =>
+              setData(prevData => ({...prevData, reason_late: text}))
+            }
           />
           <ImagePicker
             label="Foto Selfie Masuk"
@@ -190,7 +207,7 @@ function AbsenMasukScreen() {
             location={location}
             getCurrentLocation={getCurrentLocation}
           />
-          <View style={[globalStyles.groupField, { marginBottom: 10 }]}>
+          <View style={[globalStyles.groupField, {marginBottom: 10}]}>
             <Button label="Simpan" onPress={handleSubmit} />
           </View>
         </View>
