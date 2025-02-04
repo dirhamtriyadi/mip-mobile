@@ -1,9 +1,15 @@
-import { useState, useEffect } from 'react';
-import { PermissionsAndroid, Platform, Alert } from 'react-native';
+import {useState, useEffect} from 'react';
+import {PermissionsAndroid, Platform, Alert} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 
+interface LocationProps {
+  latitude: number;
+  longitude: number;
+  locationString: string;
+}
+
 export const useCurrentLocation = () => {
-  const [location, setLocation] = useState({
+  const [location, setLocation] = useState<LocationProps>({
     latitude: 0,
     longitude: 0,
     locationString: '',
@@ -21,28 +27,28 @@ export const useCurrentLocation = () => {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           {
-            title: "Location Permission",
-            message: "This app needs access to your location.",
-            buttonNeutral: "Ask Me Later",
-            buttonNegative: "Cancel",
-            buttonPositive: "OK"
-          }
+            title: 'Location Permission',
+            message: 'This app needs access to your location.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log("You can use the location");
+          console.log('You can use the location');
         } else {
-          console.log("Location permission denied");
+          console.log('Location permission denied');
           Alert.alert(
-            "Permission Denied",
-            "Location permission is required to use this feature. Please enable it in the app settings.",
-            [
-              { text: "OK" }
-            ]
+            'Permission Denied',
+            'Location permission is required to use this feature. Please enable it in the app settings.',
+            [{text: 'OK'}],
           );
         }
       } else {
         // For iOS, you can use a different library like react-native-permissions
-        console.log("Location permission is not required for iOS in this example.");
+        console.log(
+          'Location permission is not required for iOS in this example.',
+        );
       }
     } catch (err) {
       console.warn(err);
@@ -51,21 +57,31 @@ export const useCurrentLocation = () => {
 
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
+      position => {
+        const {latitude, longitude} = position.coords;
         setLocation({
           latitude,
           longitude,
-          locationString: `${latitude}, ${longitude}`
+          locationString: `${latitude}, ${longitude}`,
         });
       },
-      (error) => {
+      error => {
         console.error(error);
-        Alert.alert("Error", "Failed to get current location.");
+        Alert.alert('Error', 'Failed to get current location.');
       },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
   };
 
-  return { location, getCurrentLocation };
+  const changeLocationMarker = (latitude: number, longitude: number) => {
+    setLocation({
+      latitude: latitude,
+      longitude: longitude,
+      locationString: `${latitude}, ${longitude}`,
+    });
+    console.log(latitude, longitude);
+    console.log(`${latitude}, ${longitude}`);
+  };
+
+  return {location, getCurrentLocation, changeLocationMarker};
 };
