@@ -16,6 +16,7 @@ import IzinScreen from '@screens/Izin';
 import CutiScreen from '@screens/Cuti';
 import PenagihanScreen from '@screens/Penagihan';
 import DetailPenagihanScreen from '@screens/DetailPenagihan';
+import LaporanPenagihanScreen from '@src/screens/LaporanPenagihan';
 import ProfilScreen from '@src/screens/Profil';
 
 export type RootStackParamList = {
@@ -29,6 +30,7 @@ export type RootStackParamList = {
   Cuti: undefined;
   Penagihan: undefined;
   DetailPenagihan: { id: string };
+  LaporanPenagihan: undefined;
   Profil: undefined;
 };
 
@@ -57,6 +59,7 @@ function HomeStackScreen() {
         <Stack.Screen name="Cuti" component={CutiScreen} options={{ title: 'Cuti' }} />
         <Stack.Screen name="Penagihan" component={PenagihanScreen} options={{ title: 'Penagihan' }} />
         <Stack.Screen name="DetailPenagihan" component={DetailPenagihanScreen} options={{ title: 'Detail Penagihan' }} />
+        <Stack.Screen name="LaporanPenagihan" component={LaporanPenagihanScreen} options={{ title: 'Laporan Penagihan' }} />
       </Stack.Group>
     </Stack.Navigator>
   )
@@ -125,6 +128,7 @@ function Layout() {
               tabBarIcon: ({ color }) => (
                 <Ionicons name='home-outline' size={24} color={color} />
                 ),
+              tabBarActiveTintColor: '#000',
               }} />
             <Tab.Screen name="ProfilStackScreen" component={ProfilStackScreen} options={{
               headerShown: false,
@@ -132,6 +136,7 @@ function Layout() {
               tabBarIcon: ({ color }) => (
                 <Ionicons name='person-outline' size={24} color={color} />
                 ),
+              tabBarActiveTintColor: '#000',
             }} />
           </Tab.Navigator>
         ) : (
