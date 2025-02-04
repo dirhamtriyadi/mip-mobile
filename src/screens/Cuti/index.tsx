@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { ScrollView, Text, TouchableOpacity, View, Alert, ActivityIndicator } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, {useState, useEffect} from 'react';
+import {ScrollView, Text, View, Alert, ActivityIndicator} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import DatePicker from 'react-native-date-picker';
-import instance from "../../configs/axios";
-import { useUserData } from "@hooks/useUserData";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../../../App";
-import dayjs from "dayjs";
+import instance from '../../configs/axios';
+import {useUserData} from '@hooks/useUserData';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../../../App';
+import dayjs from 'dayjs';
 import 'dayjs/locale/id';
-import { useNotification } from "@hooks/useNotification";
-import useDatePickerStartDate from "@hooks/useDatePicker";
-import useDatePickerEndDate from "@hooks/useDatePicker";
-import InputField from "@components/InputField";
-import globalStyles from "@styles/styles";
-import styles from "./styles";
-import Button from "@src/components/Button";
+import {useNotification} from '@hooks/useNotification';
+import useDatePickerStartDate from '@hooks/useDatePicker';
+import useDatePickerEndDate from '@hooks/useDatePicker';
+import InputField from '@components/InputField';
+import globalStyles from '@styles/styles';
+import styles from './styles';
+import Button from '@src/components/Button';
 
 interface CutiData {
   start_date: any;
@@ -44,10 +44,20 @@ function CutiScreen() {
     end_date: dayjs(),
   });
 
-  const { date: startDate, openDatePicker: openDatePickerStartDate, setOpenDatePicker: setOpenDatePickerStartDate, handleDateChange: handleDateChangeStartDate } = useDatePickerStartDate(data.start_date);
-  const { date: endDate, openDatePicker: openDatePickerEndDate, setOpenDatePicker: setOpenDatePickerEndDate, handleDateChange: handleDateChangeEndDate } = useDatePickerEndDate(data.end_date);
-  const { userDetailData } = useUserData();
-  const { showNotification } = useNotification();
+  const {
+    date: startDate,
+    openDatePicker: openDatePickerStartDate,
+    setOpenDatePicker: setOpenDatePickerStartDate,
+    handleDateChange: handleDateChangeStartDate,
+  } = useDatePickerStartDate(data.start_date);
+  const {
+    date: endDate,
+    openDatePicker: openDatePickerEndDate,
+    setOpenDatePicker: setOpenDatePickerEndDate,
+    handleDateChange: handleDateChangeEndDate,
+  } = useDatePickerEndDate(data.end_date);
+  const {userDetailData} = useUserData();
+  const {showNotification} = useNotification();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -58,19 +68,23 @@ function CutiScreen() {
       setIsLoading(true);
       const response = await instance.get('v1/leaves');
       setCutiData(response.data.data);
-      setIsLoading(false);
     } catch (error: any) {
+      if (error.response.status === 404) {
+        Alert.alert('Cuti kosong', 'Anda belum pernah mengajukan cuti');
+        return;
+      }
       Alert.alert('Gagal mengambil data cuti', error.response.data.message);
+    } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     fetchCutiData();
   }, []);
 
   useEffect(() => {
-    setData((prevData) => ({
+    setData(prevData => ({
       ...prevData,
       nik: userDetailData.nik,
       name: userDetailData.name,
@@ -80,23 +94,28 @@ function CutiScreen() {
   }, [userDetailData, startDate, endDate]);
 
   const handleSubmit = async () => {
-
     // add validation here
     if (data.nik === '') {
-      return Alert.alert('NIK harus diisi');
+      return Alert.alert('NIK', 'NIK harus diisi tidak boleh kosong');
     }
     if (data.name === '') {
-      return Alert.alert('Nama harus diisi');
+      return Alert.alert('Nama', 'Nama harus diisi tidak boleh kosong');
     }
-    
+    if (data.end_date < data.start_date) {
+      return Alert.alert(
+        'Tanggal',
+        'Tanggal akhir cuti tidak boleh kurang dari mulai cuti',
+      );
+    }
+
     try {
-      const { start_date, end_date } = data;
+      const {start_date, end_date} = data;
 
       const formData = new FormData();
-      
+
       formData.append('start_date', start_date.format('YYYY-MM-DD'));
       formData.append('end_date', end_date.format('YYYY-MM-DD'));
-      
+
       instance.defaults.headers['Content-Type'] = 'multipart/form-data';
 
       await instance.post('v1/leaves/submission', formData);
@@ -104,7 +123,7 @@ function CutiScreen() {
         {
           text: 'OK',
           onPress: () => navigation.navigate('Home'),
-        }
+        },
       ]);
       showNotification('Cuti berhasil', 'Cuti berhasil diajukan');
     } catch (error: any) {
@@ -114,11 +133,14 @@ function CutiScreen() {
           return Alert.alert('Cuti Gagal', item);
         });
       } else {
-        Alert.alert('Cuti Gagal', 'Gagal terjadi kesalahan karena:\n' + error.response.data.message);
+        Alert.alert(
+          'Cuti Gagal',
+          'Gagal terjadi kesalahan karena:\n' + error.response.data.message,
+        );
         // console.log('Error submitting cuti: ', error.response.data.message);
       }
     }
-  }
+  };
 
   return (
     <SafeAreaView style={globalStyles.container}>
@@ -128,13 +150,17 @@ function CutiScreen() {
             label="NIK"
             placeholder="NIK"
             value={data.nik}
-            onChangeText={(text) => setData((prevData) => ({ ...prevData, nik: text }))}
+            onChangeText={text =>
+              setData(prevData => ({...prevData, nik: text}))
+            }
           />
           <InputField
             label="Nama"
             placeholder="Nama"
             value={data.name}
-            onChangeText={(text) => setData((prevData) => ({ ...prevData, name: text }))}
+            onChangeText={text =>
+              setData(prevData => ({...prevData, name: text}))
+            }
           />
           <InputField
             label="Tanggal Mulai Cuti"
@@ -154,27 +180,45 @@ function CutiScreen() {
             onIconPress={() => setOpenDatePickerEndDate(true)}
             iconName="calendar"
           />
-          <View style={[globalStyles.groupField, { marginBottom: 10 }]}>
+          <View style={[globalStyles.groupField, {marginBottom: 10}]}>
             <Button label="Ajukan Cuti" onPress={handleSubmit} />
           </View>
           {isLoading ? (
             <ActivityIndicator size="large" color="#007bff" />
           ) : cutiData ? (
             <View style={styles.groupDetailCuti}>
-              <Text style={{ color: 'black', fontWeight: 'bold' }}>Detail Terakhir Cuti</Text>
-              <View style={[globalStyles.groupField, { marginBottom: 10 }]}>
-                <Text style={{ color: 'black' }}>Nama: {cutiData.user.name}</Text>
-                <Text style={{ color: 'black' }}>NIK: {cutiData.user.detail_users.nik}</Text>
-                <Text style={{ color: 'black' }}>Tanggal Mulai Cuti: {dayjs(cutiData.start_date).locale('id').format('DD MMMM YYYY')}</Text> 
-                <Text style={{ color: 'black' }}>Tanggal Selesai Cuti: {dayjs(cutiData.end_date).locale('id').format('DD MMMM YYYY')}</Text>
-                <Text style={{ color: 'black' }}>Status Cuti: {cutiData.status}</Text>
-                <Text style={{ color: 'black' }}>Response Cuti: {cutiData.response}</Text>
+              <Text style={{color: 'black', fontWeight: 'bold'}}>
+                Detail Terakhir Cuti
+              </Text>
+              <View style={[globalStyles.groupField, {marginBottom: 10}]}>
+                <Text style={{color: 'black'}}>Nama: {cutiData.user.name}</Text>
+                <Text style={{color: 'black'}}>
+                  NIK: {cutiData.user.detail_users.nik}
+                </Text>
+                <Text style={{color: 'black'}}>
+                  Tanggal Mulai Cuti:{' '}
+                  {dayjs(cutiData.start_date)
+                    .locale('id')
+                    .format('DD MMMM YYYY')}
+                </Text>
+                <Text style={{color: 'black'}}>
+                  Tanggal Selesai Cuti:{' '}
+                  {dayjs(cutiData.end_date).locale('id').format('DD MMMM YYYY')}
+                </Text>
+                <Text style={{color: 'black'}}>
+                  Status Cuti: {cutiData.status}
+                </Text>
+                <Text style={{color: 'black'}}>
+                  Response Cuti: {cutiData.response}
+                </Text>
               </View>
             </View>
           ) : (
             <View style={styles.groupDetailCuti}>
-              <Text style={{ color: 'black', fontWeight: 'bold' }}>Detail Terakhir Cuti</Text>
-              <Text style={{ color: 'black' }}>Tidak ada data</Text>
+              <Text style={{color: 'black', fontWeight: 'bold'}}>
+                Detail Terakhir Cuti
+              </Text>
+              <Text style={{color: 'black'}}>Tidak ada data</Text>
             </View>
           )}
         </View>
