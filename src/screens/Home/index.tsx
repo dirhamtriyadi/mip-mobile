@@ -33,6 +33,20 @@ function HomeScreen() {
             <Text>Laporan Penagihan</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.content}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('CalonNasabah')}>
+            <Icon name="user-alt" size={30} color="#000" />
+            <Text>Calon Nasabah</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Survei')}>
+            <Icon name="clipboard-list" size={30} color="#000" />
+            <Text>Survei</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { ScrollView, View, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, {useState, useEffect, useCallback} from 'react';
+import {ScrollView, View, Alert} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import instance from '../../configs/axios';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../../App';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../../../App';
 import dayjs from 'dayjs';
-import useImagePicker from "@hooks/useImagePicker";
-import { useNotification } from '@hooks/useNotification';
+import useImagePicker from '@hooks/useImagePicker';
+import {useNotification} from '@hooks/useNotification';
 import globalStyles from '@styles/styles';
 import styles from './styles';
 import Button from '@src/components/Button';
-import PenagihanForm from '@src/components/PenagihanForm';
+import FormPenagihan from '@src/components/FormPenagihan';
 
 interface DetailPenagihanScreenProps {
   route: any;
@@ -34,17 +34,18 @@ interface DetailPenagihanData {
   signature_customer: string | null;
 }
 
-function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
-  const { id } = route.params;
-  const { showNotification } = useNotification();
-  const { image, handleClickOpenCamera, handleImageSelect, handleClickReset } = useImagePicker();
+function DetailPenagihanScreen({route}: DetailPenagihanScreenProps) {
+  const {id} = route.params;
+  const {showNotification} = useNotification();
+  const {image, handleClickOpenCamera, handleImageSelect, handleClickReset} =
+    useImagePicker();
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const [data, setData] = useState<DetailPenagihanData>({
     id: 0,
     no_billing: '',
     date: dayjs().toDate(),
     customer_id: 0,
-    customer: { name_customer: '' },
+    customer: {name_customer: ''},
     user_id: 0,
     status: 'visit',
     description: '',
@@ -76,11 +77,14 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
         id: response.data.data.id,
         no_billing: response.data.data.no_billing,
         customer_id: response.data.data.customer_id,
-        customer: { name_customer: response.data.data.customer.name_customer },
+        customer: {name_customer: response.data.data.customer.name_customer},
       }));
     } catch (error: any) {
       if (error.response.data.status === 'error') {
-        Alert.alert('Gagal mengambil data penagihan', error.response.data.message);
+        Alert.alert(
+          'Gagal mengambil data penagihan',
+          error.response.data.message,
+        );
       }
       Alert.alert('Gagal mengambil data penagihan', `Gagal terjadi kesalahan.`);
     }
@@ -88,7 +92,18 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
 
   const handleSubmit = useCallback(async () => {
     try {
-      const { id, no_billing, date, status, description, evidence, promise_date, amount, signature_officer, signature_customer } = data;
+      const {
+        id,
+        no_billing,
+        date,
+        status,
+        description,
+        evidence,
+        promise_date,
+        amount,
+        signature_officer,
+        signature_customer,
+      } = data;
 
       const formData = new FormData();
       formData.append('id', id);
@@ -106,7 +121,10 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
       }
 
       if (status === 'promise_to_pay') {
-        formData.append('promise_date', dayjs(promise_date).format('YYYY-MM-DD'));
+        formData.append(
+          'promise_date',
+          dayjs(promise_date).format('YYYY-MM-DD'),
+        );
       } else if (status === 'pay') {
         formData.append('amount', amount ?? null);
       }
@@ -128,15 +146,22 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
       }
 
       instance.defaults.headers['Content-Type'] = 'multipart/form-data';
-      await instance.post('v1/billing-statuses/', formData);
 
-      Alert.alert('Penagihan berhasil', 'Status penagihan berhasil ditambahkan', [
-        { text: 'OK', onPress: () => navigation.navigate('Home') },
-      ]);
+      await instance.post('v1/billing-statuses', formData);
+
+      Alert.alert(
+        'Penagihan berhasil',
+        'Status penagihan berhasil ditambahkan',
+        [{text: 'OK', onPress: () => navigation.navigate('Home')}],
+      );
       showNotification('Penagihan', 'Status penagihan berhasil ditambahkan');
     } catch (error: any) {
+      console.log(error.response);
       if (error.response.data.status === 'error') {
-        Alert.alert('Penagihan Gagal', `Gagal terjadi kesalahan karena:\n${error.response.data.message}`);
+        Alert.alert(
+          'Penagihan Gagal',
+          `Gagal terjadi kesalahan karena:\n${error.response.data.message}`,
+        );
       }
       Alert.alert('Penagihan Gagal', `Gagal terjadi kesalahan.`);
     }
@@ -145,7 +170,7 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
   return (
     <SafeAreaView style={globalStyles.container}>
       <ScrollView scrollEnabled={scrollEnabled}>
-        <PenagihanForm
+        <FormPenagihan
           data={data}
           onDataChange={setData}
           onOpenCamera={handleClickOpenCamera}
@@ -153,8 +178,8 @@ function DetailPenagihanScreen({ route }: DetailPenagihanScreenProps) {
           onImageReset={handleClickReset}
           onScrollEnabledChange={setScrollEnabled}
         />
-        <View style={[styles.formContainer, { marginBottom: 10 }]}>
-          <Button label='Simpan' onPress={handleSubmit} />
+        <View style={[styles.formContainer, {marginBottom: 10}]}>
+          <Button label="Simpan" onPress={handleSubmit} />
         </View>
       </ScrollView>
     </SafeAreaView>
