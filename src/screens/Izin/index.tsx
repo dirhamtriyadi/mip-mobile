@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {ScrollView, View, Alert} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import DatePicker from 'react-native-date-picker';
-import {useCurrentLocation} from '@src/hooks/useLocation';
+import {useLocation} from '@src/hooks/useLocation';
 import instance from '../../configs/axios';
 import {useUserData} from '@hooks/useUserData';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
@@ -39,7 +39,7 @@ function IzinScreen() {
   const {time, openTimePicker, setOpenTimePicker, handleTimeChange} =
     useTimePicker(data.time_check_in);
   const {userDetailData} = useUserData();
-  const {location, getCurrentLocation} = useCurrentLocation();
+  const {location, getCurrentLocation} = useLocation();
   const {showNotification} = useNotification();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
