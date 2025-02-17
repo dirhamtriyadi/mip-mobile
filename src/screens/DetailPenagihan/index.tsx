@@ -18,8 +18,8 @@ interface DetailPenagihanScreenProps {
 
 interface DetailPenagihanData {
   id: number;
-  no_billing: string;
-  date: any;
+  bill_number: string;
+  date_exec: any;
   customer_id: number;
   customer: {
     name_customer: string;
@@ -27,9 +27,9 @@ interface DetailPenagihanData {
   user_id: number;
   status: string;
   description: string;
-  evidence: string | null;
+  proof: string | null;
   promise_date: any | null;
-  amount: number | null;
+  payment_amount: number | null;
   signature_officer: string | null;
   signature_customer: string | null;
 }
@@ -42,16 +42,16 @@ function DetailPenagihanScreen({route}: DetailPenagihanScreenProps) {
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const [data, setData] = useState<DetailPenagihanData>({
     id: 0,
-    no_billing: '',
-    date: dayjs().toDate(),
+    bill_number: '',
+    date_exec: dayjs().toDate(),
     customer_id: 0,
     customer: {name_customer: ''},
     user_id: 0,
     status: 'visit',
     description: '',
-    evidence: null,
+    proof: null,
     promise_date: dayjs().toDate(),
-    amount: null,
+    payment_amount: null,
     signature_officer: null,
     signature_customer: null,
   });
@@ -61,7 +61,7 @@ function DetailPenagihanScreen({route}: DetailPenagihanScreenProps) {
   useEffect(() => {
     setData(prevData => ({
       ...prevData,
-      evidence: image,
+      proof: image,
     }));
   }, [image]);
 
@@ -71,11 +71,11 @@ function DetailPenagihanScreen({route}: DetailPenagihanScreenProps) {
 
   const fetchBillingDetails = async () => {
     try {
-      const response = await instance.get(`v1/billings/${id}`);
+      const response = await instance.get(`v1/customer-billings/${id}`);
       setData(prevData => ({
         ...prevData,
         id: response.data.data.id,
-        no_billing: response.data.data.no_billing,
+        bill_number: response.data.data.bill_number,
         customer_id: response.data.data.customer_id,
         customer: {name_customer: response.data.data.customer.name_customer},
       }));
@@ -94,26 +94,26 @@ function DetailPenagihanScreen({route}: DetailPenagihanScreenProps) {
     try {
       const {
         id,
-        no_billing,
-        date,
+        bill_number,
+        date_exec,
         status,
         description,
-        evidence,
+        proof,
         promise_date,
-        amount,
+        payment_amount,
         signature_officer,
         signature_customer,
       } = data;
 
       const formData = new FormData();
       formData.append('id', id);
-      formData.append('no_billing', no_billing);
-      formData.append('status_date', dayjs(date).format('YYYY-MM-DD'));
+      formData.append('bill_number', bill_number);
+      formData.append('date_exec', dayjs(date_exec).format('YYYY-MM-DD'));
       formData.append('status', status);
       formData.append('description', description || '');
 
-      if (evidence) {
-        formData.append('evidence', {
+      if (proof) {
+        formData.append('proof', {
           uri: image.uri,
           type: image.type,
           name: image.fileName,
@@ -126,7 +126,7 @@ function DetailPenagihanScreen({route}: DetailPenagihanScreenProps) {
           dayjs(promise_date).format('YYYY-MM-DD'),
         );
       } else if (status === 'pay') {
-        formData.append('amount', amount ?? null);
+        formData.append('payment_amount', payment_amount ?? null);
       }
 
       if (signature_officer) {
@@ -147,7 +147,7 @@ function DetailPenagihanScreen({route}: DetailPenagihanScreenProps) {
 
       instance.defaults.headers['Content-Type'] = 'multipart/form-data';
 
-      await instance.post('v1/billing-statuses', formData);
+      await instance.post('v1/billing-followups', formData);
 
       Alert.alert(
         'Penagihan berhasil',
@@ -156,7 +156,7 @@ function DetailPenagihanScreen({route}: DetailPenagihanScreenProps) {
       );
       showNotification('Penagihan', 'Status penagihan berhasil ditambahkan');
     } catch (error: any) {
-      console.log(error.response);
+      console.log(error.response.data);
       if (error.response.data.status === 'error') {
         Alert.alert(
           'Penagihan Gagal',

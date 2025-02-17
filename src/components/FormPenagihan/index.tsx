@@ -38,7 +38,7 @@ function FormPenagihan({
       <InputField
         label="No Tagihan"
         placeholder="Masukan No Tagihan"
-        value={data.no_billing}
+        value={data.bill_number}
         editable={false}
         onChangeText={() => {}}
       />
@@ -51,9 +51,9 @@ function FormPenagihan({
       />
       <InputDatePicker
         label="Tanggal"
-        value={data.date}
+        value={data.date_exec}
         iconName="calendar"
-        onChange={value => onDataChange({...data, date: value})}
+        onChange={value => onDataChange({...data, date_exec: value})}
       />
       <InputStatusPicker
         value={data.status}
@@ -71,13 +71,15 @@ function FormPenagihan({
         <InputCurrency
           label="Nominal"
           placeholder="Masukan Nominal"
-          value={data.amount || 0}
-          onChangeValue={value => onDataChange({...data, amount: value})}
+          value={data.payment_amount || 0}
+          onChangeValue={value =>
+            onDataChange({...data, payment_amount: value})
+          }
         />
       )}
       <ImagePicker
         label="Bukti"
-        image={data.evidence}
+        image={data.proof}
         onOpenCamera={onOpenCamera}
         onImageSelected={onImageSelect}
         onResetImage={onImageReset}
