@@ -14,22 +14,26 @@ import {useEffect, useState} from 'react';
 import instance from '@src/configs/axios';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from 'App';
+import dayjs from 'dayjs';
+import 'dayjs/locale/id';
 
 interface LaporanPenagihanData {
   id: string;
-  no_billing: string;
-  date: string;
+  bill_number: string | number;
+  created_at: string;
   customer: {
     id: string;
     name_customer: string;
-    no: string;
+    name_mother: string;
+    no_contract: string | number;
   };
-  latestBillingStatus?: {
+  latestBillingFollowups?: {
     status?: {
       label: string;
       value: string;
     };
-    status_date?: string;
+    promise_date?: string;
+    date_exec?: string;
   };
 }
 
@@ -51,7 +55,7 @@ function LaporanPenagihanScreen() {
   const fetchDataBillingReports = async () => {
     try {
       setLoading(true);
-      const response = await instance.get('v1/billing-reports', {
+      const response = await instance.get('v1/customer-billing-reports', {
         params: search ? {search} : {},
       });
       setData(response.data.data);
@@ -88,7 +92,7 @@ function LaporanPenagihanScreen() {
       </View>
       <ScrollView>
         <View style={styles.listContainer}>
-          {loading ? (
+        {loading ? (
             <ActivityIndicator size="large" color="#007bff" />
           ) : data && data.length > 0 ? (
             data.map(item => (
@@ -99,31 +103,39 @@ function LaporanPenagihanScreen() {
                   {padding: 10, backgroundColor: '#f8f8f8', borderRadius: 10},
                 ]}
                 onPress={() =>
-                  // navigation.navigate('DetailPenagihan', {id: item.id})
-                  console.log({id: item.id})
+                  navigation.navigate('DetailPenagihan', {id: item.id})
+                  // console.log({id: item.id})
                 }>
                 <View style={styles.head}>
                   <Text style={styles.textKontrak}>
-                    No. Kontrak: {item.customer.no}
+                    No. Kontrak: {item.customer.no_contract}
                   </Text>
-                  <Text style={styles.textDate}>{item.date}</Text>
+                  <Text style={styles.textDate}>{dayjs(item.created_at).format('DD-MM-YYYY')}</Text>
                 </View>
-                <Text>No. Tagihan: {item.no_billing}</Text>
-                <Text>{item.customer.name_customer}</Text>
+                <Text>No. Tagihan: {item.bill_number}</Text>
+                <Text>Nama Nasabah: {item.customer.name_customer}</Text>
                 <View style={{flex: 1, flexDirection: 'row', gap: 5}}>
-                  {item.latestBillingStatus?.status?.value ? (
+                  {item.latestBillingFollowups?.status?.value ? (
                     <Text
                       style={getStatusStyle(
-                        item.latestBillingStatus.status.value,
+                        item.latestBillingFollowups.status.value,
                       )}>
-                      {item.latestBillingStatus.status.label}
+                      {item.latestBillingFollowups.status.label}
                     </Text>
                   ) : (
                     <Text style={styles.statusError}>Belum Ada</Text>
                   )}
-                  {item.latestBillingStatus?.status_date && (
-                    <Text>{item.latestBillingStatus.status_date}</Text>
+                  {item.latestBillingFollowups?.date_exec && (
+                    <Text>{dayjs(item.latestBillingFollowups.date_exec).format('DD-MM-YYYY')}</Text>
                   )}
+                </View>
+                <View style={{flex: 1, flexDirection: 'row', gap: 5}}>
+                  {item.latestBillingFollowups?.status?.value === 'promise_to_pay' ? (
+                    <Text>
+                      Tanggal janji bayar:{' '}
+                      {dayjs(item.latestBillingFollowups.promise_date).format('DD-MM-YYYY')}
+                    </Text>
+                  ) : null }
                 </View>
               </TouchableOpacity>
             ))

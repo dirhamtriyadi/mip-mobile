@@ -15,25 +15,26 @@ import {RootStackParamList} from '../../../App';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './styles';
 import dayjs from 'dayjs';
+import 'dayjs/locale/id'
 
 interface PenagihanData {
   id: string;
-  bill_number: string;
+  bill_number: string | number;
+  created_at: string;
   customer: {
     id: string;
     name_customer: string;
-    no_contract: string;
-    description: string;
+    name_mother: string;
+    no_contract: string | number;
   };
   latestBillingFollowups?: {
     status?: {
       label: string;
       value: string;
     };
-    date_exec?: string;
     promise_date?: string;
+    date_exec?: string;
   };
-  created_at: string;
 }
 
 function PenagihanScreen() {
@@ -53,6 +54,7 @@ function PenagihanScreen() {
       const response = await instance.get('v1/customer-billings', {
         params: search ? {search} : {},
       });
+      console.log(response.data.data);
       setData(response.data.data);
     } catch (error: any) {
       Alert.alert(
@@ -92,7 +94,7 @@ function PenagihanScreen() {
       </View>
       <ScrollView>
         <View style={styles.listContainer}>
-          {loading ? (
+        {loading ? (
             <ActivityIndicator size="large" color="#007bff" />
           ) : data && data.length > 0 ? (
             data.map(item => (
@@ -104,17 +106,16 @@ function PenagihanScreen() {
                 ]}
                 onPress={() =>
                   navigation.navigate('DetailPenagihan', {id: item.id})
+                  // console.log({id: item.id})
                 }>
                 <View style={styles.head}>
                   <Text style={styles.textKontrak}>
                     No. Kontrak: {item.customer.no_contract}
                   </Text>
-                  <Text style={styles.textDate}>
-                    {dayjs(item.created_at).format('DD-MM-YYYY')}
-                  </Text>
+                  <Text style={styles.textDate}>{dayjs(item.created_at).format('DD-MM-YYYY')}</Text>
                 </View>
                 <Text>No. Tagihan: {item.bill_number}</Text>
-                <Text>{item.customer.name_customer}</Text>
+                <Text>Nama Nasabah: {item.customer.name_customer}</Text>
                 <View style={{flex: 1, flexDirection: 'row', gap: 5}}>
                   {item.latestBillingFollowups?.status?.value ? (
                     <Text
@@ -127,22 +128,16 @@ function PenagihanScreen() {
                     <Text style={styles.statusError}>Belum Ada</Text>
                   )}
                   {item.latestBillingFollowups?.date_exec && (
-                    <Text>{item.latestBillingFollowups.date_exec}</Text>
+                    <Text>{dayjs(item.latestBillingFollowups.date_exec).format('DD-MM-YYYY')}</Text>
                   )}
                 </View>
                 <View style={{flex: 1, flexDirection: 'row', gap: 5}}>
-                  {item.latestBillingFollowups?.status?.value ? (
-                    item.latestBillingFollowups?.status?.value ===
-                    'promise_to_pay' ? (
-                      <Text>
-                        Tanggal janji bayar:{' '}
-                        {item.latestBillingFollowups?.promise_date}
-                      </Text>
-                    ) : null
-                  ) : null}
-                </View>
-                <View style={{flex: 1, flexDirection: 'row', gap: 5}}>
-                  <Text>Keterangan : {item.customer.description}</Text>
+                  {item.latestBillingFollowups?.status?.value === 'promise_to_pay' ? (
+                    <Text>
+                      Tanggal janji bayar:{' '}
+                      {dayjs(item.latestBillingFollowups.promise_date).format('DD-MM-YYYY')}
+                    </Text>
+                  ) : null }
                 </View>
               </TouchableOpacity>
             ))
