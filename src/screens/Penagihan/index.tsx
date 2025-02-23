@@ -139,9 +139,7 @@ function PenagihanScreen() {
                         {item.latestBillingFollowups?.promise_date}
                       </Text>
                     ) : null
-                  ) : (
-                    <Text style={styles.statusError}>Belum Ada</Text>
-                  )}
+                  ) : null}
                 </View>
                 <View style={{flex: 1, flexDirection: 'row', gap: 5}}>
                   <Text>Keterangan : {item.customer.description}</Text>
