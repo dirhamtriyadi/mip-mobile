@@ -7,6 +7,8 @@ import InputSignature from '@components/InputSignature';
 import InputDatePicker from '@components/InputDatePicker';
 import InputStatusPicker from '@components/InputStatusPicker';
 import globalStyles from '@src/styles/styles';
+import InputFieldTextArea from '../InputFieldTextArea';
+import dayjs from 'dayjs';
 
 interface FormPenagihanProps {
   data: any;
@@ -25,6 +27,7 @@ function FormPenagihan({
   onImageReset,
   onScrollEnabledChange,
 }: FormPenagihanProps) {
+  dayjs.locale('id');
   const [scrollEnabled, setScrollEnabled] = useState(true);
 
   useEffect(() => {
@@ -49,11 +52,41 @@ function FormPenagihan({
         editable={false}
         onChangeText={() => {}}
       />
-      <InputDatePicker
-        label="Tanggal"
-        value={data.date_exec}
-        iconName="calendar"
-        onChange={value => onDataChange({...data, date_exec: value})}
+      <InputFieldTextArea
+        label="Alamat"
+        placeholder="Alamat Kosong"
+        value={data.customer.customer_address.address}
+        onChangeText={() => {}}
+        editable={false}
+      />
+      <InputField
+        label="Nama Ibu"
+        placeholder="Nama Ibu Kosong"
+        value={data.customer.name_mother}
+        editable={false}
+        onChangeText={() => {}}
+      />
+      <InputField
+        label="Tunggak Bulan"
+        placeholder="Tunggak Bulan Kosong"
+        value={data.customer.month_arrears}
+        editable={false}
+        onChangeText={() => {}}
+      />
+      <InputCurrency
+          label="Angsuran"
+          placeholder="Angsuran Bulan Kosong"
+          value={data.customer.installments || 0}
+          onChangeValue={() => {}}
+          editable={false}
+        />
+        <InputField
+        label="Tanggal Jatuh Tempo"
+        placeholder="Tanggal Jatuh Tempo Kosong"
+        value={data.customer.due_date ? dayjs(data.customer.due_date).format('DD MMMM YYYY') : ''}
+        editable={false}
+        iconName='calendar'
+        onChangeText={() => {}}
       />
       <InputStatusPicker
         value={data.status}

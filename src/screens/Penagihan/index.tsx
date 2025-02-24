@@ -54,7 +54,6 @@ function PenagihanScreen() {
       const response = await instance.get('v1/customer-billings', {
         params: search ? {search} : {},
       });
-      console.log(response.data.data);
       setData(response.data.data);
     } catch (error: any) {
       Alert.alert(

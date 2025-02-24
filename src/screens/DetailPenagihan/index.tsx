@@ -23,6 +23,15 @@ interface DetailPenagihanData {
   customer_id: number;
   customer: {
     name_customer: string;
+    name_mother: string;
+    installments: string;
+    month_arrears: string;
+    due_date: any | null;
+    customer_address: {
+      address: string;
+      village: string;
+      subdistrict: string;
+    }
   };
   user_id: number;
   status: string;
@@ -45,7 +54,18 @@ function DetailPenagihanScreen({route}: DetailPenagihanScreenProps) {
     bill_number: '',
     date_exec: dayjs().toDate(),
     customer_id: 0,
-    customer: {name_customer: ''},
+    customer: {
+      name_customer: '',
+      name_mother: '',
+      installments: '',
+      month_arrears: '',
+      due_date: null,
+      customer_address: {
+        address: '',
+        village: '',
+        subdistrict: '',
+      }
+    },
     user_id: 0,
     status: 'visit',
     description: '',
@@ -77,7 +97,18 @@ function DetailPenagihanScreen({route}: DetailPenagihanScreenProps) {
         id: response.data.data.id,
         bill_number: response.data.data.bill_number,
         customer_id: response.data.data.customer_id,
-        customer: {name_customer: response.data.data.customer.name_customer},
+        customer: {
+          name_customer: response.data.data.customer.name_customer,
+          name_mother: response.data.data.customer.name_mother,
+          installments: response.data.data.customer.installments.toString(),
+          month_arrears: response.data.data.customer.month_arrears.toString(),
+          due_date: response.data.data.customer.due_date,
+          customer_address: {
+            address: response.data.data.customer.customer_address.address,
+            village: response.data.data.customer.customer_address.village,
+            subdistrict: response.data.data.customer.customer_address.subdistrict,
+          }
+        },
       }));
     } catch (error: any) {
       if (error.response.data.status === 'error') {
