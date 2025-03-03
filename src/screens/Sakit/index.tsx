@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { ScrollView, View, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import DatePicker from "react-native-date-picker";
-import { useCurrentLocation } from "@hooks/useCurrentLocation";
-import instance from "../../configs/axios";
-import { useUserData } from "@hooks/useUserData";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../../../App";
-import dayjs from "dayjs";
-import { useNotification } from "@hooks/useNotification";
-import useCamera from "@hooks/useCamera";
-import useDatePickerStartDate from "@hooks/useDatePicker";
-import useDatePickerEndDate from "@hooks/useDatePicker";
-import useTimePicker from "@hooks/useTimePicker";
-import InputField from "@components/InputField";
-import ImagePicker from "@components/ImagePicker";
-import LocationPicker from "@components/LocationPicker";
-import globalStyles from "@styles/styles";
-import Button from "@src/components/Button";
+import React, {useState, useEffect} from 'react';
+import {ScrollView, View, Alert} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import DatePicker from 'react-native-date-picker';
+import {useLocation} from '@src/hooks/useLocation';
+import instance from '../../configs/axios';
+import {useUserData} from '@hooks/useUserData';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../../../App';
+import dayjs from 'dayjs';
+import {useNotification} from '@hooks/useNotification';
+import useImagePicker from '@hooks/useImagePicker';
+import useDatePickerStartDate from '@hooks/useDatePicker';
+import useDatePickerEndDate from '@hooks/useDatePicker';
+import useTimePicker from '@hooks/useTimePicker';
+import InputField from '@components/InputField';
+import ImagePicker from '@components/ImagePicker';
+import LocationPicker from '@components/LocationPicker';
+import globalStyles from '@styles/styles';
+import Button from '@src/components/Button';
 
-function SakitScreen() {  
+function SakitScreen() {
   const [data, setData] = useState({
     code: '',
     nik: '',
@@ -34,29 +34,41 @@ function SakitScreen() {
     longitude: 0,
   });
 
-  const { image, handleClickOpenCamera, handleClickResetCamera } = useCamera();
-  const { date: startDate, openDatePicker: openDatePickerStartDate, setOpenDatePicker: setOpenDatePickerStartDate, handleDateChange: handleDateChangeStartDate } = useDatePickerStartDate(data.start_date);
-  const { date: endDate, openDatePicker: openDatePickerEndDate, setOpenDatePicker: setOpenDatePickerEndDate, handleDateChange: handleDateChangeEndDate } = useDatePickerEndDate(data.end_date);
-  const { time, openTimePicker, setOpenTimePicker, handleTimeChange } = useTimePicker(data.time_check_in);
-  const { userDetailData } = useUserData();
-  const { location, getCurrentLocation } = useCurrentLocation();
-  const { showNotification } = useNotification();
+  const {image, handleClickOpenCamera, handleImageSelect, handleClickReset} =
+    useImagePicker();
+  const {
+    date: startDate,
+    openDatePicker: openDatePickerStartDate,
+    setOpenDatePicker: setOpenDatePickerStartDate,
+    handleDateChange: handleDateChangeStartDate,
+  } = useDatePickerStartDate(data.start_date);
+  const {
+    date: endDate,
+    openDatePicker: openDatePickerEndDate,
+    setOpenDatePicker: setOpenDatePickerEndDate,
+    handleDateChange: handleDateChangeEndDate,
+  } = useDatePickerEndDate(data.end_date);
+  const {time, openTimePicker, setOpenTimePicker, handleTimeChange} =
+    useTimePicker(data.time_check_in);
+  const {userDetailData} = useUserData();
+  const {location, getCurrentLocation} = useLocation();
+  const {showNotification} = useNotification();
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     if (location.latitude !== 0 && location.longitude !== 0) {
-      setData((prevData) => ({
+      setData(prevData => ({
         ...prevData,
         latitude: location.latitude,
         longitude: location.longitude,
-        location_check_in: location.locationString
+        location_check_in: location.locationString,
       }));
     }
   }, [location]);
 
   useEffect(() => {
-    setData((prevData) => ({
+    setData(prevData => ({
       ...prevData,
       code: userDetailData.name + data.start_date.format('DD/MM/YYYY'),
       nik: userDetailData.nik,
@@ -69,24 +81,25 @@ function SakitScreen() {
   }, [userDetailData, data.start_date, startDate, endDate, time, image]);
 
   const handleLocationChange = (text: string) => {
-    const [latitude, longitude] = text.split(',').map(coord => parseFloat(coord.trim()));
+    const [latitude, longitude] = text
+      .split(',')
+      .map(coord => parseFloat(coord.trim()));
     if (!isNaN(latitude) && !isNaN(longitude)) {
-      setData((prevData) => ({
+      setData(prevData => ({
         ...prevData,
         location: text,
         latitude,
-        longitude
+        longitude,
       }));
     } else {
-      setData((prevData) => ({
+      setData(prevData => ({
         ...prevData,
-        location: text
+        location: text,
       }));
     }
   };
 
   const handleSubmit = async () => {
-
     // add validation here
     if (data.code === '') {
       return Alert.alert('Kode absen harus diisi');
@@ -105,7 +118,8 @@ function SakitScreen() {
     }
 
     try {
-      const { start_date, end_date, time_check_in, type, location_check_in } = data;
+      const {start_date, end_date, time_check_in, type, location_check_in} =
+        data;
 
       const formData = new FormData();
 
@@ -131,21 +145,24 @@ function SakitScreen() {
         {
           text: 'OK',
           onPress: () => navigation.navigate('Home'),
-        }
+        },
       ]);
       showNotification('Absen sakit berhasil', 'Absen sakit berhasil disubmit');
     } catch (error: any) {
       if (error.response?.data?.message?.code) {
         error.response?.data?.message?.code.map((item: any) => {
-          console.log(item);
+          // console.log(item);
           return Alert.alert('Absen Sakit Gagal', item);
         });
       } else {
-        Alert.alert('Absen Sakit Gagal', 'Gagal terjadi kesalahan karena:\n' + error.response.data.message);
-        console.log('Error submitting absen sakit: ', error.response.data.message);
+        Alert.alert(
+          'Absen Sakit Gagal',
+          'Gagal terjadi kesalahan karena:\n' + error.response.data.message,
+        );
+        // console.log('Error submitting absen sakit: ', error.response.data.message);
       }
     }
-  }
+  };
 
   return (
     <SafeAreaView style={globalStyles.container}>
@@ -155,19 +172,25 @@ function SakitScreen() {
             label="Kode Absen"
             placeholder="Kode"
             value={data.code}
-            onChangeText={(text) => setData((prevData) => ({ ...prevData, code: text }))}
+            onChangeText={text =>
+              setData(prevData => ({...prevData, code: text}))
+            }
           />
           <InputField
             label="NIK"
             placeholder="NIK"
             value={data.nik}
-            onChangeText={(text) => setData((prevData) => ({ ...prevData, nik: text }))}
+            onChangeText={text =>
+              setData(prevData => ({...prevData, nik: text}))
+            }
           />
           <InputField
             label="Nama"
             placeholder="Nama"
             value={data.name}
-            onChangeText={(text) => setData((prevData) => ({ ...prevData, name: text }))}
+            onChangeText={text =>
+              setData(prevData => ({...prevData, name: text}))
+            }
           />
           <InputField
             label="Tanggal Awal Sakit"
@@ -200,7 +223,8 @@ function SakitScreen() {
             label="Bukti Sakit / Surat Dokter"
             image={image}
             onOpenCamera={handleClickOpenCamera}
-            onResetCamera={handleClickResetCamera}
+            onImageSelected={handleImageSelect}
+            onResetImage={handleClickReset}
           />
           <LocationPicker
             label="Lokasi Absen Sakit"
@@ -208,7 +232,7 @@ function SakitScreen() {
             location={location}
             getCurrentLocation={getCurrentLocation}
           />
-          <View style={[globalStyles.groupField, { marginBottom: 10 }]}>
+          <View style={[globalStyles.groupField, {marginBottom: 10}]}>
             <Button label="Simpan" onPress={handleSubmit} />
           </View>
         </View>

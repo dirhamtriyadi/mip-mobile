@@ -1,23 +1,23 @@
-import React, {useState, useEffect} from 'react';
 import {
+  ActivityIndicator,
+  Alert,
+  SafeAreaView,
   ScrollView,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
-  Alert,
-  TextInput,
-  ActivityIndicator,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import instance from '../../configs/axios';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {RootStackParamList} from '../../../App';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './styles';
+import {useEffect, useState} from 'react';
+import instance from '@src/configs/axios';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from 'App';
 import dayjs from 'dayjs';
 import 'dayjs/locale/id';
 
-interface PenagihanData {
+interface LaporanPenagihanData {
   id: string;
   bill_number: string | number;
   created_at: string;
@@ -37,27 +37,32 @@ interface PenagihanData {
   };
 }
 
-function PenagihanScreen() {
-  const [data, setData] = useState<PenagihanData[]>([]);
+function LaporanPenagihanScreen() {
+  const [data, setData] = useState<LaporanPenagihanData[]>([]);
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const handleSearch = () => {
+    // Cari enum yang cocok dengan pencarian
+  };
+
   useEffect(() => {
-    fetchBillings();
+    fetchDataBillingReports();
   }, [search]); // Pencarian akan otomatis dilakukan saat `search` berubah
 
-  const fetchBillings = async () => {
+  const fetchDataBillingReports = async () => {
     try {
       setLoading(true);
-      const response = await instance.get('v1/customer-billings', {
+      const response = await instance.get('v1/customer-billing-reports', {
         params: search ? {search} : {},
       });
       setData(response.data.data);
     } catch (error: any) {
+      console.error(error);
       Alert.alert(
-        'Gagal mengambil data penagihan',
+        'Error',
         error.response?.data?.message || 'Terjadi kesalahan',
       );
     } finally {
@@ -65,16 +70,10 @@ function PenagihanScreen() {
     }
   };
 
-  const handleSearch = () => {
-    fetchBillings(); // Memanggil kembali API saat tombol pencarian ditekan
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headContainer}>
-        <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 10}}>
-          List Tagihan
-        </Text>
+        <Text style={styles.textHeadContainer}>Laporan Penagihan</Text>
         <View style={styles.groupSearch}>
           <TextInput
             placeholder="Masukan kata pencarian"
@@ -93,7 +92,7 @@ function PenagihanScreen() {
       </View>
       <ScrollView>
         <View style={styles.listContainer}>
-          {loading ? (
+        {loading ? (
             <ActivityIndicator size="large" color="#007bff" />
           ) : data && data.length > 0 ? (
             data.map(item => (
@@ -103,17 +102,15 @@ function PenagihanScreen() {
                   styles.btn,
                   {padding: 10, backgroundColor: '#f8f8f8', borderRadius: 10},
                 ]}
-                onPress={
-                  () => navigation.navigate('DetailPenagihan', {id: item.id})
+                onPress={() =>
+                  navigation.navigate('DetailPenagihan', {id: item.id})
                   // console.log({id: item.id})
                 }>
                 <View style={styles.head}>
                   <Text style={styles.textKontrak}>
                     No. Kontrak: {item.customer.no_contract}
                   </Text>
-                  <Text style={styles.textDate}>
-                    {dayjs(item.created_at).format('DD-MM-YYYY')}
-                  </Text>
+                  <Text style={styles.textDate}>{dayjs(item.created_at).format('DD-MM-YYYY')}</Text>
                 </View>
                 <Text>No. Tagihan: {item.bill_number}</Text>
                 <Text>Nama Nasabah: {item.customer.name_customer}</Text>
@@ -129,23 +126,16 @@ function PenagihanScreen() {
                     <Text style={styles.statusError}>Belum Ada</Text>
                   )}
                   {item.latestBillingFollowups?.date_exec && (
-                    <Text>
-                      {dayjs(item.latestBillingFollowups.date_exec).format(
-                        'DD-MM-YYYY',
-                      )}
-                    </Text>
+                    <Text>{dayjs(item.latestBillingFollowups.date_exec).format('DD-MM-YYYY')}</Text>
                   )}
                 </View>
                 <View style={{flex: 1, flexDirection: 'row', gap: 5}}>
-                  {item.latestBillingFollowups?.status?.value ===
-                  'promise_to_pay' ? (
+                  {item.latestBillingFollowups?.status?.value === 'promise_to_pay' ? (
                     <Text>
                       Tanggal janji bayar:{' '}
-                      {dayjs(item.latestBillingFollowups.promise_date).format(
-                        'DD-MM-YYYY',
-                      )}
+                      {dayjs(item.latestBillingFollowups.promise_date).format('DD-MM-YYYY')}
                     </Text>
-                  ) : null}
+                  ) : null }
                 </View>
               </TouchableOpacity>
             ))
@@ -175,4 +165,4 @@ const getStatusStyle = (status: string) => {
   }
 };
 
-export default PenagihanScreen;
+export default LaporanPenagihanScreen;

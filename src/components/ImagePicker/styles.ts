@@ -9,11 +9,20 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontWeight: 'bold',
     },
+    btnContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        height: 47,
+    },
     btnText: {
         color: '#242c40',
     },
     btn: {
-        width: '100%',
+        width: '50%',
         height: 45,
         borderWidth: 1,
         borderColor: '#ccc',
