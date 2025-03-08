@@ -8,18 +8,17 @@ import {useCallback, useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import Animated, {
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
 import styles from './styles';
+import InputCurrency from '@src/components/InputCurrency';
 
 interface FormData {
   name: string;
@@ -33,30 +32,29 @@ interface FormData {
   job_level: string;
   employee_status: string;
   job_type: string;
-  salary: string;
-  other_business: string;
-  monthly_living_expenses: string;
+  salary: number;
+  other_business: number;
+  monthly_living_expenses: number;
   children: string;
   wife: string;
   couple_jobs: string;
   couple_business: string;
-  couple_income: string;
-  bank_debt: string;
-  cooperative_debt: string;
-  personal_debt: string;
-  online_debt: string;
+  couple_income: number;
+  bank_debt: number;
+  cooperative_debt: number;
+  personal_debt: number;
+  online_debt: number;
   customer_character_analysis: string;
   financial_report_analysis: string;
   slik_result: string;
   info_provider_name: string;
   info_provider_position: string;
   workplace_condition: string;
-  building_type: string;
   employee_count: string;
   business_duration: string;
   office_address: string;
   office_phone: string;
-  additional_info: string;
+  loan_application: number;
   latitude: number;
   longitude: number;
   locationString: string;
@@ -106,30 +104,29 @@ function SurveiScreen() {
     job_level: '',
     employee_status: '',
     job_type: '',
-    salary: '',
-    other_business: '',
-    monthly_living_expenses: '',
+    salary: 0,
+    other_business: 0,
+    monthly_living_expenses: 0,
     children: '',
     wife: '',
     couple_jobs: '',
     couple_business: '',
-    couple_income: '',
-    bank_debt: '',
-    cooperative_debt: '',
-    personal_debt: '',
-    online_debt: '',
+    couple_income: 0,
+    bank_debt: 0,
+    cooperative_debt: 0,
+    personal_debt: 0,
+    online_debt: 0,
     customer_character_analysis: '',
     financial_report_analysis: '',
     slik_result: '',
     info_provider_name: '',
     info_provider_position: '',
     workplace_condition: '',
-    building_type: '',
     employee_count: '',
     business_duration: '',
     office_address: '',
     office_phone: '',
-    additional_info: '',
+    loan_application: 0,
     latitude: 0,
     longitude: 0,
     locationString: '',
@@ -276,37 +273,36 @@ function SurveiScreen() {
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Gaji*"
               placeholder="Masukan gaji"
               value={formData.salary}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  salary: text,
+                  salary: Number(text),
                 }));
               }}
             />
-            <InputFieldNumber
+            <InputCurrency
               label="Usaha Tambahan"
               placeholder="Masukan usaha tambahan"
               value={formData.other_business}
-              onChangeText={text => {
-                const numericValue = text.replace(/[^0-9]/g, '');
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  other_business: numericValue,
+                  other_business: Number(text),
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Biaya hidup per bulan*"
               placeholder="Masukan biaya hidup per bulan"
               value={formData.monthly_living_expenses}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  monthly_living_expenses: text,
+                  monthly_living_expenses: Number(text),
                 }));
               }}
             />
@@ -356,60 +352,60 @@ function SurveiScreen() {
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Pendapatan Pasangan"
               placeholder="Masukan pendapatan pasangan"
               value={formData.couple_income}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  couple_income: text,
+                  couple_income: Number(text),
                 }));
               }}
             />
           </AccordionSection>
           <AccordionSection title="3. Hutang">
-            <InputField
+            <InputCurrency
               label="Bank"
               placeholder="Masukan hutang bank"
               value={formData.bank_debt}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  bank_debt: text,
+                  bank_debt: Number(text),
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Koperasi"
               placeholder="Masukan hutang koperasi"
               value={formData.cooperative_debt}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  cooperative_debt: text,
+                  cooperative_debt: Number(text),
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Perorangan"
               placeholder="Masukan hutang perorangan"
               value={formData.personal_debt}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  personal_debt: text,
+                  personal_debt: Number(text),
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Online"
               placeholder="Masukan hutang online"
               value={formData.online_debt}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  online_debt: text,
+                  online_debt: Number(text),
                 }));
               }}
             />
@@ -449,7 +445,7 @@ function SurveiScreen() {
               }}
             />
           </AccordionSection>
-          <AccordionSection title="5. Pengajuan Developer">
+          <AccordionSection title="5. Informasi Tambahan dan Pengajuan">
             <InputField
               label="Nama Pemberi Informasi"
               placeholder="Masukan nama pemeberi informasi"
@@ -473,24 +469,13 @@ function SurveiScreen() {
               }}
             />
             <InputField
-              label="Kondisi Gedung/Tempat Kerja"
-              placeholder="Masukan kondisi gedung/tempat kerja"
+              label="Kondisi Tempat Kerja"
+              placeholder="Masukan kondisi tempat kerja"
               value={formData.workplace_condition}
               onChangeText={text => {
                 setFormData(prevData => ({
                   ...prevData,
                   workplace_condition: text,
-                }));
-              }}
-            />
-            <InputField
-              label="(Gedung, Rumah, Ruko) / Lantai Gedung"
-              placeholder="Masukan (gedung, rumah, rukko) / lantai gedung"
-              value={formData.building_type}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  building_type: text,
                 }));
               }}
             />
@@ -538,14 +523,14 @@ function SurveiScreen() {
                 }));
               }}
             />
-            <InputFieldTextArea
-              label="Info Lainnya"
-              placeholder="Masukan info lainnya"
-              value={formData.additional_info}
-              onChangeText={text => {
+            <InputCurrency
+              label="Pengajuan"
+              placeholder="Masukan Pengajuan"
+              value={formData.loan_application}
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  additional_info: text,
+                  loan_application: Number(text),
                 }));
               }}
             />
