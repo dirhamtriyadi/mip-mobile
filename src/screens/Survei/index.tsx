@@ -8,18 +8,21 @@ import {useCallback, useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import Animated, {
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
 import styles from './styles';
+import InputCurrency from '@src/components/InputCurrency';
+import dayjs, {Dayjs} from 'dayjs';
+import 'dayjs/locale/id';
+import useDatePicker from '@src/hooks/useDatePicker';
+import DatePicker from 'react-native-date-picker';
 
 interface FormData {
   name: string;
@@ -33,30 +36,35 @@ interface FormData {
   job_level: string;
   employee_status: string;
   job_type: string;
-  salary: string;
-  other_business: string;
-  monthly_living_expenses: string;
+  salary: number;
+  other_business: number;
+  monthly_living_expenses: number;
   children: string;
   wife: string;
   couple_jobs: string;
   couple_business: string;
-  couple_income: string;
-  bank_debt: string;
-  cooperative_debt: string;
-  personal_debt: string;
-  online_debt: string;
+  couple_income: number;
+  bank_debt: number;
+  cooperative_debt: number;
+  personal_debt: number;
+  online_debt: number;
   customer_character_analysis: string;
   financial_report_analysis: string;
   slik_result: string;
   info_provider_name: string;
   info_provider_position: string;
   workplace_condition: string;
-  building_type: string;
   employee_count: string;
   business_duration: string;
   office_address: string;
   office_phone: string;
-  loan_application: string;
+  loan_application: number;
+  recommendation_from_vendors: string;
+  recommendation_from_treasurer: string;
+  recommendation_from_other: string;
+  descriptionSurvey: string;
+  locationSurvey: string;
+  dateSurvey: Dayjs;
   latitude: number;
   longitude: number;
   locationString: string;
@@ -106,45 +114,53 @@ function SurveiScreen() {
     job_level: '',
     employee_status: '',
     job_type: '',
-    salary: '',
-    other_business: '',
-    monthly_living_expenses: '',
+    salary: 0,
+    other_business: 0,
+    monthly_living_expenses: 0,
     children: '',
     wife: '',
     couple_jobs: '',
     couple_business: '',
-    couple_income: '',
-    bank_debt: '',
-    cooperative_debt: '',
-    personal_debt: '',
-    online_debt: '',
+    couple_income: 0,
+    bank_debt: 0,
+    cooperative_debt: 0,
+    personal_debt: 0,
+    online_debt: 0,
     customer_character_analysis: '',
     financial_report_analysis: '',
     slik_result: '',
     info_provider_name: '',
     info_provider_position: '',
     workplace_condition: '',
-    building_type: '',
     employee_count: '',
     business_duration: '',
     office_address: '',
     office_phone: '',
-    loan_application: '',
+    loan_application: 0,
+    recommendation_from_vendors: '',
+    recommendation_from_treasurer: '',
+    recommendation_from_other: '',
+    descriptionSurvey: '',
+    locationSurvey: '',
+    dateSurvey: dayjs(),
     latitude: 0,
     longitude: 0,
     locationString: '',
   });
 
   const {location, getCurrentLocation, changeLocationMarker} = useLocation();
+  const {date, openDatePicker, setOpenDatePicker, handleDateChange} =
+    useDatePicker(formData.dateSurvey);
 
   useEffect(() => {
     setFormData(prevData => ({
       ...prevData,
+      dateSurvey: date,
       latitude: location.latitude,
       longitude: location.longitude,
       locationString: location.locationString,
     }));
-  }, [location]);
+  }, [location, date]);
 
   return (
     <SafeAreaView style={globalStyles.container}>
@@ -276,37 +292,36 @@ function SurveiScreen() {
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Gaji*"
               placeholder="Masukan gaji"
               value={formData.salary}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  salary: text,
+                  salary: Number(text),
                 }));
               }}
             />
-            <InputFieldNumber
+            <InputCurrency
               label="Usaha Tambahan"
               placeholder="Masukan usaha tambahan"
               value={formData.other_business}
-              onChangeText={text => {
-                const numericValue = text.replace(/[^0-9]/g, '');
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  other_business: numericValue,
+                  other_business: Number(text),
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Biaya hidup per bulan*"
               placeholder="Masukan biaya hidup per bulan"
               value={formData.monthly_living_expenses}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  monthly_living_expenses: text,
+                  monthly_living_expenses: Number(text),
                 }));
               }}
             />
@@ -356,60 +371,60 @@ function SurveiScreen() {
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Pendapatan Pasangan"
               placeholder="Masukan pendapatan pasangan"
               value={formData.couple_income}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  couple_income: text,
+                  couple_income: Number(text),
                 }));
               }}
             />
           </AccordionSection>
           <AccordionSection title="3. Hutang">
-            <InputField
+            <InputCurrency
               label="Bank"
               placeholder="Masukan hutang bank"
               value={formData.bank_debt}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  bank_debt: text,
+                  bank_debt: Number(text),
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Koperasi"
               placeholder="Masukan hutang koperasi"
               value={formData.cooperative_debt}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  cooperative_debt: text,
+                  cooperative_debt: Number(text),
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Perorangan"
               placeholder="Masukan hutang perorangan"
               value={formData.personal_debt}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  personal_debt: text,
+                  personal_debt: Number(text),
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Online"
               placeholder="Masukan hutang online"
               value={formData.online_debt}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  online_debt: text,
+                  online_debt: Number(text),
                 }));
               }}
             />
@@ -449,7 +464,7 @@ function SurveiScreen() {
               }}
             />
           </AccordionSection>
-          <AccordionSection title="5. Informasi Tamabahan dan Pengajuan">
+          <AccordionSection title="5. Informasi Tambahan dan Pengajuan">
             <InputField
               label="Nama Pemberi Informasi"
               placeholder="Masukan nama pemeberi informasi"
@@ -474,7 +489,7 @@ function SurveiScreen() {
             />
             <InputField
               label="Kondisi Tempat Kerja"
-              placeholder="Masukan kondisi gedung/tempat kerja"
+              placeholder="Masukan kondisi tempat kerja"
               value={formData.workplace_condition}
               onChangeText={text => {
                 setFormData(prevData => ({
@@ -527,14 +542,14 @@ function SurveiScreen() {
                 }));
               }}
             />
-            <InputField
+            <InputCurrency
               label="Pengajuan"
-              placeholder="Masukan pengajuan"
+              placeholder="Masukan Pengajuan"
               value={formData.loan_application}
-              onChangeText={text => {
+              onChangeValue={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  loan_application: text,
+                  loan_application: Number(text),
                 }));
               }}
             />
@@ -543,46 +558,97 @@ function SurveiScreen() {
             <InputField
               label="Vendor"
               placeholder="Masukan nama vendor"
-              value={formData.info_provider_name}
+              value={formData.recommendation_from_vendors}
               onChangeText={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  info_provider_name: text,
+                  recommendation_from_vendors: text,
                 }));
               }}
             />
             <InputField
               label="Bendahara"
               placeholder="Masukan nama bendahara"
-              value={formData.info_provider_position}
+              value={formData.recommendation_from_treasurer}
               onChangeText={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  info_provider_position: text,
+                  recommendation_from_treasurer: text,
                 }));
               }}
             />
             <InputFieldTextArea
               label="Lainnya"
-              placeholder="Masukan info lainnya"
-              value={formData.workplace_condition}
+              placeholder="Masukan lainnya"
+              value={formData.recommendation_from_other}
               onChangeText={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  workplace_condition: text,
+                  recommendation_from_other: text,
                 }));
               }}
             />
           </AccordionSection>
-          <LocationPicker
-            label="Lokasi"
-            placeholder="Lokasi"
-            location={location}
-            getCurrentLocation={getCurrentLocation}
-            onDragMarker={changeLocationMarker}
-          />
+          <AccordionSection title="7. Wawancara 1">
+            <Text>Test</Text>
+          </AccordionSection>
+          <AccordionSection title="8. Wawancara 2 (Opsional)">
+            <Text>Test</Text>
+          </AccordionSection>
+          <AccordionSection title="9. Catatan Rekomendasi PT">
+            <InputFieldTextArea
+              label="Keterangan"
+              placeholder="Masukan keterangan"
+              value={formData.recommendation_from_other}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  recommendation_from_other: text,
+                }));
+              }}
+            />
+            <InputField
+              label="Tempat"
+              placeholder="Masukan tempat"
+              value={formData.descriptionSurvey}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  descriptionSurvey: text,
+                }));
+              }}
+            />
+            <InputField
+              label="Tanggal"
+              placeholder="Tanggal"
+              value={formData.dateSurvey.format('dddd - DD/MM/YYYY')}
+              onChangeText={() => {}}
+              editable={false}
+              onIconPress={() => setOpenDatePicker(true)}
+              iconName="calendar"
+            />
+            <LocationPicker
+              label="Lokasi"
+              placeholder="Lokasi"
+              location={location}
+              getCurrentLocation={getCurrentLocation}
+              onDragMarker={changeLocationMarker}
+            />
+          </AccordionSection>
+          <AccordionSection title='10. Berkas'>
+            <Text>Test</Text>
+          </AccordionSection>
         </View>
       </ScrollView>
+      <DatePicker
+        modal
+        mode="date"
+        minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
+        open={openDatePicker}
+        date={formData.dateSurvey.toDate()}
+        onConfirm={handleDateChange}
+        onCancel={() => setOpenDatePicker(false)}
+      />
     </SafeAreaView>
   );
 }
