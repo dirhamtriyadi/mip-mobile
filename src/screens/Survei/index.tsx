@@ -19,6 +19,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import styles from './styles';
 import InputCurrency from '@src/components/InputCurrency';
+import dayjs, {Dayjs} from 'dayjs';
+import 'dayjs/locale/id';
+import useDatePicker from '@src/hooks/useDatePicker';
+import DatePicker from 'react-native-date-picker';
 
 interface FormData {
   name: string;
@@ -55,6 +59,12 @@ interface FormData {
   office_address: string;
   office_phone: string;
   loan_application: number;
+  recommendation_from_vendors: string;
+  recommendation_from_treasurer: string;
+  recommendation_from_other: string;
+  descriptionSurvey: string;
+  locationSurvey: string;
+  dateSurvey: Dayjs;
   latitude: number;
   longitude: number;
   locationString: string;
@@ -127,21 +137,30 @@ function SurveiScreen() {
     office_address: '',
     office_phone: '',
     loan_application: 0,
+    recommendation_from_vendors: '',
+    recommendation_from_treasurer: '',
+    recommendation_from_other: '',
+    descriptionSurvey: '',
+    locationSurvey: '',
+    dateSurvey: dayjs(),
     latitude: 0,
     longitude: 0,
     locationString: '',
   });
 
   const {location, getCurrentLocation, changeLocationMarker} = useLocation();
+  const {date, openDatePicker, setOpenDatePicker, handleDateChange} =
+    useDatePicker(formData.dateSurvey);
 
   useEffect(() => {
     setFormData(prevData => ({
       ...prevData,
+      dateSurvey: date,
       latitude: location.latitude,
       longitude: location.longitude,
       locationString: location.locationString,
     }));
-  }, [location]);
+  }, [location, date]);
 
   return (
     <SafeAreaView style={globalStyles.container}>
@@ -535,15 +554,101 @@ function SurveiScreen() {
               }}
             />
           </AccordionSection>
-          <LocationPicker
-            label="Lokasi"
-            placeholder="Lokasi"
-            location={location}
-            getCurrentLocation={getCurrentLocation}
-            onDragMarker={changeLocationMarker}
-          />
+          <AccordionSection title="6. Rekomendasi dari">
+            <InputField
+              label="Vendor"
+              placeholder="Masukan nama vendor"
+              value={formData.recommendation_from_vendors}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  recommendation_from_vendors: text,
+                }));
+              }}
+            />
+            <InputField
+              label="Bendahara"
+              placeholder="Masukan nama bendahara"
+              value={formData.recommendation_from_treasurer}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  recommendation_from_treasurer: text,
+                }));
+              }}
+            />
+            <InputFieldTextArea
+              label="Lainnya"
+              placeholder="Masukan lainnya"
+              value={formData.recommendation_from_other}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  recommendation_from_other: text,
+                }));
+              }}
+            />
+          </AccordionSection>
+          <AccordionSection title="7. Wawancara 1">
+            <Text>Test</Text>
+          </AccordionSection>
+          <AccordionSection title="8. Wawancara 2 (Opsional)">
+            <Text>Test</Text>
+          </AccordionSection>
+          <AccordionSection title="9. Catatan Rekomendasi PT">
+            <InputFieldTextArea
+              label="Keterangan"
+              placeholder="Masukan keterangan"
+              value={formData.recommendation_from_other}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  recommendation_from_other: text,
+                }));
+              }}
+            />
+            <InputField
+              label="Tempat"
+              placeholder="Masukan tempat"
+              value={formData.descriptionSurvey}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  descriptionSurvey: text,
+                }));
+              }}
+            />
+            <InputField
+              label="Tanggal"
+              placeholder="Tanggal"
+              value={formData.dateSurvey.format('dddd - DD/MM/YYYY')}
+              onChangeText={() => {}}
+              editable={false}
+              onIconPress={() => setOpenDatePicker(true)}
+              iconName="calendar"
+            />
+            <LocationPicker
+              label="Lokasi"
+              placeholder="Lokasi"
+              location={location}
+              getCurrentLocation={getCurrentLocation}
+              onDragMarker={changeLocationMarker}
+            />
+          </AccordionSection>
+          <AccordionSection title='10. Berkas'>
+            <Text>Test</Text>
+          </AccordionSection>
         </View>
       </ScrollView>
+      <DatePicker
+        modal
+        mode="date"
+        minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
+        open={openDatePicker}
+        date={formData.dateSurvey.toDate()}
+        onConfirm={handleDateChange}
+        onCancel={() => setOpenDatePicker(false)}
+      />
     </SafeAreaView>
   );
 }
