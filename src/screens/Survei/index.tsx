@@ -56,7 +56,7 @@ interface FormData {
   business_duration: string;
   office_address: string;
   office_phone: string;
-  additional_info: string;
+  loan_application: string;
   latitude: number;
   longitude: number;
   locationString: string;
@@ -129,7 +129,7 @@ function SurveiScreen() {
     business_duration: '',
     office_address: '',
     office_phone: '',
-    additional_info: '',
+    loan_application: '',
     latitude: 0,
     longitude: 0,
     locationString: '',
@@ -449,7 +449,7 @@ function SurveiScreen() {
               }}
             />
           </AccordionSection>
-          <AccordionSection title="5. Pengajuan Developer">
+          <AccordionSection title="5. Informasi Tamabahan dan Pengajuan">
             <InputField
               label="Nama Pemberi Informasi"
               placeholder="Masukan nama pemeberi informasi"
@@ -473,24 +473,13 @@ function SurveiScreen() {
               }}
             />
             <InputField
-              label="Kondisi Gedung/Tempat Kerja"
+              label="Kondisi Tempat Kerja"
               placeholder="Masukan kondisi gedung/tempat kerja"
               value={formData.workplace_condition}
               onChangeText={text => {
                 setFormData(prevData => ({
                   ...prevData,
                   workplace_condition: text,
-                }));
-              }}
-            />
-            <InputField
-              label="(Gedung, Rumah, Ruko) / Lantai Gedung"
-              placeholder="Masukan (gedung, rumah, rukko) / lantai gedung"
-              value={formData.building_type}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  building_type: text,
                 }));
               }}
             />
@@ -538,14 +527,49 @@ function SurveiScreen() {
                 }));
               }}
             />
-            <InputFieldTextArea
-              label="Info Lainnya"
-              placeholder="Masukan info lainnya"
-              value={formData.additional_info}
+            <InputField
+              label="Pengajuan"
+              placeholder="Masukan pengajuan"
+              value={formData.loan_application}
               onChangeText={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  additional_info: text,
+                  loan_application: text,
+                }));
+              }}
+            />
+          </AccordionSection>
+          <AccordionSection title="6. Rekomendasi dari">
+            <InputField
+              label="Vendor"
+              placeholder="Masukan nama vendor"
+              value={formData.info_provider_name}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  info_provider_name: text,
+                }));
+              }}
+            />
+            <InputField
+              label="Bendahara"
+              placeholder="Masukan nama bendahara"
+              value={formData.info_provider_position}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  info_provider_position: text,
+                }));
+              }}
+            />
+            <InputFieldTextArea
+              label="Lainnya"
+              placeholder="Masukan info lainnya"
+              value={formData.workplace_condition}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  workplace_condition: text,
                 }));
               }}
             />
