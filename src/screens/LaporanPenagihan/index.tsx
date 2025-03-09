@@ -15,7 +15,6 @@ import instance from '@src/configs/axios';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from 'App';
 import dayjs from 'dayjs';
-import 'dayjs/locale/id';
 import {LaporanPenagihanData} from '@src/types/laporanPenagihan';
 
 function LaporanPenagihanScreen() {

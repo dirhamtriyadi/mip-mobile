@@ -15,7 +15,6 @@ import {RootStackParamList} from '../../../App';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './styles';
 import dayjs from 'dayjs';
-import 'dayjs/locale/id';
 import {PenagihanData} from '@src/types/penagihan';
 
 function PenagihanScreen() {

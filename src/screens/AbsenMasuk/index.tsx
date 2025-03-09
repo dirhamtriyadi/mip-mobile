@@ -8,7 +8,6 @@ import {useUserData} from '@hooks/useUserData';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../../App';
 import dayjs from 'dayjs';
-import 'dayjs/locale/id';
 import {useNotification} from '@hooks/useNotification';
 import InputField from '@components/InputField';
 import ReasonModal from '@components/ReasonModal';

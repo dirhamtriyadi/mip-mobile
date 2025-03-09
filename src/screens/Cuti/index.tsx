@@ -7,7 +7,6 @@ import {useUserData} from '@hooks/useUserData';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../../App';
 import dayjs from 'dayjs';
-import 'dayjs/locale/id';
 import {useNotification} from '@hooks/useNotification';
 import useDatePickerStartDate from '@hooks/useDatePicker';
 import useDatePickerEndDate from '@hooks/useDatePicker';
