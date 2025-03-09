@@ -9,14 +9,7 @@ import {Alert, SafeAreaView, ScrollView, View} from 'react-native';
 import FormCalonNasabah from './form';
 import instance from '@src/configs/axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-interface FormData {
-  name: string;
-  no_ktp: string;
-  bank: string;
-  ktp: any;
-  kk: any;
-}
+import {CalonNasabahFormData} from '@src/types/calonNasabah';
 
 function CalonNasabahScreen() {
   const {
@@ -33,7 +26,7 @@ function CalonNasabahScreen() {
     handleClickReset: handleClickResetKk,
   } = useImagePicker();
 
-  const [data, setData] = useState<FormData>({
+  const [data, setData] = useState<CalonNasabahFormData>({
     name: '',
     no_ktp: '',
     bank: '',

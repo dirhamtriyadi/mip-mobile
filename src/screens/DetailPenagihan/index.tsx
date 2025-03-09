@@ -11,36 +11,10 @@ import globalStyles from '@styles/styles';
 import styles from './styles';
 import Button from '@src/components/Button';
 import FormPenagihan from '@src/components/FormPenagihan';
+import {DetailPenagihanData} from '@src/types/detailPenagihan';
 
 interface DetailPenagihanScreenProps {
   route: any;
-}
-
-interface DetailPenagihanData {
-  id: number;
-  bill_number: string;
-  date_exec: any;
-  customer_id: number;
-  customer: {
-    name_customer: string;
-    name_mother: string;
-    installments: string;
-    month_arrears: string;
-    due_date: any | null;
-    customer_address: {
-      address: string;
-      village: string;
-      subdistrict: string;
-    }
-  };
-  user_id: number;
-  status: string;
-  description: string;
-  proof: string | null;
-  promise_date: any | null;
-  payment_amount: number | null;
-  signature_officer: string | null;
-  signature_customer: string | null;
 }
 
 function DetailPenagihanScreen({route}: DetailPenagihanScreenProps) {

@@ -6,32 +6,20 @@ import InputField from '@components/InputField';
 import React, {useState, useEffect} from 'react';
 import instance from '../../configs/axios';
 import Button from '@src/components/Button';
-
-interface formDataProfil {
-  _method: string;
-  name: string;
-  email: string;
-  nik: string;
-}
-
-interface formDataPassword {
-  _method: string;
-  password: string;
-  confirm_password: string;
-}
+import {DataPassword, DataProfil} from '@src/types/profil';
 
 function ProfilScreen() {
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<any>({});
 
-  const [formDataProfil, setFormDataProfil] = useState<formDataProfil>({
+  const [formDataProfil, setFormDataProfil] = useState<DataProfil>({
     _method: 'put',
     name: '',
     email: '',
     nik: '',
   });
 
-  const [formDataPassword, setFormDataPassword] = useState<formDataPassword>({
+  const [formDataPassword, setFormDataPassword] = useState<DataPassword>({
     _method: 'put',
     password: '',
     confirm_password: '',

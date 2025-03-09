@@ -16,26 +16,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './styles';
 import dayjs from 'dayjs';
 import 'dayjs/locale/id';
-
-interface PenagihanData {
-  id: string;
-  bill_number: string | number;
-  created_at: string;
-  customer: {
-    id: string;
-    name_customer: string;
-    name_mother: string;
-    no_contract: string | number;
-  };
-  latestBillingFollowups?: {
-    status?: {
-      label: string;
-      value: string;
-    };
-    promise_date?: string;
-    date_exec?: string;
-  };
-}
+import {PenagihanData} from '@src/types/penagihan';
 
 function PenagihanScreen() {
   const [data, setData] = useState<PenagihanData[]>([]);
