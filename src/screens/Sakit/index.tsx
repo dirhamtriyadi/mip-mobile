@@ -129,14 +129,14 @@ function SakitScreen() {
           <InputField label="Nama" value={data.name} editable={false} />
           <InputField
             label="Tanggal Awal Sakit"
-            value={data.start_date.format('DD/MM/YYYY')}
+            value={data.start_date.format('dddd DD/MM/YYYY')}
             onIconPress={() => setOpenStartDate(true)}
             iconName="calendar"
             editable={false}
           />
           <InputField
             label="Tanggal Akhir Sakit"
-            value={data.end_date.format('DD/MM/YYYY')}
+            value={data.end_date.format('dddd DD/MM/YYYY')}
             onIconPress={() => setOpenEndDate(true)}
             iconName="calendar"
             editable={false}
@@ -173,6 +173,7 @@ function SakitScreen() {
       <DatePicker
         modal
         mode="date"
+        minimumDate={data.start_date.toDate()}
         open={openEndDate}
         date={data.end_date.toDate()}
         onConfirm={handleEndDateChange}
@@ -181,6 +182,8 @@ function SakitScreen() {
       <DatePicker
         modal
         mode="time"
+        minimumDate={dayjs().toDate()}
+        maximumDate={dayjs().toDate()}
         open={openTimePicker}
         date={data.time_check_in.toDate()}
         onConfirm={handleTimeChange}
