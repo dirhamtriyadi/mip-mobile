@@ -10,9 +10,9 @@ import styles from './styles';
 
 interface InputFieldProps {
   label: string;
-  placeholder: string;
+  placeholder?: string;
   value: string;
-  onChangeText: (text: string) => void;
+  onChangeText?: (text: string) => void;
   editable?: boolean;
   onIconPress?: () => void;
   iconName?: string;
