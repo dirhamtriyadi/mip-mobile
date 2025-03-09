@@ -96,7 +96,7 @@ function CalonNasabahScreen() {
         } else {
           Alert.alert(
             'Gagal',
-            `Terjadi kesalahan: ${error.response.data.message}`,
+            `Terjadi kesalahan: ${error?.response?.data?.message}`,
           );
         }
       } else {
