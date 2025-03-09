@@ -60,7 +60,7 @@ function SakitScreen() {
   useEffect(() => {
     setData(prevData => ({
       ...prevData,
-      code: userDetailData.name + date.format('DD/MM/YYYY'),
+      code: `${userDetailData.name}_${dayjs().format('DDMMYYYY')}`,
       nik: userDetailData.nik,
       name: userDetailData.name,
       date,
@@ -119,18 +119,37 @@ function SakitScreen() {
     <SafeAreaView style={globalStyles.container}>
       <ScrollView>
         <View style={globalStyles.formContainer}>
-          <InputField label="Kode Absen" placeholder="Kode" value={data.code} />
-          <InputField label="NIK" placeholder="NIK" value={data.nik} />
-          <InputField label="Nama" placeholder="Nama" value={data.name} />
+          <InputField
+            label="Kode Absen"
+            placeholder="Kode"
+            value={data.code}
+            editable={false}
+          />
+          <InputField
+            label="NIK"
+            placeholder="NIK"
+            value={data.nik}
+            editable={false}
+          />
+          <InputField
+            label="Nama"
+            placeholder="Nama"
+            value={data.name}
+            editable={false}
+          />
           <InputField
             label="Tanggal"
-            value={date.format('DD/MM/YYYY')}
+            value={date.format('dddd DD/MM/YYYY')}
             editable={false}
+            onIconPress={() => setOpenDatePicker(true)}
+            iconName="calendar"
           />
           <InputField
             label="Jam"
             value={time.format('HH:mm:ss')}
             editable={false}
+            onIconPress={() => setOpenTimePicker(true)}
+            iconName="clock"
           />
           <ReasonModal
             visible={openModal}
@@ -161,6 +180,8 @@ function SakitScreen() {
       <DatePicker
         modal
         mode="date"
+        minimumDate={dayjs().startOf('day').toDate()}
+        maximumDate={dayjs().endOf('day').toDate()}
         open={openDatePicker}
         date={date.toDate()}
         onConfirm={handleDateChange}
@@ -169,6 +190,8 @@ function SakitScreen() {
       <DatePicker
         modal
         mode="time"
+        minimumDate={dayjs().toDate()}
+        maximumDate={dayjs().toDate()}
         open={openTimePicker}
         date={time.toDate()}
         onConfirm={handleTimeChange}
