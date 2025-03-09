@@ -5,14 +5,14 @@ import styles from './styles';
 import webStyles from './webStyles';
 import globalStyles from '@styles/styles';
 
-interface SignatureComponentProps {
+interface InputSignatureProps {
   label: string;
   signature: string | null;
   onConfirm: (result: string) => void;
   onScrollEnabledChange?: (scrollEnabled: boolean) => void;
 }
 
-function SignatureComponent({ label, signature, onConfirm, onScrollEnabledChange }: SignatureComponentProps) {
+function InputSignature({ label, signature, onConfirm, onScrollEnabledChange }: InputSignatureProps) {
   const ref = useRef<SignatureViewRef>(null);
   const [isLocked, setIsLocked] = useState(true);
   const [scrollEnabled, setScrollEnabled] = useState(true);
@@ -77,4 +77,4 @@ function SignatureComponent({ label, signature, onConfirm, onScrollEnabledChange
   );
 }
 
-export default SignatureComponent;
+export default InputSignature;

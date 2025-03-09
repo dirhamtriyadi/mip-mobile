@@ -4,25 +4,18 @@ import InputFieldTextArea from '@src/components/InputFieldTextArea';
 import LocationPicker from '@src/components/LocationPicker';
 import {useLocation} from '@src/hooks/useLocation';
 import globalStyles from '@src/styles/styles';
-import {useCallback, useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import styles from './styles';
+import {useEffect, useState} from 'react';
+import {SafeAreaView, ScrollView, Text, View} from 'react-native';
 import InputCurrency from '@src/components/InputCurrency';
 import dayjs, {Dayjs} from 'dayjs';
 import 'dayjs/locale/id';
 import useDatePicker from '@src/hooks/useDatePicker';
 import DatePicker from 'react-native-date-picker';
+import InputStatusPicker from '@src/components/InputStatusPicker';
+import InputSignature from '@src/components/InputSignature';
+import AccordionSection from '@src/components/AccordionSection';
+import ImagePicker from '@src/components/ImagePicker';
+import useImagePicker from '@src/hooks/useImagePicker';
 
 interface FormData {
   name: string;
@@ -62,44 +55,27 @@ interface FormData {
   recommendation_from_vendors: string;
   recommendation_from_treasurer: string;
   recommendation_from_other: string;
+  recomendation_pt: string;
   descriptionSurvey: string;
   locationSurvey: string;
   dateSurvey: Dayjs;
   latitude: number;
   longitude: number;
   locationString: string;
+  signature_officer: string | null;
+  signature_customer: string | null;
+  signature_couple: string | null;
+  workplace_image1: {uri: string} | null;
+  workplace_image2: {uri: string} | null;
+  customer_image: {uri: string} | null;
+  ktp_image: {uri: string} | null;
+  loan_guarantee_image1: {uri: string} | null;
+  loan_guarantee_image2: {uri: string} | null;
+  kk_image: {uri: string} | null;
+  id_card_image: {uri: string} | null;
+  salary_slip_image1: {uri: string} | null;
+  salary_slip_image2: {uri: string} | null;
 }
-
-interface AccordionSectionProps {
-  title: string;
-  children: React.ReactNode;
-}
-
-const AccordionSection = ({title, children}: AccordionSectionProps) => {
-  const heightValue = useSharedValue(0);
-
-  const toggleExpand = useCallback(() => {
-    const newHeight = heightValue.value === 0 ? 1 : 0;
-    heightValue.value = withTiming(newHeight, {duration: 300});
-  }, []);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    height: heightValue.value ? 'auto' : 0,
-    overflow: 'hidden',
-    padding: heightValue.value ? 10 : 0,
-  }));
-
-  return (
-    <View style={styles.accordionContainer}>
-      <TouchableOpacity onPress={toggleExpand} style={styles.accordionHeader}>
-        <Text style={styles.accordionTitle}>{title}</Text>
-      </TouchableOpacity>
-      <Animated.View style={[styles.accordionContent, animatedStyle]}>
-        {children}
-      </Animated.View>
-    </View>
-  );
-};
 
 function SurveiScreen() {
   const [formData, setFormData] = useState<FormData>({
@@ -140,17 +116,92 @@ function SurveiScreen() {
     recommendation_from_vendors: '',
     recommendation_from_treasurer: '',
     recommendation_from_other: '',
+    recomendation_pt: '',
     descriptionSurvey: '',
     locationSurvey: '',
     dateSurvey: dayjs(),
     latitude: 0,
     longitude: 0,
     locationString: '',
+    signature_officer: null,
+    signature_customer: null,
+    signature_couple: null,
+    workplace_image1: null,
+    workplace_image2: null,
+    customer_image: null,
+    ktp_image: null,
+    loan_guarantee_image1: null,
+    loan_guarantee_image2: null,
+    kk_image: null,
+    id_card_image: null,
+    salary_slip_image1: null,
+    salary_slip_image2: null,
   });
+  const [scrollEnabled, setScrollEnabled] = useState(true);
 
   const {location, getCurrentLocation, changeLocationMarker} = useLocation();
   const {date, openDatePicker, setOpenDatePicker, handleDateChange} =
     useDatePicker(formData.dateSurvey);
+  const {
+    image: imageWorkplace1,
+    handleClickOpenCamera: handleClickOpenCameraWorkplaceImage1,
+    handleImageSelect: handleImageSelectWorkplaceImage1,
+    handleClickReset: handleClickResetWorkplaceImage1,
+  } = useImagePicker();
+  const {
+    image: imageWorkplace2,
+    handleClickOpenCamera: handleClickOpenCameraWorkplaceImage2,
+    handleImageSelect: handleImageSelectWorkplaceImage2,
+    handleClickReset: handleClickResetWorkplaceImage2,
+  } = useImagePicker();
+  const {
+    image: imageCustomer,
+    handleClickOpenCamera: handleClickOpenCameraCustomerImage,
+    handleImageSelect: handleImageSelectCustomerImage,
+    handleClickReset: handleClickResetCustomerImage,
+  } = useImagePicker();
+  const {
+    image: imageKtp,
+    handleClickOpenCamera: handleClickOpenCameraKtpImage,
+    handleImageSelect: handleImageSelectKtpImage,
+    handleClickReset: handleClickResetKtpImage,
+  } = useImagePicker();
+  const {
+    image: imageLoanGuarantee1,
+    handleClickOpenCamera: handleClickOpenCameraLoanGuarantee1,
+    handleImageSelect: handleImageSelectLoanGuarantee1,
+    handleClickReset: handleClickResetLoanGuarantee1,
+  } = useImagePicker();
+  const {
+    image: imageLoanGuarantee2,
+    handleClickOpenCamera: handleClickOpenCameraLoanGuarantee2,
+    handleImageSelect: handleImageSelectLoanGuarantee2,
+    handleClickReset: handleClickResetLoanGuarantee2,
+  } = useImagePicker();
+  const {
+    image: imageKk,
+    handleClickOpenCamera: handleClickOpenCameraKkImage,
+    handleImageSelect: handleImageSelectKkImage,
+    handleClickReset: handleClickResetKkImage,
+  } = useImagePicker();
+  const {
+    image: imageIdCard,
+    handleClickOpenCamera: handleClickOpenCameraIdCardImage,
+    handleImageSelect: handleImageSelectIdCardImage,
+    handleClickReset: handleClickResetIdCardImage,
+  } = useImagePicker();
+  const {
+    image: imageSlipSalary1,
+    handleClickOpenCamera: handleClickOpenCameraSlipSalaryImage1,
+    handleImageSelect: handleImageSelectSlipSalaryImage1,
+    handleClickReset: handleClickResetSlipSalaryImage1,
+  } = useImagePicker();
+  const {
+    image: imageSlipSalary2,
+    handleClickOpenCamera: handleClickOpenCameraSlipSalaryImage2,
+    handleImageSelect: handleImageSelectSliphandleClickOpenCameraSlipSalaryImage2,
+    handleClickReset: handleClickResetSliphandleClickOpenCameraSlipSalaryImage2,
+  } = useImagePicker();
 
   useEffect(() => {
     setFormData(prevData => ({
@@ -159,12 +210,35 @@ function SurveiScreen() {
       latitude: location.latitude,
       longitude: location.longitude,
       locationString: location.locationString,
+      workplace_image1: imageWorkplace1,
+      workplace_image2: imageWorkplace2,
+      customer_image: imageCustomer,
+      ktp_image: imageKtp,
+      loan_guarantee_image1: imageLoanGuarantee1,
+      loan_guarantee_image2: imageLoanGuarantee2,
+      kk_image: imageKk,
+      id_card_image: imageIdCard,
+      salary_slip_image1: imageSlipSalary1,
+      salary_slip_image2: imageSlipSalary2,
     }));
-  }, [location, date]);
+  }, [
+    location,
+    date,
+    imageWorkplace1,
+    imageWorkplace2,
+    imageCustomer,
+    imageKtp,
+    imageLoanGuarantee1,
+    imageLoanGuarantee2,
+    imageKk,
+    imageIdCard,
+    imageSlipSalary1,
+    imageSlipSalary2,
+  ]);
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <ScrollView>
+      <ScrollView scrollEnabled={scrollEnabled}>
         <View style={globalStyles.formContainer}>
           <AccordionSection title="1. CIF">
             <InputField
@@ -596,6 +670,20 @@ function SurveiScreen() {
             <Text>Test</Text>
           </AccordionSection>
           <AccordionSection title="9. Catatan Rekomendasi PT">
+            <InputStatusPicker
+              label="Direkomendasikan"
+              value={formData.recomendation_pt}
+              onChange={value =>
+                setFormData(prevData => ({
+                  ...prevData,
+                  recomendation_pt: value,
+                }))
+              }
+              options={[
+                {label: 'Ya', value: 'yes'},
+                {label: 'Tidak', value: 'no'},
+              ]}
+            />
             <InputFieldTextArea
               label="Keterangan"
               placeholder="Masukan keterangan"
@@ -634,9 +722,136 @@ function SurveiScreen() {
               getCurrentLocation={getCurrentLocation}
               onDragMarker={changeLocationMarker}
             />
+            <InputSignature
+              label="TTD Petugas"
+              signature={formData.signature_officer}
+              onConfirm={result =>
+                setFormData(prevData => ({
+                  ...prevData,
+                  signature_officer: result,
+                }))
+              }
+              onScrollEnabledChange={setScrollEnabled}
+            />
+            <InputSignature
+              label="TTD Nasabah"
+              signature={formData.signature_customer}
+              onConfirm={result =>
+                setFormData(prevData => ({
+                  ...prevData,
+                  signature_customer: result,
+                }))
+              }
+              onScrollEnabledChange={setScrollEnabled}
+            />
+            <InputSignature
+              label="TTD Pasangan/Penanggung Jawab"
+              signature={formData.signature_couple}
+              onConfirm={result =>
+                setFormData(prevData => ({
+                  ...prevData,
+                  signature_couple: result,
+                }))
+              }
+              onScrollEnabledChange={setScrollEnabled}
+            />
           </AccordionSection>
-          <AccordionSection title='10. Berkas'>
-            <Text>Test</Text>
+          <AccordionSection title="10. Berkas">
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              1. Foto Gedung
+            </Text>
+            <View style={{padding: 10}}>
+              <ImagePicker
+                label="Foto Gedung 1"
+                image={formData.workplace_image1}
+                onOpenCamera={handleClickOpenCameraWorkplaceImage1}
+                onImageSelected={handleImageSelectWorkplaceImage1}
+                onResetImage={handleClickResetWorkplaceImage1}
+              />
+              <ImagePicker
+                label="Foto Gedung 2"
+                image={formData.workplace_image2}
+                onOpenCamera={handleClickOpenCameraWorkplaceImage2}
+                onImageSelected={handleImageSelectWorkplaceImage2}
+                onResetImage={handleClickResetWorkplaceImage2}
+              />
+            </View>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              2. Foto Nasabah dan KTP
+            </Text>
+            <View style={{padding: 10}}>
+              <ImagePicker
+                label="Foto Nasabah"
+                image={formData.customer_image}
+                onOpenCamera={handleClickOpenCameraCustomerImage}
+                onImageSelected={handleImageSelectCustomerImage}
+                onResetImage={handleClickResetCustomerImage}
+              />
+              <ImagePicker
+                label="Foto KTP"
+                image={formData.ktp_image}
+                onOpenCamera={handleClickOpenCameraKtpImage}
+                onImageSelected={handleImageSelectKtpImage}
+                onResetImage={handleClickResetKtpImage}
+              />
+            </View>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              3. Foto Jaminan
+            </Text>
+            <View style={{padding: 10}}>
+              <ImagePicker
+                label="Foto Jaminan 1"
+                image={formData.loan_guarantee_image1}
+                onOpenCamera={handleClickOpenCameraLoanGuarantee1}
+                onImageSelected={handleImageSelectLoanGuarantee1}
+                onResetImage={handleClickResetLoanGuarantee1}
+              />
+              <ImagePicker
+                label="Foto Jaminan 2"
+                image={formData.loan_guarantee_image2}
+                onOpenCamera={handleClickOpenCameraLoanGuarantee2}
+                onImageSelected={handleImageSelectLoanGuarantee2}
+                onResetImage={handleClickResetLoanGuarantee2}
+              />
+            </View>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              4. Foto KK dan ID Card
+            </Text>
+            <View style={{padding: 10}}>
+              <ImagePicker
+                label="Foto KK"
+                image={formData.kk_image}
+                onOpenCamera={handleClickOpenCameraKkImage}
+                onImageSelected={handleImageSelectKkImage}
+                onResetImage={handleClickResetKkImage}
+              />
+              <ImagePicker
+                label="Foto ID Card"
+                image={formData.id_card_image}
+                onOpenCamera={handleClickOpenCameraIdCardImage}
+                onImageSelected={handleImageSelectIdCardImage}
+                onResetImage={handleClickResetIdCardImage}
+              />
+            </View>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              5. Slip Gaji
+            </Text>
+            <View style={{padding: 10}}>
+              <ImagePicker
+                label="Slip Gaji 1"
+                image={formData.salary_slip_image1}
+                onOpenCamera={handleClickOpenCameraSlipSalaryImage1}
+                onImageSelected={handleImageSelectSlipSalaryImage1}
+                onResetImage={handleClickResetSlipSalaryImage1}
+              />
+              <ImagePicker
+                label="Slip Gaji 2"
+                image={formData.salary_slip_image2}
+                onOpenCamera={handleClickOpenCameraSlipSalaryImage2}
+                onImageSelected={handleImageSelectSliphandleClickOpenCameraSlipSalaryImage2}
+                onResetImage={handleClickResetSliphandleClickOpenCameraSlipSalaryImage2}
+              />
+            </View>
           </AccordionSection>
         </View>
       </ScrollView>
