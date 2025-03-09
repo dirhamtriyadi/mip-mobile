@@ -10,7 +10,7 @@ import {useNotification} from '@hooks/useNotification';
 import globalStyles from '@styles/styles';
 import styles from './styles';
 import Button from '@src/components/Button';
-import FormPenagihan from '@src/components/FormPenagihan';
+import FormPenagihan from './form';
 import {DetailPenagihanData} from '@src/types/detailPenagihan';
 
 interface DetailPenagihanScreenProps {

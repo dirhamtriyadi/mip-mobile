@@ -7,7 +7,7 @@ import InputSignature from '@components/InputSignature';
 import InputDatePicker from '@components/InputDatePicker';
 import InputStatusPicker from '@components/InputStatusPicker';
 import globalStyles from '@src/styles/styles';
-import InputFieldTextArea from '../InputFieldTextArea';
+import InputFieldTextArea from '@components/InputFieldTextArea';
 import dayjs from 'dayjs';
 
 interface FormPenagihanProps {
