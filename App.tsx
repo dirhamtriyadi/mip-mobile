@@ -4,8 +4,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {useContext} from 'react';
 import {Text, TouchableOpacity, View, ActivityIndicator} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import dayjs from "dayjs";
-import "dayjs/locale/id";
+import dayjs from 'dayjs';
+import 'dayjs/locale/id';
 
 import {AuthContext, AuthProvider} from './src/contexts/AuthContext';
 import LoginScreen from '@screens/Auth/Login.tsx';
@@ -52,7 +52,7 @@ function App() {
 }
 
 function HomeStackScreen() {
-  dayjs.locale("id");
+  dayjs.locale('id');
   return (
     <Stack.Navigator>
       <Stack.Group>
