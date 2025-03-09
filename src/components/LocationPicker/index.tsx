@@ -6,7 +6,7 @@ import styles from './styles';
 
 interface LocationPickerProps {
   label: string;
-  placeholder: string;
+  placeholder?: string;
   getCurrentLocation: () => void;
   onDragMarker?: (latitude: number, longitude: number) => void;
   location: {
