@@ -21,6 +21,18 @@ import globalStyles from '@styles/styles';
 import Button from '@src/components/Button';
 
 function SakitScreen() {
+  const workSchedule = useWorkSchedule();
+  const {image, handleClickOpenCamera, handleClickReset} = useImagePicker();
+  const {date, openDatePicker, setOpenDatePicker, handleDateChange} =
+    useDatePicker(dayjs());
+  const {time, openTimePicker, setOpenTimePicker, handleTimeChange} =
+    useTimePicker(dayjs());
+  const [openModal, setOpenModal] = useState(false);
+  const {userDetailData} = useUserData();
+  const {location, getCurrentLocation} = useLocation();
+  const {showNotification} = useNotification();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const [data, setData] = useState({
     code: '',
     nik: '',
@@ -34,22 +46,8 @@ function SakitScreen() {
     longitude: 0,
   });
 
-  const workSchedule = useWorkSchedule();
-  const {image, handleClickOpenCamera, handleImageSelect, handleClickReset} =
-    useImagePicker();
-  const {date, openDatePicker, setOpenDatePicker, handleDateChange} =
-    useDatePicker(data.date);
-  const {time, openTimePicker, setOpenTimePicker, handleTimeChange} =
-    useTimePicker(data.time_check_out);
-  const [openModal, setOpenModal] = useState(false);
-  const {userDetailData} = useUserData();
-  const {location, getCurrentLocation} = useLocation();
-  const {showNotification} = useNotification();
-
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
   useEffect(() => {
-    if (location.latitude !== 0 && location.longitude !== 0) {
+    if (location.latitude && location.longitude) {
       setData(prevData => ({
         ...prevData,
         latitude: location.latitude,
@@ -62,101 +60,58 @@ function SakitScreen() {
   useEffect(() => {
     setData(prevData => ({
       ...prevData,
-      code: userDetailData.name + data.date.format('DD/MM/YYYY'),
+      code: userDetailData.name + date.format('DD/MM/YYYY'),
       nik: userDetailData.nik,
       name: userDetailData.name,
-      date: date,
+      date,
       time_check_out: time,
       image_check_out: image,
     }));
-  }, [userDetailData, data.date, date, time, image]);
-
-  const handleLocationChange = (text: string) => {
-    const [latitude, longitude] = text
-      .split(',')
-      .map(coord => parseFloat(coord.trim()));
-    if (!isNaN(latitude) && !isNaN(longitude)) {
-      setData(prevData => ({
-        ...prevData,
-        location_check_out: text,
-        latitude,
-        longitude,
-      }));
-    } else {
-      setData(prevData => ({
-        ...prevData,
-        location_check_out: text,
-      }));
-    }
-  };
+  }, [userDetailData, date, time, image]);
 
   const handleSubmit = async () => {
-    // add validation here
-    if (data.code === '') {
-      return Alert.alert('Kode absen harus diisi');
-    }
-    if (data.nik === '') {
-      return Alert.alert('NIK harus diisi');
-    }
-    if (data.name === '') {
-      return Alert.alert('Nama harus diisi');
-    }
+    if (!data.code) return Alert.alert('Kode absen harus diisi');
+    if (!data.nik) return Alert.alert('NIK harus diisi');
+    if (!data.name) return Alert.alert('Nama harus diisi');
+    if (!data.location_check_out) return Alert.alert('Lokasi harus diisi');
+    if (!data.image_check_out) return Alert.alert('Foto selfie harus diisi');
+
+    const workEndTime = workSchedule?.work_end_time;
     if (
-      data.time_check_out.format('HH:mm:ss') < workSchedule?.work_end_time &&
-      data.reason_early_out === ''
+      workEndTime &&
+      data.time_check_out.format('HH:mm:ss') < workEndTime &&
+      !data.reason_early_out
     ) {
-      // return Alert.alert('Keterangan pulang harus diisi');
       return setOpenModal(true);
-    }
-    if (data.image_check_out === '') {
-      return Alert.alert('Foto selfie harus diisi');
-    }
-    if (data.location_check_out === '') {
-      return Alert.alert('Lokasi harus diisi');
     }
 
     try {
-      const {date, time_check_out, reason_early_out, location_check_out} = data;
-
-      // Create form data
       const formData = new FormData();
+      formData.append('date', data.date.format('YYYY-MM-DD'));
+      formData.append('time_check_out', data.time_check_out.format('HH:mm:ss'));
+      formData.append('reason_early_out', data.reason_early_out);
+      formData.append('location_check_out', data.location_check_out);
 
-      formData.append('date', date.format('YYYY-MM-DD'));
-      formData.append('time_check_out', time_check_out.format('HH:mm:ss'));
-      formData.append('reason_early_out', reason_early_out);
-      formData.append('location_check_out', location_check_out);
-
-      // Add image file to formData
       if (image) {
         formData.append('image_check_out', {
           uri: image.uri,
           type: image.type,
-          name: image.fileName,
+          name: image.fileName || `selfie-${Date.now()}.jpg`,
         });
       }
 
-      // Set headers
       instance.defaults.headers['Content-Type'] = 'multipart/form-data';
-
-      // Send request
       await instance.post('v1/attendances/check-out', formData);
+
       Alert.alert('Absen pulang berhasil', 'Absen pulang berhasil disubmit', [
-        {
-          text: 'OK',
-          onPress: () => navigation.navigate('Home'),
-        },
+        {text: 'OK', onPress: () => navigation.navigate('Home')},
       ]);
       showNotification('Absen Pulang', 'Absen pulang berhasil disubmit');
     } catch (error: any) {
-      if (error.response?.data?.message?.code) {
-        error.response?.data?.message?.code.map((item: any) => {
-          // console.log(item);
-          return Alert.alert('Absen Pulang Gagal', item);
-        });
-      } else {
-        Alert.alert('Absen Pulang Gagal:\n', error.response.data.message);
-        // console.log('Error submitting absen pulang: ', error.response.data.message);
-      }
+      const messages = error.response?.data?.message?.code || [
+        error.response?.data?.message,
+      ];
+      messages.forEach((msg: string) => Alert.alert('Absen Pulang Gagal', msg));
     }
   };
 
@@ -164,42 +119,17 @@ function SakitScreen() {
     <SafeAreaView style={globalStyles.container}>
       <ScrollView>
         <View style={globalStyles.formContainer}>
-          <InputField
-            label="Kode Absen"
-            placeholder="Kode"
-            value={data.code}
-            onChangeText={text =>
-              setData(prevData => ({...prevData, code: text}))
-            }
-          />
-          <InputField
-            label="NIK"
-            placeholder="NIK"
-            value={data.nik}
-            onChangeText={text =>
-              setData(prevData => ({...prevData, nik: text}))
-            }
-          />
-          <InputField
-            label="Nama"
-            placeholder="Nama"
-            value={data.name}
-            onChangeText={text =>
-              setData(prevData => ({...prevData, name: text}))
-            }
-          />
+          <InputField label="Kode Absen" placeholder="Kode" value={data.code} />
+          <InputField label="NIK" placeholder="NIK" value={data.nik} />
+          <InputField label="Nama" placeholder="Nama" value={data.name} />
           <InputField
             label="Tanggal"
-            placeholder="Tanggal"
-            value={data.date.format('DD/MM/YYYY')}
-            onChangeText={() => {}}
+            value={date.format('DD/MM/YYYY')}
             editable={false}
           />
           <InputField
             label="Jam"
-            placeholder="Jam"
-            value={data.time_check_out.format('HH:mm:ss')}
-            onChangeText={() => {}}
+            value={time.format('HH:mm:ss')}
             editable={false}
           />
           <ReasonModal
@@ -220,7 +150,6 @@ function SakitScreen() {
           />
           <LocationPicker
             label="Lokasi Absen Pulang"
-            placeholder="Lokasi Absen Pulang"
             location={location}
             getCurrentLocation={getCurrentLocation}
           />
@@ -232,18 +161,16 @@ function SakitScreen() {
       <DatePicker
         modal
         mode="date"
-        minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
         open={openDatePicker}
-        date={data.date.toDate()}
+        date={date.toDate()}
         onConfirm={handleDateChange}
         onCancel={() => setOpenDatePicker(false)}
       />
       <DatePicker
         modal
         mode="time"
-        minimumDate={dayjs().toDate()}
         open={openTimePicker}
-        date={data.time_check_out.toDate()}
+        date={time.toDate()}
         onConfirm={handleTimeChange}
         onCancel={() => setOpenTimePicker(false)}
       />
