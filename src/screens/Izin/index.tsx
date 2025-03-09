@@ -117,7 +117,7 @@ function IzinScreen() {
           <InputField label="Nama" value={data.name} editable={false} />
           <InputField
             label="Tanggal"
-            value={data.date.format('DD/MM/YYYY')}
+            value={data.date.format('dddd DD/MM/YYYY')}
             editable={false}
             onIconPress={() => setOpenDatePicker(true)}
             iconName="calendar"

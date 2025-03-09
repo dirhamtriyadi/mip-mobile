@@ -124,14 +124,14 @@ function CutiScreen() {
           />
           <InputField
             label="Tanggal Mulai Cuti"
-            value={data.start_date.format('DD/MM/YYYY')}
+            value={data.start_date.format('dddd DD/MM/YYYY')}
             editable={false}
             onIconPress={() => setOpenStartPicker(true)}
             iconName="calendar"
           />
           <InputField
             label="Tanggal Akhir Cuti"
-            value={data.end_date.format('DD/MM/YYYY')}
+            value={data.end_date.format('dddd DD/MM/YYYY')}
             editable={false}
             onIconPress={() => setOpenEndPicker(true)}
             iconName="calendar"
