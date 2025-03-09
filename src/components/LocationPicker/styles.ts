@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         paddingHorizontal: 10,
         justifyContent: 'center',
+        backgroundColor: '#fff',
     },
     textInput: {
         color: '#242c40'

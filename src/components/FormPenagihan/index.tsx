@@ -91,6 +91,11 @@ function FormPenagihan({
       <InputStatusPicker
         value={data.status}
         onChange={value => onDataChange({...data, status: value})}
+        options={[
+          { label: 'Kunjungan', value: 'visit' },
+          { label: 'Janji Bayar', value: 'promise_to_pay' },
+          { label: 'Bayar', value: 'pay' },
+        ]}
       />
       {data.status === 'promise_to_pay' && (
         <InputDatePicker

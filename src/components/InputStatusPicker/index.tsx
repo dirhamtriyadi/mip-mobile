@@ -4,37 +4,36 @@ import { Picker } from '@react-native-picker/picker';
 import styles from './styles';
 import globalStyles from '@styles/styles';
 
-interface StatusPickerComponentProps {
+interface Option {
+  label: string;
   value: string;
-  onChange: (value: string) => void;
 }
 
-function StatusPickerComponent({ value, onChange }: StatusPickerComponentProps) {
+interface InputStatusPickerProps {
+  value?: string;
+  onChange: (value: string) => void;
+  options: Option[];
+  label?: string;
+}
+
+function InputStatusPicker({ value, onChange, options, label = 'Pilih Status' }: InputStatusPickerProps) {
   return (
     <View style={globalStyles.groupField}>
-      <Text style={styles.fieldLabel}>Tujuan Penagihan</Text>
-      <View
-        style={{
-          width: '100%',
-          height: 45,
-          borderWidth: 1,
-          borderColor: '#ccc',
-          borderRadius: 5,
-          marginBottom: 15,
-          paddingHorizontal: 10,
-          justifyContent: 'center',
-        }}>
+      {label && <Text style={styles.fieldLabel}>{label}</Text>}
+      <View style={styles.pickerContainer}>
         <Picker
-          style={{ color: '#242c40' }}
+          style={styles.picker}
           selectedValue={value}
-          onValueChange={onChange}>
-          <Picker.Item label="Kunjungan" value="visit" />
-          <Picker.Item label="Janji Bayar" value="promise_to_pay" />
-          <Picker.Item label="Bayar" value="pay" />
+          onValueChange={(itemValue) => onChange(itemValue)}
+        >
+          <Picker.Item label="-- Pilih --" value="" />
+          {options.map((option) => (
+            <Picker.Item key={option.value} label={option.label} value={option.value} />
+          ))}
         </Picker>
       </View>
     </View>
   );
 }
 
-export default StatusPickerComponent;
+export default InputStatusPicker;
