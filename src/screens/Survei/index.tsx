@@ -25,7 +25,7 @@ function SurveiScreen() {
     address_status: '',
     phone_number: '',
     npwp: '',
-    job: '',
+    company_name: '',
     employee_tenure: '',
     job_level: '',
     employee_status: '',
@@ -56,7 +56,29 @@ function SurveiScreen() {
     recommendation_from_vendors: '',
     recommendation_from_treasurer: '',
     recommendation_from_other: '',
-    recomendation_pt: '',
+    source_1_full_name: '',
+    source_1_gender: '',
+    source_1_source_relationship: '',
+    source_1_source_character: '',
+    source_1_knows_prospect_customer: '',
+    source_1_prospect_lives_at_address: '',
+    source_1_length_of_residence: '',
+    source_1_house_ownership_status: '',
+    source_1_prospect_status: '',
+    source_1_number_of_dependents: '',
+    source_1_prospect_character: '',
+    source_2_full_name: '',
+    source_2_gender: '',
+    source_2_source_relationship: '',
+    source_2_source_character: '',
+    source_2_knows_prospect_customer: '',
+    source_2_prospect_lives_at_address: '',
+    source_2_length_of_residence: '',
+    source_2_house_ownership_status: '',
+    source_2_prospect_status: '',
+    source_2_number_of_dependents: '',
+    source_2_prospect_character: '',
+    recommendation_pt: '',
     descriptionSurvey: '',
     locationSurvey: '',
     dateSurvey: dayjs(),
@@ -139,7 +161,8 @@ function SurveiScreen() {
   const {
     image: imageSlipSalary2,
     handleClickOpenCamera: handleClickOpenCameraSlipSalaryImage2,
-    handleImageSelect: handleImageSelectSliphandleClickOpenCameraSlipSalaryImage2,
+    handleImageSelect:
+      handleImageSelectSliphandleClickOpenCameraSlipSalaryImage2,
     handleClickReset: handleClickResetSliphandleClickOpenCameraSlipSalaryImage2,
   } = useImagePicker();
 
@@ -252,24 +275,24 @@ function SurveiScreen() {
           </AccordionSection>
           <AccordionSection title="2. Pendapatan">
             <InputField
-              label="Pekerjaan"
-              placeholder="Masukan pekerjaan"
-              value={formData.job}
+              label="Jenis Pekerjaan"
+              placeholder="Masukan jenis pekerjaan"
+              value={formData.job_type}
               onChangeText={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  job: text,
+                  job_type: text,
                 }));
               }}
             />
             <InputField
-              label="Lama Kerja"
-              placeholder="Masukan lama kerja"
-              value={formData.employee_tenure}
+              label="Nama Perusahaan"
+              placeholder="Masukan nama perusahaan"
+              value={formData.company_name}
               onChangeText={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  employee_tenure: text,
+                  company_name: text,
                 }));
               }}
             />
@@ -285,6 +308,17 @@ function SurveiScreen() {
               }}
             />
             <InputField
+              label="Lama Kerja"
+              placeholder="Masukan lama kerja"
+              value={formData.employee_tenure}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  employee_tenure: text,
+                }));
+              }}
+            />
+            <InputField
               label="Status Karyawan"
               placeholder="Masukan status karyawan"
               value={formData.employee_status}
@@ -292,17 +326,6 @@ function SurveiScreen() {
                 setFormData(prevData => ({
                   ...prevData,
                   employee_status: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Jenis Pekerjaan"
-              placeholder="Masukan jenis pekerjaan"
-              value={formData.job_type}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  job_type: text,
                 }));
               }}
             />
@@ -604,19 +627,259 @@ function SurveiScreen() {
             />
           </AccordionSection>
           <AccordionSection title="7. Wawancara 1">
-            <Text>Test</Text>
+            <InputField
+              label='Nama'
+              placeholder='Masukan nama'
+              value={formData.source_1_full_name}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_1_full_name: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Jenis Kelamin'
+              placeholder='Masukan jenis kelamin'
+              value={formData.source_1_gender}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_1_gender: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Hubungan Sumber Informasi'
+              placeholder='Masukan hubungan sumber informasi'
+              value={formData.source_1_source_relationship}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_1_source_relationship: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Karakter Sumber Informasi'
+              placeholder='Masukan karakter sumber informasi'
+              value={formData.source_1_source_character}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_1_source_character: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Kenal Dengan Calon Nasabah?'
+              placeholder='Masukan keterangan'
+              value={formData.source_1_knows_prospect_customer}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_1_knows_prospect_customer: text,
+                }));
+              }}
+            />
+            <InputField 
+              label='Calon Nasabah Tinggal di Alamat tersebut?'
+              placeholder='Masukan keterangan'
+              value={formData.source_1_prospect_lives_at_address}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_1_prospect_lives_at_address: text,
+                }));
+              }}
+            />
+            <InputField 
+              label='Lama Tinggal'
+              placeholder='Masukan lama tinggal'
+              value={formData.source_1_length_of_residence}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_1_length_of_residence: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Status Kepemilikan Rumah'
+              placeholder='Masukan status kepemilikan rumah'
+              value={formData.source_1_house_ownership_status}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_1_house_ownership_status: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Status Calon Nasabah'
+              placeholder='Masukan status calon nasabah'
+              value={formData.source_1_prospect_status}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_1_prospect_status: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Jumlah Tanggungan'
+              placeholder='Masukkan jumlah tanggungan'
+              value={formData.source_1_number_of_dependents}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_1_number_of_dependents: text
+                }))
+              }}
+            />
+            <InputField
+              label='Karakter Calon Nasabah'
+              placeholder='Masukkan karakter calon nasabah'
+              value={formData.source_1_prospect_character}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_1_prospect_character: text
+                }))
+              }}
+            />
           </AccordionSection>
           <AccordionSection title="8. Wawancara 2 (Opsional)">
-            <Text>Test</Text>
+          <InputField
+              label='Nama'
+              placeholder='Masukan nama'
+              value={formData.source_2_full_name}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_2_full_name: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Jenis Kelamin'
+              placeholder='Masukan jenis kelamin'
+              value={formData.source_2_gender}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_2_gender: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Hubungan Sumber Informasi'
+              placeholder='Masukan hubungan sumber informasi'
+              value={formData.source_2_source_relationship}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_2_source_relationship: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Karakter Sumber Informasi'
+              placeholder='Masukan karakter sumber informasi'
+              value={formData.source_2_source_character}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_2_source_character: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Kenal Dengan Calon Nasabah?'
+              placeholder='Masukan keterangan'
+              value={formData.source_2_knows_prospect_customer}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_2_knows_prospect_customer: text,
+                }));
+              }}
+            />
+            <InputField 
+              label='Calon Nasabah Tinggal di Alamat tersebut?'
+              placeholder='Masukan keterangan'
+              value={formData.source_2_prospect_lives_at_address}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_2_prospect_lives_at_address: text,
+                }));
+              }}
+            />
+            <InputField 
+              label='Lama Tinggal'
+              placeholder='Masukan lama tinggal'
+              value={formData.source_2_length_of_residence}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_2_length_of_residence: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Status Kepemilikan Rumah'
+              placeholder='Masukan status kepemilikan rumah'
+              value={formData.source_2_house_ownership_status}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_2_house_ownership_status: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Status Calon Nasabah'
+              placeholder='Masukan status calon nasabah'
+              value={formData.source_2_prospect_status}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_2_prospect_status: text,
+                }));
+              }}
+            />
+            <InputField
+              label='Jumlah Tanggungan'
+              placeholder='Masukkan jumlah tanggungan'
+              value={formData.source_2_number_of_dependents}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_2_number_of_dependents: text
+                }))
+              }}
+            />
+            <InputField
+              label='Karakter Calon Nasabah'
+              placeholder='Masukkan karakter calon nasabah'
+              value={formData.source_2_prospect_character}
+              onChangeText={text => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  source_2_prospect_character: text
+                }))
+              }}
+            />
           </AccordionSection>
           <AccordionSection title="9. Catatan Rekomendasi PT">
             <InputStatusPicker
               label="Direkomendasikan"
-              value={formData.recomendation_pt}
+              value={formData.recommendation_pt}
               onChange={value =>
                 setFormData(prevData => ({
                   ...prevData,
-                  recomendation_pt: value,
+                  recommendation_pt: value,
                 }))
               }
               options={[
@@ -773,9 +1036,7 @@ function SurveiScreen() {
                 onResetImage={handleClickResetIdCardImage}
               />
             </View>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-              5. Slip Gaji
-            </Text>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>5. Slip Gaji</Text>
             <View style={{padding: 10}}>
               <ImagePicker
                 label="Slip Gaji 1"
@@ -788,8 +1049,12 @@ function SurveiScreen() {
                 label="Slip Gaji 2"
                 image={formData.salary_slip_image2}
                 onOpenCamera={handleClickOpenCameraSlipSalaryImage2}
-                onImageSelected={handleImageSelectSliphandleClickOpenCameraSlipSalaryImage2}
-                onResetImage={handleClickResetSliphandleClickOpenCameraSlipSalaryImage2}
+                onImageSelected={
+                  handleImageSelectSliphandleClickOpenCameraSlipSalaryImage2
+                }
+                onResetImage={
+                  handleClickResetSliphandleClickOpenCameraSlipSalaryImage2
+                }
               />
             </View>
           </AccordionSection>
