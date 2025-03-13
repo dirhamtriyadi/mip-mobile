@@ -5,11 +5,11 @@ export type SurveiFormData = {
   address_status: string;
   phone_number: string;
   npwp: string;
-  company_name: string;
-  employee_tenure: string;
-  job_level: string;
-  employee_status: string;
   job_type: string;
+  company_name: string;
+  job_level: string;
+  employee_tenure: string;
+  employee_status: string;
   salary: number;
   other_business: number;
   monthly_living_expenses: number;
