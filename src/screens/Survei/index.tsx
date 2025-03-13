@@ -890,22 +890,22 @@ function SurveiScreen() {
             <InputFieldTextArea
               label="Keterangan"
               placeholder="Masukan keterangan"
-              value={formData.recommendation_from_other}
+              value={formData.descriptionSurvey}
               onChangeText={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  recommendation_from_other: text,
+                  descriptionSurvey: text,
                 }));
               }}
             />
             <InputField
               label="Tempat"
               placeholder="Masukan tempat"
-              value={formData.descriptionSurvey}
+              value={formData.locationSurvey}
               onChangeText={text => {
                 setFormData(prevData => ({
                   ...prevData,
-                  descriptionSurvey: text,
+                  locationSurvey: text,
                 }));
               }}
             />
