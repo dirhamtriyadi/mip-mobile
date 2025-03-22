@@ -1,1076 +1,131 @@
-import InputField from '@src/components/InputField';
-import InputFieldNumber from '@src/components/InputFieldNumber';
-import InputFieldTextArea from '@src/components/InputFieldTextArea';
-import LocationPicker from '@src/components/LocationPicker';
-import {useLocation} from '@src/hooks/useLocation';
 import globalStyles from '@src/styles/styles';
+import {
+  ActivityIndicator,
+  Alert,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import styles from './styles';
 import {useEffect, useState} from 'react';
-import {SafeAreaView, ScrollView, Text, View} from 'react-native';
-import InputCurrency from '@src/components/InputCurrency';
-import dayjs from 'dayjs';
-import useDatePicker from '@src/hooks/useDatePicker';
-import DatePicker from 'react-native-date-picker';
-import InputStatusPicker from '@src/components/InputStatusPicker';
-import InputSignature from '@src/components/InputSignature';
-import AccordionSection from '@src/components/AccordionSection';
-import ImagePicker from '@src/components/ImagePicker';
-import useImagePicker from '@src/hooks/useImagePicker';
 import {SurveiFormData} from '@src/types/survei';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from 'App';
+import instance from '@src/configs/axios';
+import dayjs from 'dayjs';
+import Divider from '@src/components/Divider';
 
-function SurveiScreen() {
-  const [formData, setFormData] = useState<SurveiFormData>({
-    name: '',
-    address: '',
-    number_ktp: '',
-    address_status: '',
-    phone_number: '',
-    npwp: '',
-    company_name: '',
-    employee_tenure: '',
-    job_level: '',
-    employee_status: '',
-    job_type: '',
-    salary: 0,
-    other_business: 0,
-    monthly_living_expenses: 0,
-    children: '',
-    wife: '',
-    couple_jobs: '',
-    couple_business: '',
-    couple_income: 0,
-    bank_debt: 0,
-    cooperative_debt: 0,
-    personal_debt: 0,
-    online_debt: 0,
-    customer_character_analysis: '',
-    financial_report_analysis: '',
-    slik_result: '',
-    info_provider_name: '',
-    info_provider_position: '',
-    workplace_condition: '',
-    employee_count: '',
-    business_duration: '',
-    office_address: '',
-    office_phone: '',
-    loan_application: 0,
-    recommendation_from_vendors: '',
-    recommendation_from_treasurer: '',
-    recommendation_from_other: '',
-    source_1_full_name: '',
-    source_1_gender: '',
-    source_1_source_relationship: '',
-    source_1_source_character: '',
-    source_1_knows_prospect_customer: '',
-    source_1_prospect_lives_at_address: '',
-    source_1_length_of_residence: '',
-    source_1_house_ownership_status: '',
-    source_1_prospect_status: '',
-    source_1_number_of_dependents: '',
-    source_1_prospect_character: '',
-    source_2_full_name: '',
-    source_2_gender: '',
-    source_2_source_relationship: '',
-    source_2_source_character: '',
-    source_2_knows_prospect_customer: '',
-    source_2_prospect_lives_at_address: '',
-    source_2_length_of_residence: '',
-    source_2_house_ownership_status: '',
-    source_2_prospect_status: '',
-    source_2_number_of_dependents: '',
-    source_2_prospect_character: '',
-    recommendation_pt: '',
-    descriptionSurvey: '',
-    locationSurvey: '',
-    dateSurvey: dayjs(),
-    latitude: 0,
-    longitude: 0,
-    locationString: '',
-    signature_officer: null,
-    signature_customer: null,
-    signature_couple: null,
-    workplace_image1: null,
-    workplace_image2: null,
-    customer_image: null,
-    ktp_image: null,
-    loan_guarantee_image1: null,
-    loan_guarantee_image2: null,
-    kk_image: null,
-    id_card_image: null,
-    salary_slip_image1: null,
-    salary_slip_image2: null,
-  });
-  const [scrollEnabled, setScrollEnabled] = useState(true);
+function DetailSurveiScreen() {
+  const [data, setData] = useState<SurveiFormData[]>([]);
+  const [search, setSearch] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const {location, getCurrentLocation, changeLocationMarker} = useLocation();
-  const {date, openDatePicker, setOpenDatePicker, handleDateChange} =
-    useDatePicker(formData.dateSurvey);
-  const {
-    image: imageWorkplace1,
-    handleClickOpenCamera: handleClickOpenCameraWorkplaceImage1,
-    handleImageSelect: handleImageSelectWorkplaceImage1,
-    handleClickReset: handleClickResetWorkplaceImage1,
-  } = useImagePicker();
-  const {
-    image: imageWorkplace2,
-    handleClickOpenCamera: handleClickOpenCameraWorkplaceImage2,
-    handleImageSelect: handleImageSelectWorkplaceImage2,
-    handleClickReset: handleClickResetWorkplaceImage2,
-  } = useImagePicker();
-  const {
-    image: imageCustomer,
-    handleClickOpenCamera: handleClickOpenCameraCustomerImage,
-    handleImageSelect: handleImageSelectCustomerImage,
-    handleClickReset: handleClickResetCustomerImage,
-  } = useImagePicker();
-  const {
-    image: imageKtp,
-    handleClickOpenCamera: handleClickOpenCameraKtpImage,
-    handleImageSelect: handleImageSelectKtpImage,
-    handleClickReset: handleClickResetKtpImage,
-  } = useImagePicker();
-  const {
-    image: imageLoanGuarantee1,
-    handleClickOpenCamera: handleClickOpenCameraLoanGuarantee1,
-    handleImageSelect: handleImageSelectLoanGuarantee1,
-    handleClickReset: handleClickResetLoanGuarantee1,
-  } = useImagePicker();
-  const {
-    image: imageLoanGuarantee2,
-    handleClickOpenCamera: handleClickOpenCameraLoanGuarantee2,
-    handleImageSelect: handleImageSelectLoanGuarantee2,
-    handleClickReset: handleClickResetLoanGuarantee2,
-  } = useImagePicker();
-  const {
-    image: imageKk,
-    handleClickOpenCamera: handleClickOpenCameraKkImage,
-    handleImageSelect: handleImageSelectKkImage,
-    handleClickReset: handleClickResetKkImage,
-  } = useImagePicker();
-  const {
-    image: imageIdCard,
-    handleClickOpenCamera: handleClickOpenCameraIdCardImage,
-    handleImageSelect: handleImageSelectIdCardImage,
-    handleClickReset: handleClickResetIdCardImage,
-  } = useImagePicker();
-  const {
-    image: imageSlipSalary1,
-    handleClickOpenCamera: handleClickOpenCameraSlipSalaryImage1,
-    handleImageSelect: handleImageSelectSlipSalaryImage1,
-    handleClickReset: handleClickResetSlipSalaryImage1,
-  } = useImagePicker();
-  const {
-    image: imageSlipSalary2,
-    handleClickOpenCamera: handleClickOpenCameraSlipSalaryImage2,
-    handleImageSelect:
-      handleImageSelectSliphandleClickOpenCameraSlipSalaryImage2,
-    handleClickReset: handleClickResetSliphandleClickOpenCameraSlipSalaryImage2,
-  } = useImagePicker();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
-    setFormData(prevData => ({
-      ...prevData,
-      dateSurvey: date,
-      latitude: location.latitude,
-      longitude: location.longitude,
-      locationString: location.locationString,
-      workplace_image1: imageWorkplace1,
-      workplace_image2: imageWorkplace2,
-      customer_image: imageCustomer,
-      ktp_image: imageKtp,
-      loan_guarantee_image1: imageLoanGuarantee1,
-      loan_guarantee_image2: imageLoanGuarantee2,
-      kk_image: imageKk,
-      id_card_image: imageIdCard,
-      salary_slip_image1: imageSlipSalary1,
-      salary_slip_image2: imageSlipSalary2,
-    }));
-  }, [
-    location,
-    date,
-    imageWorkplace1,
-    imageWorkplace2,
-    imageCustomer,
-    imageKtp,
-    imageLoanGuarantee1,
-    imageLoanGuarantee2,
-    imageKk,
-    imageIdCard,
-    imageSlipSalary1,
-    imageSlipSalary2,
-  ]);
+    fetchProspectiveCustomerSurveys();
+  }, [search]);
+
+  const fetchProspectiveCustomerSurveys = async () => {
+    try {
+      setLoading(true);
+      const response = await instance.get('v1/prospective-customer-surveys', {
+        params: search ? {search} : {},
+      });
+      setData(response.data.data);
+      console.log(response.data.data);
+    } catch (error: any) {
+      Alert.alert(
+        'Gagal mengambil data penagihan',
+        error.response?.data?.message || 'Terjadi kesalahan',
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = () => {
+    fetchProspectiveCustomerSurveys();
+  };
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <ScrollView scrollEnabled={scrollEnabled}>
-        <View style={globalStyles.formContainer}>
-          <AccordionSection title="1. CIF">
-            <InputField
-              label="Nama"
-              placeholder="Masukan nama"
-              value={formData.name}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  name: text,
-                }));
-              }}
-            />
-            <InputFieldTextArea
-              label="Alamat"
-              placeholder="Masukan alamat"
-              value={formData.address}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  address: text,
-                }));
-              }}
-            />
-            <InputFieldNumber
-              label="No KTP"
-              placeholder="Masukan nomor KTP"
-              value={formData.number_ktp}
-              onChangeText={text => {
-                const numericValue = text.replace(/[^0-9]/g, '');
-                setFormData(prevData => ({
-                  ...prevData,
-                  number_ktp: numericValue,
-                }));
-              }}
-            />
-            <InputField
-              label="Status Alamat"
-              placeholder="Masukan status alamat"
-              value={formData.address_status}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  address_status: text,
-                }));
-              }}
-            />
-            <InputFieldNumber
-              label="No Telepon"
-              placeholder="Masukan nomor telepon"
-              value={formData.phone_number}
-              onChangeText={text => {
-                const numericValue = text.replace(/[^0-9]/g, '');
-                setFormData(prevData => ({
-                  ...prevData,
-                  phone_number: numericValue,
-                }));
-              }}
-            />
-            <InputField
-              label="NPWP"
-              placeholder="Masukan NPWP"
-              value={formData.npwp}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  npwp: text,
-                }));
-              }}
-            />
-          </AccordionSection>
-          <AccordionSection title="2. Pendapatan">
-            <InputField
-              label="Jenis Pekerjaan"
-              placeholder="Masukan jenis pekerjaan"
-              value={formData.job_type}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  job_type: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Nama Perusahaan"
-              placeholder="Masukan nama perusahaan"
-              value={formData.company_name}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  company_name: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Jabatan"
-              placeholder="Masukan jabatan"
-              value={formData.job_level}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  job_level: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Lama Kerja"
-              placeholder="Masukan lama kerja"
-              value={formData.employee_tenure}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  employee_tenure: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Status Karyawan"
-              placeholder="Masukan status karyawan"
-              value={formData.employee_status}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  employee_status: text,
-                }));
-              }}
-            />
-            <InputCurrency
-              label="Gaji*"
-              placeholder="Masukan gaji"
-              value={formData.salary}
-              onChangeValue={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  salary: Number(text),
-                }));
-              }}
-            />
-            <InputCurrency
-              label="Usaha Tambahan"
-              placeholder="Masukan usaha tambahan"
-              value={formData.other_business}
-              onChangeValue={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  other_business: Number(text),
-                }));
-              }}
-            />
-            <InputCurrency
-              label="Biaya hidup per bulan*"
-              placeholder="Masukan biaya hidup per bulan"
-              value={formData.monthly_living_expenses}
-              onChangeValue={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  monthly_living_expenses: Number(text),
-                }));
-              }}
-            />
-            <Text>Tanggungan</Text>
-            <InputField
-              label="Anak"
-              placeholder="Masukan anak"
-              value={formData.children}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  children: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Istri"
-              placeholder="Masukan istri"
-              value={formData.wife}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  wife: text,
-                }));
-              }}
-            />
-            <Text>Kepemilikan Rumah</Text>
-            <InputField
-              label="Pekerjaan Pasangan"
-              placeholder="Masukan pekerjaan pasangan"
-              value={formData.couple_jobs}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  couple_jobs: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Usaha Pasangan"
-              placeholder="Masukan usaha pasangan"
-              value={formData.couple_business}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  couple_business: text,
-                }));
-              }}
-            />
-            <InputCurrency
-              label="Pendapatan Pasangan"
-              placeholder="Masukan pendapatan pasangan"
-              value={formData.couple_income}
-              onChangeValue={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  couple_income: Number(text),
-                }));
-              }}
-            />
-          </AccordionSection>
-          <AccordionSection title="3. Hutang">
-            <InputCurrency
-              label="Bank"
-              placeholder="Masukan hutang bank"
-              value={formData.bank_debt}
-              onChangeValue={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  bank_debt: Number(text),
-                }));
-              }}
-            />
-            <InputCurrency
-              label="Koperasi"
-              placeholder="Masukan hutang koperasi"
-              value={formData.cooperative_debt}
-              onChangeValue={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  cooperative_debt: Number(text),
-                }));
-              }}
-            />
-            <InputCurrency
-              label="Perorangan"
-              placeholder="Masukan hutang perorangan"
-              value={formData.personal_debt}
-              onChangeValue={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  personal_debt: Number(text),
-                }));
-              }}
-            />
-            <InputCurrency
-              label="Online"
-              placeholder="Masukan hutang online"
-              value={formData.online_debt}
-              onChangeValue={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  online_debt: Number(text),
-                }));
-              }}
-            />
-          </AccordionSection>
-          <AccordionSection title="4. Scorring">
-            <InputField
-              label="A. Analisa Karakter Nasabah"
-              placeholder="Masukan analisa karakter nasabah"
-              value={formData.customer_character_analysis}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  customer_character_analysis: text,
-                }));
-              }}
-            />
-            <InputField
-              label="B. Analisa Laporan Keuangan"
-              placeholder="Masukan analisa laporan keuangan"
-              value={formData.financial_report_analysis}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  financial_report_analysis: text,
-                }));
-              }}
-            />
-            <InputField
-              label="C. Hasil Slik"
-              placeholder="Masukan hasil slik"
-              value={formData.slik_result}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  slik_result: text,
-                }));
-              }}
-            />
-          </AccordionSection>
-          <AccordionSection title="5. Informasi Tambahan dan Pengajuan">
-            <InputField
-              label="Nama Pemberi Informasi"
-              placeholder="Masukan nama pemeberi informasi"
-              value={formData.info_provider_name}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  info_provider_name: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Jabatan Pemberi Informasi"
-              placeholder="Masukan jabatan pemberi informasi"
-              value={formData.info_provider_position}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  info_provider_position: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Kondisi Tempat Kerja"
-              placeholder="Masukan kondisi tempat kerja"
-              value={formData.workplace_condition}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  workplace_condition: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Banyak Karyawan"
-              placeholder="Masukan banyak karyawan"
-              value={formData.employee_count}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  employee_count: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Lama Usaha Kantor"
-              placeholder="Masukan lama usaha kantor"
-              value={formData.business_duration}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  business_duration: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Alamat Kantor"
-              placeholder="Masukan alamat kantor"
-              value={formData.office_address}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  office_address: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Telepon Kantor"
-              placeholder="Masukan telepon kantor"
-              value={formData.office_phone}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  office_phone: text,
-                }));
-              }}
-            />
-            <InputCurrency
-              label="Pengajuan"
-              placeholder="Masukan Pengajuan"
-              value={formData.loan_application}
-              onChangeValue={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  loan_application: Number(text),
-                }));
-              }}
-            />
-          </AccordionSection>
-          <AccordionSection title="6. Rekomendasi dari">
-            <InputField
-              label="Vendor"
-              placeholder="Masukan nama vendor"
-              value={formData.recommendation_from_vendors}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  recommendation_from_vendors: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Bendahara"
-              placeholder="Masukan nama bendahara"
-              value={formData.recommendation_from_treasurer}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  recommendation_from_treasurer: text,
-                }));
-              }}
-            />
-            <InputFieldTextArea
-              label="Lainnya"
-              placeholder="Masukan lainnya"
-              value={formData.recommendation_from_other}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  recommendation_from_other: text,
-                }));
-              }}
-            />
-          </AccordionSection>
-          <AccordionSection title="7. Wawancara 1">
-            <InputField
-              label='Nama'
-              placeholder='Masukan nama'
-              value={formData.source_1_full_name}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_1_full_name: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Jenis Kelamin'
-              placeholder='Masukan jenis kelamin'
-              value={formData.source_1_gender}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_1_gender: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Hubungan Sumber Informasi'
-              placeholder='Masukan hubungan sumber informasi'
-              value={formData.source_1_source_relationship}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_1_source_relationship: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Karakter Sumber Informasi'
-              placeholder='Masukan karakter sumber informasi'
-              value={formData.source_1_source_character}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_1_source_character: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Kenal Dengan Calon Nasabah?'
-              placeholder='Masukan keterangan'
-              value={formData.source_1_knows_prospect_customer}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_1_knows_prospect_customer: text,
-                }));
-              }}
-            />
-            <InputField 
-              label='Calon Nasabah Tinggal di Alamat tersebut?'
-              placeholder='Masukan keterangan'
-              value={formData.source_1_prospect_lives_at_address}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_1_prospect_lives_at_address: text,
-                }));
-              }}
-            />
-            <InputField 
-              label='Lama Tinggal'
-              placeholder='Masukan lama tinggal'
-              value={formData.source_1_length_of_residence}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_1_length_of_residence: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Status Kepemilikan Rumah'
-              placeholder='Masukan status kepemilikan rumah'
-              value={formData.source_1_house_ownership_status}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_1_house_ownership_status: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Status Calon Nasabah'
-              placeholder='Masukan status calon nasabah'
-              value={formData.source_1_prospect_status}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_1_prospect_status: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Jumlah Tanggungan'
-              placeholder='Masukkan jumlah tanggungan'
-              value={formData.source_1_number_of_dependents}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_1_number_of_dependents: text
-                }))
-              }}
-            />
-            <InputField
-              label='Karakter Calon Nasabah'
-              placeholder='Masukkan karakter calon nasabah'
-              value={formData.source_1_prospect_character}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_1_prospect_character: text
-                }))
-              }}
-            />
-          </AccordionSection>
-          <AccordionSection title="8. Wawancara 2 (Opsional)">
-          <InputField
-              label='Nama'
-              placeholder='Masukan nama'
-              value={formData.source_2_full_name}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_2_full_name: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Jenis Kelamin'
-              placeholder='Masukan jenis kelamin'
-              value={formData.source_2_gender}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_2_gender: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Hubungan Sumber Informasi'
-              placeholder='Masukan hubungan sumber informasi'
-              value={formData.source_2_source_relationship}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_2_source_relationship: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Karakter Sumber Informasi'
-              placeholder='Masukan karakter sumber informasi'
-              value={formData.source_2_source_character}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_2_source_character: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Kenal Dengan Calon Nasabah?'
-              placeholder='Masukan keterangan'
-              value={formData.source_2_knows_prospect_customer}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_2_knows_prospect_customer: text,
-                }));
-              }}
-            />
-            <InputField 
-              label='Calon Nasabah Tinggal di Alamat tersebut?'
-              placeholder='Masukan keterangan'
-              value={formData.source_2_prospect_lives_at_address}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_2_prospect_lives_at_address: text,
-                }));
-              }}
-            />
-            <InputField 
-              label='Lama Tinggal'
-              placeholder='Masukan lama tinggal'
-              value={formData.source_2_length_of_residence}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_2_length_of_residence: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Status Kepemilikan Rumah'
-              placeholder='Masukan status kepemilikan rumah'
-              value={formData.source_2_house_ownership_status}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_2_house_ownership_status: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Status Calon Nasabah'
-              placeholder='Masukan status calon nasabah'
-              value={formData.source_2_prospect_status}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_2_prospect_status: text,
-                }));
-              }}
-            />
-            <InputField
-              label='Jumlah Tanggungan'
-              placeholder='Masukkan jumlah tanggungan'
-              value={formData.source_2_number_of_dependents}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_2_number_of_dependents: text
-                }))
-              }}
-            />
-            <InputField
-              label='Karakter Calon Nasabah'
-              placeholder='Masukkan karakter calon nasabah'
-              value={formData.source_2_prospect_character}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  source_2_prospect_character: text
-                }))
-              }}
-            />
-          </AccordionSection>
-          <AccordionSection title="9. Catatan Rekomendasi PT">
-            <InputStatusPicker
-              label="Direkomendasikan"
-              value={formData.recommendation_pt}
-              onChange={value =>
-                setFormData(prevData => ({
-                  ...prevData,
-                  recommendation_pt: value,
-                }))
-              }
-              options={[
-                {label: 'Ya', value: 'yes'},
-                {label: 'Tidak', value: 'no'},
-              ]}
-            />
-            <InputFieldTextArea
-              label="Keterangan"
-              placeholder="Masukan keterangan"
-              value={formData.descriptionSurvey}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  descriptionSurvey: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Tempat"
-              placeholder="Masukan tempat"
-              value={formData.locationSurvey}
-              onChangeText={text => {
-                setFormData(prevData => ({
-                  ...prevData,
-                  locationSurvey: text,
-                }));
-              }}
-            />
-            <InputField
-              label="Tanggal"
-              placeholder="Tanggal"
-              value={formData.dateSurvey.format('dddd - DD/MM/YYYY')}
-              onChangeText={() => {}}
-              editable={false}
-              onIconPress={() => setOpenDatePicker(true)}
-              iconName="calendar"
-            />
-            <LocationPicker
-              label="Lokasi"
-              placeholder="Lokasi"
-              location={location}
-              getCurrentLocation={getCurrentLocation}
-              onDragMarker={changeLocationMarker}
-            />
-            <InputSignature
-              label="TTD Petugas"
-              signature={formData.signature_officer}
-              onConfirm={result =>
-                setFormData(prevData => ({
-                  ...prevData,
-                  signature_officer: result,
-                }))
-              }
-              onScrollEnabledChange={setScrollEnabled}
-            />
-            <InputSignature
-              label="TTD Nasabah"
-              signature={formData.signature_customer}
-              onConfirm={result =>
-                setFormData(prevData => ({
-                  ...prevData,
-                  signature_customer: result,
-                }))
-              }
-              onScrollEnabledChange={setScrollEnabled}
-            />
-            <InputSignature
-              label="TTD Pasangan/Penanggung Jawab"
-              signature={formData.signature_couple}
-              onConfirm={result =>
-                setFormData(prevData => ({
-                  ...prevData,
-                  signature_couple: result,
-                }))
-              }
-              onScrollEnabledChange={setScrollEnabled}
-            />
-          </AccordionSection>
-          <AccordionSection title="10. Berkas">
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-              1. Foto Gedung
-            </Text>
-            <View style={{padding: 10}}>
-              <ImagePicker
-                label="Foto Gedung 1"
-                image={formData.workplace_image1}
-                onOpenCamera={handleClickOpenCameraWorkplaceImage1}
-                onImageSelected={handleImageSelectWorkplaceImage1}
-                onResetImage={handleClickResetWorkplaceImage1}
-              />
-              <ImagePicker
-                label="Foto Gedung 2"
-                image={formData.workplace_image2}
-                onOpenCamera={handleClickOpenCameraWorkplaceImage2}
-                onImageSelected={handleImageSelectWorkplaceImage2}
-                onResetImage={handleClickResetWorkplaceImage2}
-              />
+      <View style={styles.headContainer}>
+        <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 10}}>
+          List Survei
+        </Text>
+        <View style={styles.groupSearch}>
+          <TextInput
+            placeholder="Masukan kata pencarian"
+            style={{width: '90%'}}
+            value={search}
+            onChangeText={setSearch}
+            keyboardType="default"
+            onSubmitEditing={handleSearch} // Jalankan pencarian saat "Enter" ditekan
+          />
+          <TouchableOpacity
+            style={{justifyContent: 'center'}}
+            onPress={handleSearch}>
+            <Icon name="search" size={20} color="#000" />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <ScrollView>
+        <View style={styles.listContainer}>
+          {loading ? (
+            <ActivityIndicator size="large" color="#007bff" />
+          ) : data && data.length > 0 ? (
+            data.map(item => (
+              <TouchableOpacity
+                key={item.id}
+                style={[
+                  styles.btn,
+                  {padding: 10, backgroundColor: '#f8f8f8', borderRadius: 10},
+                ]}
+                onPress={
+                  () => navigation.navigate('DetailSurvei', {id: item.id})
+                  // console.log({id: item.id})
+                }>
+                <View style={styles.head}>
+                  <Text style={{fontWeight: 'bold', fontSize: 20}}>
+                    {item.name}
+                  </Text>
+                  <Text>{dayjs(item.created_at).format('DD-MM-YYYY')}</Text>
+                </View>
+                <Divider orientation='horizontal' color='black' width={1} />
+                <Text>
+                  <Text style={{fontWeight: 'bold'}}>No. KTP:</Text>{' '}
+                  {item.number_ktp}
+                </Text>
+                <Text>
+                  <Text style={{fontWeight: 'bold'}}>Status Alamat:</Text>{' '}
+                  {item.address_status}
+                </Text>
+                <Text>
+                  <Text style={{fontWeight: 'bold'}}>Status Alamat:</Text>{' '}
+                  {item.address_status}
+                </Text>
+                <Text>
+                  <Text style={{fontWeight: 'bold'}}>No. HP:</Text>{' '}
+                  {item.phone_number}
+                </Text>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <View style={styles.noData}>
+              <Text style={styles.noDataText}>
+                Tidak ada data yang ditemukan
+              </Text>
             </View>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-              2. Foto Nasabah dan KTP
-            </Text>
-            <View style={{padding: 10}}>
-              <ImagePicker
-                label="Foto Nasabah"
-                image={formData.customer_image}
-                onOpenCamera={handleClickOpenCameraCustomerImage}
-                onImageSelected={handleImageSelectCustomerImage}
-                onResetImage={handleClickResetCustomerImage}
-              />
-              <ImagePicker
-                label="Foto KTP"
-                image={formData.ktp_image}
-                onOpenCamera={handleClickOpenCameraKtpImage}
-                onImageSelected={handleImageSelectKtpImage}
-                onResetImage={handleClickResetKtpImage}
-              />
-            </View>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-              3. Foto Jaminan
-            </Text>
-            <View style={{padding: 10}}>
-              <ImagePicker
-                label="Foto Jaminan 1"
-                image={formData.loan_guarantee_image1}
-                onOpenCamera={handleClickOpenCameraLoanGuarantee1}
-                onImageSelected={handleImageSelectLoanGuarantee1}
-                onResetImage={handleClickResetLoanGuarantee1}
-              />
-              <ImagePicker
-                label="Foto Jaminan 2"
-                image={formData.loan_guarantee_image2}
-                onOpenCamera={handleClickOpenCameraLoanGuarantee2}
-                onImageSelected={handleImageSelectLoanGuarantee2}
-                onResetImage={handleClickResetLoanGuarantee2}
-              />
-            </View>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-              4. Foto KK dan ID Card
-            </Text>
-            <View style={{padding: 10}}>
-              <ImagePicker
-                label="Foto KK"
-                image={formData.kk_image}
-                onOpenCamera={handleClickOpenCameraKkImage}
-                onImageSelected={handleImageSelectKkImage}
-                onResetImage={handleClickResetKkImage}
-              />
-              <ImagePicker
-                label="Foto ID Card"
-                image={formData.id_card_image}
-                onOpenCamera={handleClickOpenCameraIdCardImage}
-                onImageSelected={handleImageSelectIdCardImage}
-                onResetImage={handleClickResetIdCardImage}
-              />
-            </View>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>5. Slip Gaji</Text>
-            <View style={{padding: 10}}>
-              <ImagePicker
-                label="Slip Gaji 1"
-                image={formData.salary_slip_image1}
-                onOpenCamera={handleClickOpenCameraSlipSalaryImage1}
-                onImageSelected={handleImageSelectSlipSalaryImage1}
-                onResetImage={handleClickResetSlipSalaryImage1}
-              />
-              <ImagePicker
-                label="Slip Gaji 2"
-                image={formData.salary_slip_image2}
-                onOpenCamera={handleClickOpenCameraSlipSalaryImage2}
-                onImageSelected={
-                  handleImageSelectSliphandleClickOpenCameraSlipSalaryImage2
-                }
-                onResetImage={
-                  handleClickResetSliphandleClickOpenCameraSlipSalaryImage2
-                }
-              />
-            </View>
-          </AccordionSection>
+          )}
         </View>
       </ScrollView>
-      <DatePicker
-        modal
-        mode="date"
-        minimumDate={dayjs().hour(0).minute(0).second(0).toDate()}
-        open={openDatePicker}
-        date={formData.dateSurvey.toDate()}
-        onConfirm={handleDateChange}
-        onCancel={() => setOpenDatePicker(false)}
-      />
     </SafeAreaView>
   );
 }
 
-export default SurveiScreen;
+export default DetailSurveiScreen;

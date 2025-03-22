@@ -21,6 +21,7 @@ import DetailPenagihanScreen from '@screens/DetailPenagihan';
 import LaporanPenagihanScreen from '@src/screens/LaporanPenagihan';
 import CalonNasabahScreen from '@src/screens/CalonNasabah';
 import SurveiScreen from '@src/screens/Survei';
+import DetailSurveiScreen from '@src/screens/DetailSurvei';
 import ProfilScreen from '@src/screens/Profil';
 
 export type RootStackParamList = {
@@ -37,6 +38,7 @@ export type RootStackParamList = {
   LaporanPenagihan: undefined;
   CalonNasabah: undefined;
   Survei: undefined;
+  DetailSurvei: {id: string};
   Profil: undefined;
 };
 
@@ -115,6 +117,11 @@ function HomeStackScreen() {
           name="Survei"
           component={SurveiScreen}
           options={{title: 'Survei'}}
+        />
+        <Stack.Screen
+          name="DetailSurvei"
+          component={DetailSurveiScreen}
+          options={{title: 'Detail Survei'}}
         />
       </Stack.Group>
     </Stack.Navigator>

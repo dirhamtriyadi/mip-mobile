@@ -1,4 +1,5 @@
 export type SurveiFormData = {
+  id: string;
   name: string;
   address: string;
   number_ktp: string;
@@ -78,4 +79,5 @@ export type SurveiFormData = {
   id_card_image: {uri: string} | null;
   salary_slip_image1: {uri: string} | null;
   salary_slip_image2: {uri: string} | null;
+  created_at?: string;
 };
