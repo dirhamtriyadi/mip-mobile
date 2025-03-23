@@ -102,8 +102,8 @@ function DetailSurveiScreen() {
                   {item.number_ktp}
                 </Text>
                 <Text>
-                  <Text style={{fontWeight: 'bold'}}>Status Alamat:</Text>{' '}
-                  {item.address_status}
+                  <Text style={{fontWeight: 'bold'}}>Alamata:</Text>{' '}
+                  {item.address}
                 </Text>
                 <Text>
                   <Text style={{fontWeight: 'bold'}}>Status Alamat:</Text>{' '}
