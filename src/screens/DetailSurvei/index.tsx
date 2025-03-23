@@ -377,70 +377,70 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
           name: 'signature_couple.png',
         });
       }
-      if (formDataSurvei.workplace_image1) {
+      if (imageWorkplace1) {
         formData.append('workplace_image1', {
           uri: imageWorkplace1.uri,
           type: imageWorkplace1.type,
           name: imageWorkplace1.fileName,
         });
       }
-      if (formDataSurvei.workplace_image2) {
+      if (imageWorkplace2) {
         formData.append('workplace_image2', {
           uri: imageWorkplace2.uri,
           type: imageWorkplace2.type,
           name: imageWorkplace2.fileName,
         });
       }
-      if (formDataSurvei.customer_image) {
+      if (imageCustomer) {
         formData.append('customer_image', {
           uri: imageCustomer.uri,
           type: imageCustomer.type,
           name: imageCustomer.fileName,
         });
       }
-      if (formDataSurvei.ktp_image) {
+      if (imageKtp) {
         formData.append('ktp_image', {
           uri: imageKtp.uri,
           type: imageKtp.type,
           name: imageKtp.fileName,
         });
       }
-      if (formDataSurvei.loan_guarantee_image1) {
+      if (imageLoanGuarantee1) {
         formData.append('loan_guarantee_image1', {
           uri: imageLoanGuarantee1.uri,
           type: imageLoanGuarantee1.type,
           name: imageLoanGuarantee1.fileName,
         });
       }
-      if (formDataSurvei.loan_guarantee_image2) {
+      if (imageLoanGuarantee2) {
         formData.append('loan_guarantee_image2', {
           uri: imageLoanGuarantee2.uri,
           type: imageLoanGuarantee2.type,
           name: imageLoanGuarantee2.fileName,
         });
       }
-      if (formDataSurvei.kk_image) {
+      if (imageKk) {
         formData.append('kk_image', {
           uri: imageKk.uri,
           type: imageKk.type,
           name: imageKk.fileName,
         });
       }
-      if (formDataSurvei.id_card_image) {
+      if (imageIdCard) {
         formData.append('id_card_image', {
           uri: imageIdCard.uri,
           type: imageIdCard.type,
           name: imageIdCard.fileName,
         });
       }
-      if (formDataSurvei.salary_slip_image1) {
+      if (imageSlipSalary1) {
         formData.append('salary_slip_image1', {
           uri: imageSlipSalary1.uri,
           type: imageSlipSalary1.type,
           name: imageSlipSalary1.fileName,
         });
       }
-      if (formDataSurvei.salary_slip_image2) {
+      if (imageSlipSalary2) {
         formData.append('salary_slip_image2', {
           uri: imageSlipSalary2.uri,
           type: imageSlipSalary2.type,
@@ -466,7 +466,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
       ]);
       showNotification('Penagihan', 'Status penagihan berhasil ditambahkan');
     } catch (error: any) {
-      console.log(error.response);
+      console.log(error);
       if (error.response?.data?.status === 'error') {
         const errorMessages = Object.values(error.response?.data?.errors || {})
           .flat()
