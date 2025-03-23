@@ -1,7 +1,3 @@
-import Button from '@src/components/Button';
-import ImagePicker from '@src/components/ImagePicker';
-import InputField from '@src/components/InputField';
-import InputFieldNumber from '@src/components/InputFieldNumber';
 import useImagePicker from '@src/hooks/useImagePicker';
 import globalStyles from '@src/styles/styles';
 import {useCallback, useEffect, useState} from 'react';
@@ -10,8 +6,13 @@ import FormCalonNasabah from './form';
 import instance from '@src/configs/axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CalonNasabahFormData} from '@src/types/calonNasabah';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from 'App';
+import { useNotification } from '@src/hooks/useNotification';
 
 function CalonNasabahScreen() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const {showNotification} = useNotification();
   const {
     image: imageKtp,
     handleClickOpenCamera: handleClickOpenCameraKtp,
@@ -73,8 +74,10 @@ function CalonNasabahScreen() {
       );
       if (response.data.status === 'success') {
         Alert.alert('Berhasil', 'Data berhasil disimpan', [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
+          {text: 'OK', onPress: () => navigation.navigate('Home')},
         ]);
+
+        showNotification('Penagihan', 'Status penagihan berhasil ditambahkan');
       }
     } catch (error: any) {
       // console.log(error.response.data);
