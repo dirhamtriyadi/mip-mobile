@@ -219,7 +219,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
       );
       console.log(response.data.data);
 
-      setFormDataSurvei(prevData => ({...prevData, ...response.data.data}));
+      setFormDataSurvei(prevData => ({...prevData, ...response.data.data}))
     } catch (error: any) {
       console.log(error.response);
 
@@ -1293,14 +1293,14 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
             <View style={{padding: 10}}>
               <ImagePicker
                 label="Foto Gedung 1"
-                image={formDataSurvei.workplace_image1}
+                image={imageWorkplace1}
                 onOpenCamera={handleClickOpenCameraWorkplaceImage1}
                 onImageSelected={handleImageSelectWorkplaceImage1}
                 onResetImage={handleClickResetWorkplaceImage1}
               />
               <ImagePicker
                 label="Foto Gedung 2"
-                image={formDataSurvei.workplace_image2}
+                image={imageWorkplace2}
                 onOpenCamera={handleClickOpenCameraWorkplaceImage2}
                 onImageSelected={handleImageSelectWorkplaceImage2}
                 onResetImage={handleClickResetWorkplaceImage2}
@@ -1312,14 +1312,14 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
             <View style={{padding: 10}}>
               <ImagePicker
                 label="Foto Nasabah"
-                image={formDataSurvei.customer_image}
+                image={imageCustomer}
                 onOpenCamera={handleClickOpenCameraCustomerImage}
                 onImageSelected={handleImageSelectCustomerImage}
                 onResetImage={handleClickResetCustomerImage}
               />
               <ImagePicker
                 label="Foto KTP"
-                image={formDataSurvei.ktp_image}
+                image={imageKtp}
                 onOpenCamera={handleClickOpenCameraKtpImage}
                 onImageSelected={handleImageSelectKtpImage}
                 onResetImage={handleClickResetKtpImage}
@@ -1331,14 +1331,14 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
             <View style={{padding: 10}}>
               <ImagePicker
                 label="Foto Jaminan 1"
-                image={formDataSurvei.loan_guarantee_image1}
+                image={imageLoanGuarantee1}
                 onOpenCamera={handleClickOpenCameraLoanGuarantee1}
                 onImageSelected={handleImageSelectLoanGuarantee1}
                 onResetImage={handleClickResetLoanGuarantee1}
               />
               <ImagePicker
                 label="Foto Jaminan 2"
-                image={formDataSurvei.loan_guarantee_image2}
+                image={imageLoanGuarantee2}
                 onOpenCamera={handleClickOpenCameraLoanGuarantee2}
                 onImageSelected={handleImageSelectLoanGuarantee2}
                 onResetImage={handleClickResetLoanGuarantee2}
@@ -1350,14 +1350,14 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
             <View style={{padding: 10}}>
               <ImagePicker
                 label="Foto KK"
-                image={formDataSurvei.kk_image}
+                image={imageKk}
                 onOpenCamera={handleClickOpenCameraKkImage}
                 onImageSelected={handleImageSelectKkImage}
                 onResetImage={handleClickResetKkImage}
               />
               <ImagePicker
                 label="Foto ID Card"
-                image={formDataSurvei.id_card_image}
+                image={imageIdCard}
                 onOpenCamera={handleClickOpenCameraIdCardImage}
                 onImageSelected={handleImageSelectIdCardImage}
                 onResetImage={handleClickResetIdCardImage}
@@ -1367,14 +1367,14 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
             <View style={{padding: 10}}>
               <ImagePicker
                 label="Slip Gaji 1"
-                image={formDataSurvei.salary_slip_image1}
+                image={imageSlipSalary1}
                 onOpenCamera={handleClickOpenCameraSlipSalaryImage1}
                 onImageSelected={handleImageSelectSlipSalaryImage1}
                 onResetImage={handleClickResetSlipSalaryImage1}
               />
               <ImagePicker
                 label="Slip Gaji 2"
-                image={formDataSurvei.salary_slip_image2}
+                image={imageSlipSalary2}
                 onOpenCamera={handleClickOpenCameraSlipSalaryImage2}
                 onImageSelected={
                   handleImageSelectSliphandleClickOpenCameraSlipSalaryImage2
