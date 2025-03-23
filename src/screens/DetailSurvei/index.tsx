@@ -1274,6 +1274,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
               />
               <ImagePicker
                 label="Foto Gedung 2"
+                imageOld={formDataSurvei.workplace_image2}
                 image={imageWorkplace2}
                 onOpenCamera={handleClickOpenCameraWorkplaceImage2}
                 onImageSelected={handleImageSelectWorkplaceImage2}
@@ -1286,6 +1287,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
             <View style={{padding: 10}}>
               <ImagePicker
                 label="Foto Nasabah"
+                imageOld={formDataSurvei.customer_image}
                 image={imageCustomer}
                 onOpenCamera={handleClickOpenCameraCustomerImage}
                 onImageSelected={handleImageSelectCustomerImage}
@@ -1293,6 +1295,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
               />
               <ImagePicker
                 label="Foto KTP"
+                imageOld={formDataSurvei.ktp_image}
                 image={imageKtp}
                 onOpenCamera={handleClickOpenCameraKtpImage}
                 onImageSelected={handleImageSelectKtpImage}
@@ -1305,6 +1308,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
             <View style={{padding: 10}}>
               <ImagePicker
                 label="Foto Jaminan 1"
+                imageOld={formDataSurvei.loan_guarantee_image1}
                 image={imageLoanGuarantee1}
                 onOpenCamera={handleClickOpenCameraLoanGuarantee1}
                 onImageSelected={handleImageSelectLoanGuarantee1}
@@ -1312,6 +1316,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
               />
               <ImagePicker
                 label="Foto Jaminan 2"
+                imageOld={formDataSurvei.loan_guarantee_image2}
                 image={imageLoanGuarantee2}
                 onOpenCamera={handleClickOpenCameraLoanGuarantee2}
                 onImageSelected={handleImageSelectLoanGuarantee2}
@@ -1324,6 +1329,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
             <View style={{padding: 10}}>
               <ImagePicker
                 label="Foto KK"
+                imageOld={formDataSurvei.kk_image}
                 image={imageKk}
                 onOpenCamera={handleClickOpenCameraKkImage}
                 onImageSelected={handleImageSelectKkImage}
@@ -1331,6 +1337,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
               />
               <ImagePicker
                 label="Foto ID Card"
+                imageOld={formDataSurvei.id_card_image}
                 image={imageIdCard}
                 onOpenCamera={handleClickOpenCameraIdCardImage}
                 onImageSelected={handleImageSelectIdCardImage}
@@ -1341,6 +1348,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
             <View style={{padding: 10}}>
               <ImagePicker
                 label="Slip Gaji 1"
+                imageOld={formDataSurvei.salary_slip_image1}
                 image={imageSlipSalary1}
                 onOpenCamera={handleClickOpenCameraSlipSalaryImage1}
                 onImageSelected={handleImageSelectSlipSalaryImage1}
@@ -1348,6 +1356,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
               />
               <ImagePicker
                 label="Slip Gaji 2"
+                imageOld={formDataSurvei.salary_slip_image2}
                 image={imageSlipSalary2}
                 onOpenCamera={handleClickOpenCameraSlipSalaryImage2}
                 onImageSelected={
