@@ -232,6 +232,8 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
   }, []);
 
   const handleSubmit = useCallback(async () => {
+    console.log(imageWorkplace1);
+    
     try {
       const formData = new FormData();
       formData.append('_method', 'PUT');
@@ -404,79 +406,86 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
       }
       if (formDataSurvei.workplace_image1) {
         formData.append('workplace_image1', {
-          uri: formDataSurvei.workplace_image1,
+          uri: imageWorkplace1.uri,
           type: imageWorkplace1.type,
           name: imageWorkplace1.fileName,
         });
       }
       if (formDataSurvei.workplace_image2) {
         formData.append('workplace_image2', {
-          uri: formDataSurvei.workplace_image2,
+          uri: imageWorkplace2.uri,
           type: imageWorkplace2.type,
           name: imageWorkplace2.fileName,
         });
       }
       if (formDataSurvei.customer_image) {
         formData.append('customer_image', {
-          uri: formDataSurvei.customer_image,
+          uri: imageCustomer.uri,
           type: imageCustomer.type,
           name: imageCustomer.fileName,
         });
       }
       if (formDataSurvei.ktp_image) {
         formData.append('ktp_image', {
-          uri: formDataSurvei.ktp_image,
+          uri: imageKtp.uri,
           type: imageKtp.type,
           name: imageKtp.fileName,
         });
       }
       if (formDataSurvei.loan_guarantee_image1) {
         formData.append('loan_guarantee_image1', {
-          uri: formDataSurvei.loan_guarantee_image1,
+          uri: imageLoanGuarantee1.uri,
           type: imageLoanGuarantee1.type,
           name: imageLoanGuarantee1.fileName,
         });
       }
       if (formDataSurvei.loan_guarantee_image2) {
         formData.append('loan_guarantee_image2', {
-          uri: formDataSurvei.loan_guarantee_image2,
+          uri: imageLoanGuarantee2.uri,
           type: imageLoanGuarantee2.type,
           name: imageLoanGuarantee2.fileName,
         });
       }
       if (formDataSurvei.kk_image) {
         formData.append('kk_image', {
-          uri: formDataSurvei.kk_image,
+          uri: imageKk.uri,
           type: imageKk.type,
           name: imageKk.fileName,
         });
       }
       if (formDataSurvei.id_card_image) {
         formData.append('id_card_image', {
-          uri: formDataSurvei.id_card_image,
+          uri: imageIdCard.uri,
           type: imageIdCard.type,
           name: imageIdCard.fileName,
         });
       }
       if (formDataSurvei.salary_slip_image1) {
         formData.append('salary_slip_image1', {
-          uri: formDataSurvei.salary_slip_image1,
+          uri: imageSlipSalary1.uri,
           type: imageSlipSalary1.type,
           name: imageSlipSalary1.fileName,
         });
       }
       if (formDataSurvei.salary_slip_image2) {
         formData.append('salary_slip_image2', {
-          uri: formDataSurvei.salary_slip_image2,
+          uri: imageSlipSalary2.uri,
           type: imageSlipSalary2.type,
           name: imageSlipSalary2.fileName,
         });
       }
 
-      instance.defaults.headers['Content-Type'] = 'multipart/form-data';
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Accept: 'application/json',
+        },
+      };
+
       await instance.post(
         `v1/prospective-customer-surveys/${formDataSurvei.id}`,
         formData,
+        config,
       );
 
       Alert.alert('Berhasil', 'Prospective customer survey berhasil disimpan', [
@@ -484,6 +493,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
       ]);
       showNotification('Penagihan', 'Status penagihan berhasil ditambahkan');
     } catch (error: any) {
+      console.log(error);
       if (error.response?.data?.status === 'error') {
         const errorMessages = Object.values(error.response?.data?.errors || {})
           .flat()
