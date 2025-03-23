@@ -5,7 +5,15 @@ import LocationPicker from '@src/components/LocationPicker';
 import {useLocation} from '@src/hooks/useLocation';
 import globalStyles from '@src/styles/styles';
 import {useCallback, useEffect, useState} from 'react';
-import {Alert, SafeAreaView, ScrollView, Text, View} from 'react-native';
+import {
+  Alert,
+  PermissionsAndroid,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import InputCurrency from '@src/components/InputCurrency';
 import dayjs from 'dayjs';
 import useDatePicker from '@src/hooks/useDatePicker';
@@ -21,6 +29,7 @@ import Button from '@src/components/Button';
 import {useNotification} from '@src/hooks/useNotification';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from 'App';
+import RNFetchBlob from 'react-native-blob-util';
 
 interface DetailSurveiScreenProps {
   route: any;
@@ -372,10 +381,75 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
     showNotification,
   ]);
 
+  const handleDownloadPDF = useCallback(async () => {
+    try {
+      // Cek dan minta izin penyimpanan di Android 12 ke bawah
+      if (Platform.OS === 'android' && Platform.Version < 33) {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        );
+        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+          Alert.alert('Error', 'Izin penyimpanan ditolak.');
+          return;
+        }
+      }
+
+      // Fetch file dari API
+      const response = await instance.get(
+        `v1/prospective-customer-surveys/${id}/export-pdf-by-customer`,
+        {responseType: 'arraybuffer'},
+      );
+
+      // Konversi ke base64
+      const base64Data = RNFetchBlob.base64.encode(response.data);
+
+      // Dapatkan direktori penyimpanan yang benar
+      const {fs} = RNFetchBlob;
+      const fileName = `customer_survey_${id}.pdf`;
+
+      let filePath = `${fs.dirs.DownloadDir}/${fileName}`;
+
+      if (Platform.OS === 'android' && Platform.Version >= 29) {
+        filePath = `${fs.dirs.SDCardDir}/Download/${fileName}`;
+      }
+
+      // Simpan file ke folder Download
+      await fs.writeFile(filePath, base64Data, 'base64');
+
+      Alert.alert('Berhasil', `File disimpan di ${filePath}`);
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert('Error', error.message);
+    }
+  }, [id]);
+
+  const requestManageStoragePermission = async () => {
+    if (Number(Platform.Version) >= 30) {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.MANAGE_EXTERNAL_STORAGE,
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Izin penyimpanan penuh diberikan.');
+      } else {
+        console.log('Izin penyimpanan penuh ditolak.');
+      }
+    }
+  };
+
+  useEffect(() => {
+    requestManageStoragePermission();
+  }, []);
+
   return (
     <SafeAreaView style={globalStyles.container}>
       <ScrollView scrollEnabled={scrollEnabled}>
         <View style={globalStyles.formContainer}>
+          <Button
+            label="Download pdf"
+            style={{marginTop: 10}}
+            onPress={handleDownloadPDF}
+          />
           <AccordionSection title="1. CIF">
             <InputField
               label="Nama"
@@ -1245,7 +1319,11 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
               />
             </View>
           </AccordionSection>
-          <Button label="Kirim" onPress={handleSubmit} />
+          <Button
+            label="Kirim"
+            style={{marginBottom: 10}}
+            onPress={handleSubmit}
+          />
         </View>
       </ScrollView>
       <DatePicker
