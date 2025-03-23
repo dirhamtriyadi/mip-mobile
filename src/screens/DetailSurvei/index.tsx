@@ -186,40 +186,15 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
       latitude: location.latitude,
       longitude: location.longitude,
       locationString: location.locationString,
-      workplace_image1: imageWorkplace1,
-      workplace_image2: imageWorkplace2,
-      customer_image: imageCustomer,
-      ktp_image: imageKtp,
-      loan_guarantee_image1: imageLoanGuarantee1,
-      loan_guarantee_image2: imageLoanGuarantee2,
-      kk_image: imageKk,
-      id_card_image: imageIdCard,
-      salary_slip_image1: imageSlipSalary1,
-      salary_slip_image2: imageSlipSalary2,
     }));
-  }, [
-    location,
-    date,
-    imageWorkplace1,
-    imageWorkplace2,
-    imageCustomer,
-    imageKtp,
-    imageLoanGuarantee1,
-    imageLoanGuarantee2,
-    imageKk,
-    imageIdCard,
-    imageSlipSalary1,
-    imageSlipSalary2,
-  ]);
+  }, [location, date]);
 
   const fetchSurveyDetails = async () => {
     try {
       const response = await instance.get(
         `v1/prospective-customer-surveys/${id}`,
       );
-      console.log(response.data.data);
-
-      setFormDataSurvei(prevData => ({...prevData, ...response.data.data}))
+      setFormDataSurvei(prevData => ({...prevData, ...response.data.data}));
     } catch (error: any) {
       console.log(error.response);
 
@@ -232,8 +207,6 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
   }, []);
 
   const handleSubmit = useCallback(async () => {
-    console.log(imageWorkplace1);
-    
     try {
       const formData = new FormData();
       formData.append('_method', 'PUT');
@@ -493,7 +466,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
       ]);
       showNotification('Penagihan', 'Status penagihan berhasil ditambahkan');
     } catch (error: any) {
-      console.log(error);
+      console.log(error.response);
       if (error.response?.data?.status === 'error') {
         const errorMessages = Object.values(error.response?.data?.errors || {})
           .flat()
@@ -1293,6 +1266,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
             <View style={{padding: 10}}>
               <ImagePicker
                 label="Foto Gedung 1"
+                imageOld={formDataSurvei.workplace_image1}
                 image={imageWorkplace1}
                 onOpenCamera={handleClickOpenCameraWorkplaceImage1}
                 onImageSelected={handleImageSelectWorkplaceImage1}
