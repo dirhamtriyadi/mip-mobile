@@ -405,71 +405,71 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
       if (formDataSurvei.workplace_image1) {
         formData.append('workplace_image1', {
           uri: formDataSurvei.workplace_image1,
-          type: 'image/png',
-          name: 'workplace_image1.png',
+          type: imageWorkplace1.type,
+          name: imageWorkplace1.fileName,
         });
       }
       if (formDataSurvei.workplace_image2) {
         formData.append('workplace_image2', {
           uri: formDataSurvei.workplace_image2,
-          type: 'image/png',
-          name: 'workplace_image2.png',
+          type: imageWorkplace2.type,
+          name: imageWorkplace2.fileName,
         });
       }
       if (formDataSurvei.customer_image) {
         formData.append('customer_image', {
           uri: formDataSurvei.customer_image,
-          type: 'image/png',
-          name: 'customer_image.png',
+          type: imageCustomer.type,
+          name: imageCustomer.fileName,
         });
       }
       if (formDataSurvei.ktp_image) {
         formData.append('ktp_image', {
           uri: formDataSurvei.ktp_image,
-          type: 'image/png',
-          name: 'ktp_image.png',
+          type: imageKtp.type,
+          name: imageKtp.fileName,
         });
       }
       if (formDataSurvei.loan_guarantee_image1) {
         formData.append('loan_guarantee_image1', {
           uri: formDataSurvei.loan_guarantee_image1,
-          type: 'image/png',
-          name: 'loan_guarantee_image1.png',
+          type: imageLoanGuarantee1.type,
+          name: imageLoanGuarantee1.fileName,
         });
       }
       if (formDataSurvei.loan_guarantee_image2) {
         formData.append('loan_guarantee_image2', {
           uri: formDataSurvei.loan_guarantee_image2,
-          type: 'image/png',
-          name: 'loan_guarantee_image2.png',
+          type: imageLoanGuarantee2.type,
+          name: imageLoanGuarantee2.fileName,
         });
       }
       if (formDataSurvei.kk_image) {
         formData.append('kk_image', {
           uri: formDataSurvei.kk_image,
-          type: 'image/png',
-          name: 'kk_image.png',
+          type: imageKk.type,
+          name: imageKk.fileName,
         });
       }
       if (formDataSurvei.id_card_image) {
         formData.append('id_card_image', {
           uri: formDataSurvei.id_card_image,
-          type: 'image/png',
-          name: 'id_card_image.png',
+          type: imageIdCard.type,
+          name: imageIdCard.fileName,
         });
       }
       if (formDataSurvei.salary_slip_image1) {
         formData.append('salary_slip_image1', {
           uri: formDataSurvei.salary_slip_image1,
-          type: 'image/png',
-          name: 'salary_slip_image1.png',
+          type: imageSlipSalary1.type,
+          name: imageSlipSalary1.fileName,
         });
       }
       if (formDataSurvei.salary_slip_image2) {
         formData.append('salary_slip_image2', {
           uri: formDataSurvei.salary_slip_image2,
-          type: 'image/png',
-          name: 'salary_slip_image2.png',
+          type: imageSlipSalary2.type,
+          name: imageSlipSalary2.fileName,
         });
       }
 
