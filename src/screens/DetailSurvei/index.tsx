@@ -209,244 +209,121 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
   const handleSubmit = useCallback(async () => {
     try {
       const formData = new FormData();
-      formData.append('_method', 'PUT');
-      formData.append('name', formDataSurvei.name);
-      formData.append('address', formDataSurvei.address);
-      formData.append('number_ktp', formDataSurvei.number_ktp);
-      formData.append('address_status', formDataSurvei.address_status);
-      formData.append('phone_number', formDataSurvei.phone_number);
-      formData.append('npwp', formDataSurvei.npwp);
-      formData.append('company_name', formDataSurvei.company_name);
-      formData.append('employee_tenure', formDataSurvei.employee_tenure);
-      formData.append('job_level', formDataSurvei.job_level);
-      formData.append('employee_status', formDataSurvei.employee_status);
-      formData.append('salary', formDataSurvei.salary);
-      formData.append('other_business', formDataSurvei.other_business);
-      formData.append(
-        'monthly_living_expenses',
-        formDataSurvei.monthly_living_expenses,
-      );
-      formData.append('children', formDataSurvei.children);
-      formData.append('wife', formDataSurvei.wife);
-      formData.append('couple_jobs', formDataSurvei.couple_jobs);
-      formData.append('couple_business', formDataSurvei.couple_business);
-      formData.append('couple_income', formDataSurvei.couple_income);
-      formData.append('bank_debt', formDataSurvei.bank_debt);
-      formData.append('cooperative_debt', formDataSurvei.cooperative_debt);
-      formData.append('personal_debt', formDataSurvei.personal_debt);
-      formData.append('online_debt', formDataSurvei.online_debt);
-      formData.append(
-        'customer_character_analysis',
-        formDataSurvei.customer_character_analysis,
-      );
-      formData.append(
-        'financial_report_analysis',
-        formDataSurvei.financial_report_analysis,
-      );
-      formData.append('slik_result', formDataSurvei.slik_result);
-      formData.append('info_provider_name', formDataSurvei.info_provider_name);
-      formData.append(
-        'info_provider_position',
-        formDataSurvei.info_provider_position,
-      );
-      formData.append(
-        'workplace_condition',
-        formDataSurvei.workplace_condition,
-      );
-      formData.append('employee_count', formDataSurvei.employee_count);
-      formData.append('business_duration', formDataSurvei.business_duration);
-      formData.append('office_address', formDataSurvei.office_address);
-      formData.append('office_phone', formDataSurvei.office_phone);
-      formData.append('loan_application', formDataSurvei.loan_application);
-      formData.append(
-        'recommendation_from_vendors',
-        formDataSurvei.recommendation_from_vendors,
-      );
-      formData.append(
-        'recommendation_from_treasurer',
-        formDataSurvei.recommendation_from_treasurer,
-      );
-      formData.append(
-        'recommendation_from_other',
-        formDataSurvei.recommendation_from_other,
-      );
-      formData.append('source_1_full_name', formDataSurvei.source_1_full_name);
-      formData.append('source_1_gender', formDataSurvei.source_1_gender);
-      formData.append(
-        'source_1_source_relationship',
-        formDataSurvei.source_1_source_relationship,
-      );
-      formData.append(
-        'source_1_source_character',
-        formDataSurvei.source_1_source_character,
-      );
-      formData.append(
-        'source_1_knows_prospect_customer',
-        formDataSurvei.source_1_knows_prospect_customer,
-      );
-      formData.append(
-        'source_1_prospect_lives_at_address',
-        formDataSurvei.source_1_prospect_lives_at_address,
-      );
-      formData.append(
-        'source_1_length_of_residence',
-        formDataSurvei.source_1_length_of_residence,
-      );
-      formData.append(
-        'source_1_house_ownership_status',
-        formDataSurvei.source_1_house_ownership_status,
-      );
-      formData.append(
-        'source_1_prospect_status',
-        formDataSurvei.source_1_prospect_status,
-      );
-      formData.append(
-        'source_1_number_of_dependents',
-        formDataSurvei.source_1_number_of_dependents,
-      );
-      formData.append(
-        'source_1_prospect_character',
-        formDataSurvei.source_1_prospect_character,
-      );
-      formData.append('source_2_full_name', formDataSurvei.source_2_full_name);
-      formData.append('source_2_gender', formDataSurvei.source_2_gender);
-      formData.append(
-        'source_2_source_relationship',
-        formDataSurvei.source_2_source_relationship,
-      );
-      formData.append(
-        'source_2_source_character',
-        formDataSurvei.source_2_source_character,
-      );
-      formData.append(
-        'source_2_knows_prospect_customer',
-        formDataSurvei.source_2_knows_prospect_customer,
-      );
-      formData.append(
-        'source_2_prospect_lives_at_address',
-        formDataSurvei.source_2_prospect_lives_at_address,
-      );
-      formData.append(
-        'source_2_length_of_residence',
-        formDataSurvei.source_2_length_of_residence,
-      );
-      formData.append(
-        'source_2_house_ownership_status',
-        formDataSurvei.source_2_house_ownership_status,
-      );
-      formData.append(
-        'source_2_prospect_status',
-        formDataSurvei.source_2_prospect_status,
-      );
-      formData.append(
-        'source_2_number_of_dependents',
-        formDataSurvei.source_2_number_of_dependents,
-      );
-      formData.append(
-        'source_2_prospect_character',
-        formDataSurvei.source_2_prospect_character,
-      );
-      formData.append('recommendation_pt', formDataSurvei.recommendation_pt);
-      formData.append('descriptionSurvey', formDataSurvei.descriptionSurvey);
-      formData.append('locationSurvey', formDataSurvei.locationSurvey);
-      formData.append(
-        'dateSurvey',
-        dayjs(formDataSurvei.dateSurvey).format('YYYY-MM-DD'),
-      );
-      formData.append('latitude', formDataSurvei.latitude);
-      formData.append('longitude', formDataSurvei.longitude);
-      formData.append('locationString', formDataSurvei.locationString);
-      if (formDataSurvei.signature_officer) {
-        formData.append('signature_officer', {
-          uri: formDataSurvei.signature_officer,
-          type: 'image/png',
-          name: 'signature_officer.png',
-        });
-      }
-      if (formDataSurvei.signature_customer) {
-        formData.append('signature_customer', {
-          uri: formDataSurvei.signature_customer,
-          type: 'image/png',
-          name: 'signature_customer.png',
-        });
-      }
-      if (formDataSurvei.signature_couple) {
-        formData.append('signature_couple', {
-          uri: formDataSurvei.signature_couple,
-          type: 'image/png',
-          name: 'signature_couple.png',
-        });
-      }
-      if (imageWorkplace1) {
-        formData.append('workplace_image1', {
-          uri: imageWorkplace1.uri,
-          type: imageWorkplace1.type,
-          name: imageWorkplace1.fileName,
-        });
-      }
-      if (imageWorkplace2) {
-        formData.append('workplace_image2', {
-          uri: imageWorkplace2.uri,
-          type: imageWorkplace2.type,
-          name: imageWorkplace2.fileName,
-        });
-      }
-      if (imageCustomer) {
-        formData.append('customer_image', {
-          uri: imageCustomer.uri,
-          type: imageCustomer.type,
-          name: imageCustomer.fileName,
-        });
-      }
-      if (imageKtp) {
-        formData.append('ktp_image', {
-          uri: imageKtp.uri,
-          type: imageKtp.type,
-          name: imageKtp.fileName,
-        });
-      }
-      if (imageLoanGuarantee1) {
-        formData.append('loan_guarantee_image1', {
-          uri: imageLoanGuarantee1.uri,
-          type: imageLoanGuarantee1.type,
-          name: imageLoanGuarantee1.fileName,
-        });
-      }
-      if (imageLoanGuarantee2) {
-        formData.append('loan_guarantee_image2', {
-          uri: imageLoanGuarantee2.uri,
-          type: imageLoanGuarantee2.type,
-          name: imageLoanGuarantee2.fileName,
-        });
-      }
-      if (imageKk) {
-        formData.append('kk_image', {
-          uri: imageKk.uri,
-          type: imageKk.type,
-          name: imageKk.fileName,
-        });
-      }
-      if (imageIdCard) {
-        formData.append('id_card_image', {
-          uri: imageIdCard.uri,
-          type: imageIdCard.type,
-          name: imageIdCard.fileName,
-        });
-      }
-      if (imageSlipSalary1) {
-        formData.append('salary_slip_image1', {
-          uri: imageSlipSalary1.uri,
-          type: imageSlipSalary1.type,
-          name: imageSlipSalary1.fileName,
-        });
-      }
-      if (imageSlipSalary2) {
-        formData.append('salary_slip_image2', {
-          uri: imageSlipSalary2.uri,
-          type: imageSlipSalary2.type,
-          name: imageSlipSalary2.fileName,
-        });
-      }
+      const surveyData = {
+        _method: 'PUT',
+        name: formDataSurvei.name,
+        address: formDataSurvei.address,
+        number_ktp: formDataSurvei.number_ktp,
+        address_status: formDataSurvei.address_status,
+        phone_number: formDataSurvei.phone_number,
+        npwp: formDataSurvei.npwp,
+        company_name: formDataSurvei.company_name,
+        employee_tenure: formDataSurvei.employee_tenure,
+        job_level: formDataSurvei.job_level,
+        employee_status: formDataSurvei.employee_status,
+        salary: formDataSurvei.salary,
+        other_business: formDataSurvei.other_business,
+        monthly_living_expenses: formDataSurvei.monthly_living_expenses,
+        children: formDataSurvei.children,
+        wife: formDataSurvei.wife,
+        couple_jobs: formDataSurvei.couple_jobs,
+        couple_business: formDataSurvei.couple_business,
+        couple_income: formDataSurvei.couple_income,
+        bank_debt: formDataSurvei.bank_debt,
+        cooperative_debt: formDataSurvei.cooperative_debt,
+        personal_debt: formDataSurvei.personal_debt,
+        online_debt: formDataSurvei.online_debt,
+        customer_character_analysis: formDataSurvei.customer_character_analysis,
+        financial_report_analysis: formDataSurvei.financial_report_analysis,
+        slik_result: formDataSurvei.slik_result,
+        info_provider_name: formDataSurvei.info_provider_name,
+        info_provider_position: formDataSurvei.info_provider_position,
+        workplace_condition: formDataSurvei.workplace_condition,
+        employee_count: formDataSurvei.employee_count,
+        business_duration: formDataSurvei.business_duration,
+        office_address: formDataSurvei.office_address,
+        office_phone: formDataSurvei.office_phone,
+        loan_application: formDataSurvei.loan_application,
+        recommendation_from_vendors: formDataSurvei.recommendation_from_vendors,
+        recommendation_from_treasurer:
+          formDataSurvei.recommendation_from_treasurer,
+        recommendation_from_other: formDataSurvei.recommendation_from_other,
+        source_1_full_name: formDataSurvei.source_1_full_name,
+        source_1_gender: formDataSurvei.source_1_gender,
+        source_1_source_relationship:
+          formDataSurvei.source_1_source_relationship,
+        source_1_source_character: formDataSurvei.source_1_source_character,
+        source_1_knows_prospect_customer:
+          formDataSurvei.source_1_knows_prospect_customer,
+        source_1_prospect_lives_at_address:
+          formDataSurvei.source_1_prospect_lives_at_address,
+        source_1_length_of_residence:
+          formDataSurvei.source_1_length_of_residence,
+        source_1_house_ownership_status:
+          formDataSurvei.source_1_house_ownership_status,
+        source_1_prospect_status: formDataSurvei.source_1_prospect_status,
+        source_1_number_of_dependents:
+          formDataSurvei.source_1_number_of_dependents,
+        source_1_prospect_character: formDataSurvei.source_1_prospect_character,
+        source_2_full_name: formDataSurvei.source_2_full_name,
+        source_2_gender: formDataSurvei.source_2_gender,
+        source_2_source_relationship:
+          formDataSurvei.source_2_source_relationship,
+        source_2_source_character: formDataSurvei.source_2_source_character,
+        source_2_knows_prospect_customer:
+          formDataSurvei.source_2_knows_prospect_customer,
+        source_2_prospect_lives_at_address:
+          formDataSurvei.source_2_prospect_lives_at_address,
+        source_2_length_of_residence:
+          formDataSurvei.source_2_length_of_residence,
+        source_2_house_ownership_status:
+          formDataSurvei.source_2_house_ownership_status,
+        source_2_prospect_status: formDataSurvei.source_2_prospect_status,
+        source_2_number_of_dependents:
+          formDataSurvei.source_2_number_of_dependents,
+        source_2_prospect_character: formDataSurvei.source_2_prospect_character,
+        recommendation_pt: formDataSurvei.recommendation_pt,
+        descriptionSurvey: formDataSurvei.descriptionSurvey,
+        locationSurvey: formDataSurvei.locationSurvey,
+        dateSurvey: dayjs(formDataSurvei.dateSurvey).format('YYYY-MM-DD'),
+        latitude: formDataSurvei.latitude,
+        longitude: formDataSurvei.longitude,
+        locationString: formDataSurvei.locationString,
+      };
+
+      // Menambahkan semua field ke FormData
+      Object.entries(surveyData).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, value);
+        }
+      });
+
+      // Menambahkan gambar ke FormData
+      const imageFields = {
+        signature_officer: formDataSurvei.signature_officer,
+        signature_customer: formDataSurvei.signature_customer,
+        signature_couple: formDataSurvei.signature_couple,
+        workplace_image1: imageWorkplace1,
+        workplace_image2: imageWorkplace2,
+        customer_image: imageCustomer,
+        ktp_image: imageKtp,
+        loan_guarantee_image1: imageLoanGuarantee1,
+        loan_guarantee_image2: imageLoanGuarantee2,
+        kk_image: imageKk,
+        id_card_image: imageIdCard,
+        salary_slip_image1: imageSlipSalary1,
+        salary_slip_image2: imageSlipSalary2,
+      };
+
+      Object.entries(imageFields).forEach(([key, image]) => {
+        if (image) {
+          formData.append(key, {
+            uri: image.uri,
+            type: image.type || 'image/png',
+            name: image.fileName || `${key}.png`,
+          });
+        }
+      });
 
       const config = {
         headers: {
@@ -464,6 +341,7 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
       Alert.alert('Berhasil', 'Prospective customer survey berhasil disimpan', [
         {text: 'OK', onPress: () => navigation.navigate('Home')},
       ]);
+
       showNotification('Penagihan', 'Status penagihan berhasil ditambahkan');
     } catch (error: any) {
       console.log(error);
@@ -471,7 +349,6 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
         const errorMessages = Object.values(error.response?.data?.errors || {})
           .flat()
           .join(', ');
-
         return Alert.alert('Error', errorMessages || 'Terjadi kesalahan.');
       }
 
