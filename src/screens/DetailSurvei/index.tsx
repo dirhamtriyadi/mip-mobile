@@ -30,6 +30,8 @@ import {useNotification} from '@src/hooks/useNotification';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from 'App';
 import RNFetchBlob from 'react-native-blob-util';
+import {BASE_URL} from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface DetailSurveiScreenProps {
   route: any;
@@ -381,10 +383,12 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
     showNotification,
   ]);
 
-  const handleDownloadPDF = useCallback(async () => {
+  const downloadFile = useCallback(async (url: string, fileName: string) => {
     try {
-      // Cek dan minta izin penyimpanan di Android 12 ke bawah
-      if (Platform.OS === 'android' && Platform.Version < 33) {
+      const token = await AsyncStorage.getItem('token');
+
+      // **1️⃣ Cek dan minta izin penyimpanan (hanya Android < 30)**
+      if (Platform.OS === 'android' && Platform.Version < 30) {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         );
@@ -394,34 +398,50 @@ function DetailSurveiScreen({route}: DetailSurveiScreenProps) {
         }
       }
 
-      // Fetch file dari API
-      const response = await instance.get(
-        `v1/prospective-customer-surveys/${id}/export-pdf-by-customer`,
-        {responseType: 'arraybuffer'},
-      );
+      // **2️⃣ Pastikan path download benar**
+      const {dirs} = RNFetchBlob.fs;
+      const downloadDir = dirs.LegacyDownloadDir; // Folder Download yang benar
+      const filePath = `${downloadDir}/MIP/${fileName}`;
 
-      // Konversi ke base64
-      const base64Data = RNFetchBlob.base64.encode(response.data);
-
-      // Dapatkan direktori penyimpanan yang benar
-      const {fs} = RNFetchBlob;
-      const fileName = `customer_survey_${id}.pdf`;
-
-      let filePath = `${fs.dirs.DownloadDir}/${fileName}`;
-
-      if (Platform.OS === 'android' && Platform.Version >= 29) {
-        filePath = `${fs.dirs.SDCardDir}/Download/${fileName}`;
-      }
-
-      // Simpan file ke folder Download
-      await fs.writeFile(filePath, base64Data, 'base64');
-
-      Alert.alert('Berhasil', `File disimpan di ${filePath}`);
+      // **3️⃣ Gunakan Download Manager Android**
+      RNFetchBlob.config({
+        fileCache: true,
+        appendExt: 'pdf', // Pastikan ekstensi benar
+        addAndroidDownloads: {
+          useDownloadManager: true, // Wajib untuk Android 10+
+          notification: true,
+          path: filePath, // Pastikan path ini benar
+          title: fileName,
+          description: 'Downloading file...',
+          mime: 'application/pdf',
+          mediaScannable: true,
+        },
+      })
+        .fetch('GET', url, {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/pdf',
+        })
+        .then(res => {
+          Alert.alert('Download Berhasil', `File disimpan di: ${filePath}`);
+        })
+        .catch(err => {
+          console.error('Download Error:', err);
+          Alert.alert(
+            'Download Gagal',
+            'Terjadi kesalahan saat mengunduh file.',
+          );
+        });
     } catch (error: any) {
       console.log(error);
       Alert.alert('Error', error.message);
     }
-  }, [id]);
+  }, []);
+
+  const handleDownloadPDF = useCallback(() => {
+    const fileUrl = `${BASE_URL}v1/prospective-customer-surveys/${id}/export-pdf-by-customer`;
+    const fileName = `customer_survey_${formDataSurvei.name}.pdf`;
+    downloadFile(fileUrl, fileName);
+  }, [id, formDataSurvei]);
 
   const requestManageStoragePermission = async () => {
     if (Number(Platform.Version) >= 30) {
